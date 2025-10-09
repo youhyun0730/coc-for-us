@@ -27,7 +27,7 @@ function createBasicInfoSection(clan) {
                     <div class="info-icon">👥</div>
                     <div class="info-content">
                         <div class="info-label">클랜원 수</div>
-                        <div class="info-value">${clan.memberList?.length || clan.members || 0} / 50</div>
+                        <div class="info-value">${Array.isArray(clan.members) ? clan.members.length : (clan.members || 0)} / 50</div>
                     </div>
                 </div>
 
