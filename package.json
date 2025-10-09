@@ -8,7 +8,7 @@
     "build": "vercel build"
   },
   "dependencies": {
-    "clash-of-clans-api": "^3.2.1"
+    "clashofclans.js": "^3.3.22"
   },
   "keywords": [
     "clash-of-clans",

@@ -24,7 +24,7 @@ Clash of Clans APIを使用して、身内のプレイヤー情報を一覧表�
 
 ## 技術的な特徴
 
-このプロジェクトは **clash-of-clans-api** ラッパーを使用しています。これにより:
+このプロジェクトは **clashofclans.js** ラッパーを使用しています。これにより:
 
 - ✅ **IPアドレスの制限なし** - 動的にトークンを生成
 - ✅ **Vercelで動作** - サーバーレス環境でも問題なし
@@ -131,7 +131,7 @@ coc-for-us/
 - **フロントエンド**: HTML, CSS, Vanilla JavaScript
 - **バックエンド**: Vercel Serverless Functions (Node.js)
 - **API**: Clash of Clans API
-- **ラッパー**: [clash-of-clans-api](https://www.npmjs.com/package/clash-of-clans-api)
+- **ラッパー**: [clashofclans.js](https://www.npmjs.com/package/clashofclans.js)
 - **ホスティング**: Vercel
 
 ## アーキテクチャ
@@ -141,7 +141,7 @@ coc-for-us/
             ↓
          /api/players (Serverless Function)
             ↓
-    clash-of-clans-api ラッパー
+    clashofclans.js ラッパー
     （動的トークン生成）
             ↓
          Clash of Clans API
@@ -152,7 +152,7 @@ coc-for-us/
 Clash of Clans APIは**固定IPアドレス**からのリクエストのみを許可します。
 
 - ❌ **問題**: Vercelのサーバーレス関数は動的IPを使用
-- ✅ **解決**: `clash-of-clans-api` ラッパーが自動的にトークンを生成・更新
+- ✅ **解決**: `clashofclans.js` ラッパーが自動的にトークンを生成・更新
   - メールアドレスとパスワードで認証
   - 現在のIPアドレスに対応したトークンを自動作成
   - トークンの有効期限管理も自動
@@ -202,7 +202,7 @@ Clash of Clans APIは**固定IPアドレス**からのリクエストのみを�
 ## 参考リンク
 
 - [Clash of Clans Developer Portal](https://developer.clashofclans.com/)
-- [clash-of-clans-api ドキュメント](https://www.npmjs.com/package/clash-of-clans-api)
+- [clashofclans.js ドキュメント](https://clashofclans.js.org/)
 - [Clash of Clans API Discord](https://discord.gg/clashapi) - API関連のサポート
 
 ## ライセンス

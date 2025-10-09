@@ -1,8 +1,8 @@
 // Vercel Serverless Function
 // Clash of Clans APIのプロキシエンドポイント
-// clash-of-clans-apiラッパーを使用して動的にトークンを生成
+// clashofclans.jsラッパーを使用して動的にトークンを生成
 
-import { Client } from 'clash-of-clans-api';
+import { Client } from 'clashofclans.js';
 
 // クライアントのキャッシュ（コールドスタート対策）
 let cachedClient = null;
@@ -19,13 +19,14 @@ async function getClient() {
         throw new Error('COC_EMAIL and COC_PASSWORD must be set in environment variables');
     }
 
-    cachedClient = new Client({
-        keys: [process.env.COC_API_KEY].filter(Boolean),
+    cachedClient = new Client();
+
+    // メールアドレスとパスワードでログイン（自動的にトークンを生成）
+    await cachedClient.login({
         email: email,
         password: password
     });
 
-    await cachedClient.login();
     return cachedClient;
 }
 
