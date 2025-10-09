@@ -45,23 +45,53 @@ module.exports = async function handler(req, res) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    const CLAN_TAG = process.env.COC_CLAN_TAG;
+    const CLAN_TAGS = process.env.COC_CLAN_TAGS;
 
-    if (!CLAN_TAG) {
-        return res.status(500).json({ error: 'Clan tag not configured' });
+    if (!CLAN_TAGS) {
+        return res.status(500).json({ error: 'Clan tags not configured' });
     }
+
+    // カンマ区切りのクランタグを配列に変換
+    const clanTagArray = CLAN_TAGS.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
 
     try {
         const client = await getClient();
 
-        // クランタグに#が含まれていない場合は追加
-        const formattedTag = CLAN_TAG.startsWith('#') ? CLAN_TAG : `#${CLAN_TAG}`;
+        // すべてのクラン情報を並列で取得（エラーハンドリング付き）
+        const clanPromises = clanTagArray.map(async (tag) => {
+            try {
+                // タグに#が含まれていない場合は追加
+                const formattedTag = tag.startsWith('#') ? tag : `#${tag}`;
+                const clan = await client.getClan(formattedTag);
+                return { success: true, clan, tag };
+            } catch (error) {
+                console.error(`Error fetching clan ${tag}:`, error.message);
+                return { success: false, tag, error: error.message };
+            }
+        });
 
-        // クラン情報を取得
-        const clan = await client.getClan(formattedTag);
+        const results = await Promise.all(clanPromises);
+
+        // 成功したクランのみを抽出
+        const clans = results
+            .filter(result => result.success)
+            .map(result => result.clan);
+
+        // 失敗したタグをログ出力
+        const failedTags = results
+            .filter(result => !result.success)
+            .map(result => result.tag);
+
+        if (failedTags.length > 0) {
+            console.warn('Failed to fetch clans:', failedTags.join(', '));
+        }
+
+        // クランレベルで降順ソート
+        clans.sort((a, b) => b.clanLevel - a.clanLevel);
 
         res.status(200).json({
-            clan
+            clans,
+            failedTags: failedTags.length > 0 ? failedTags : undefined
         });
 
     } catch (error) {

@@ -60,14 +60,15 @@ function createBasicInfoSection(clan) {
 
 // 상세 정보 섹션을 生成
 function createDetailedInfoSection(clan) {
+    const clanTagId = clan.tag.replace('#', '');
     return `
         <div class="detailed-info-section">
-            <button class="toggle-details-btn" onclick="toggleDetails()">
-                <span id="toggle-text">상세 정보 보기</span>
-                <span id="toggle-icon">▼</span>
+            <button class="toggle-details-btn" onclick="toggleDetails('${clanTagId}')">
+                <span id="toggle-text-${clanTagId}">상세 정보 보기</span>
+                <span id="toggle-icon-${clanTagId}">▼</span>
             </button>
 
-            <div id="detailed-info" class="detailed-info" style="display: none;">
+            <div id="detailed-info-${clanTagId}" class="detailed-info" style="display: none;">
                 <div class="detail-grid">
                     <!-- 클랜 통계 -->
                     <div class="detail-card">
@@ -211,11 +212,11 @@ function translateClanType(type) {
     return types[type] || type;
 }
 
-// 상세 정보 토글
-function toggleDetails() {
-    const detailedInfo = document.getElementById('detailed-info');
-    const toggleText = document.getElementById('toggle-text');
-    const toggleIcon = document.getElementById('toggle-icon');
+// 상세 정보 토글（각クランカードごとに動作）
+function toggleDetails(clanTag) {
+    const detailedInfo = document.getElementById(`detailed-info-${clanTag}`);
+    const toggleText = document.getElementById(`toggle-text-${clanTag}`);
+    const toggleIcon = document.getElementById(`toggle-icon-${clanTag}`);
 
     if (detailedInfo.style.display === 'none') {
         detailedInfo.style.display = 'block';
@@ -250,8 +251,8 @@ function hideLoading() {
     document.getElementById('loading').style.display = 'none';
 }
 
-// 클랜 정보를 로드
-async function loadClanInfo() {
+// すべてのクラン情報をロード
+async function loadAllClans() {
     const container = document.getElementById('clan-container');
 
     try {
@@ -263,12 +264,17 @@ async function loadClanInfo() {
         }
 
         const data = await response.json();
-        const clan = data.clan;
+        const clans = data.clans;
 
         hideLoading();
 
         // 클랜 카드를 생성하고 표시
-        container.innerHTML = createClanCard(clan);
+        clans.forEach(clan => {
+            const cardHTML = createClanCard(clan);
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = cardHTML;
+            container.appendChild(tempDiv.firstElementChild);
+        });
 
     } catch (error) {
         hideLoading();
@@ -278,4 +284,4 @@ async function loadClanInfo() {
 }
 
 // 페이지 로드 시 実行
-document.addEventListener('DOMContentLoaded', loadClanInfo);
+document.addEventListener('DOMContentLoaded', loadAllClans);
