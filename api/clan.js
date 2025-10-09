@@ -54,6 +54,9 @@ module.exports = async function handler(req, res) {
     // カンマ区切りのクランタグを配列に変換
     const clanTagArray = CLAN_TAGS.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
 
+    console.log('COC_CLAN_TAGS raw:', CLAN_TAGS);
+    console.log('Parsed clan tags:', clanTagArray);
+
     try {
         const client = await getClient();
 
