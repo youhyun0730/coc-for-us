@@ -1,3 +1,49 @@
+// 영웅 섹션 생성
+function createHeroesSection(player) {
+    if (!player.heroes || player.heroes.length === 0) {
+        return '';
+    }
+
+    const heroesHTML = player.heroes.map(hero => `
+        <div class="hero-item">
+            <span class="hero-name">${hero.name}</span>
+            <span class="hero-level">레벨 ${hero.level}</span>
+        </div>
+    `).join('');
+
+    return `
+        <div class="heroes-section">
+            <div class="section-title">영웅</div>
+            <div class="heroes-list">
+                ${heroesHTML}
+            </div>
+        </div>
+    `;
+}
+
+// 영웅 장비 섹션 생성
+function createHeroEquipmentSection(player) {
+    if (!player.heroEquipment || player.heroEquipment.length === 0) {
+        return '';
+    }
+
+    const equipmentHTML = player.heroEquipment.map(equipment => `
+        <div class="equipment-item">
+            <span class="equipment-name">${equipment.name}</span>
+            <span class="equipment-level">레벨 ${equipment.level}</span>
+        </div>
+    `).join('');
+
+    return `
+        <div class="equipment-section">
+            <div class="section-title">영웅 장비</div>
+            <div class="equipment-list">
+                ${equipmentHTML}
+            </div>
+        </div>
+    `;
+}
+
 // 플레이어 카드를 생성하는 함수
 function createPlayerCard(player) {
     const card = document.createElement('div');
@@ -36,27 +82,10 @@ function createPlayerCard(player) {
                 <span class="info-label">경험치 레벨</span>
                 <span class="info-value">${player.expLevel}</span>
             </div>
-
-            <div class="info-row">
-                <span class="info-label">공격 승리</span>
-                <span class="info-value">${player.attackWins.toLocaleString()}</span>
-            </div>
-
-            <div class="info-row">
-                <span class="info-label">방어 승리</span>
-                <span class="info-value">${player.defenseWins.toLocaleString()}</span>
-            </div>
-
-            <div class="info-row">
-                <span class="info-label">최고 트로피</span>
-                <span class="info-value">${player.bestTrophies.toLocaleString()}</span>
-            </div>
-
-            <div class="info-row">
-                <span class="info-label">전쟁 스타</span>
-                <span class="info-value">${player.warStars.toLocaleString()}</span>
-            </div>
         </div>
+
+        ${createHeroesSection(player)}
+        ${createHeroEquipmentSection(player)}
 
         ${clanInfo}
     `;

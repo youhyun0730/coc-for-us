@@ -120,6 +120,47 @@ header h1 {
     background: #d1ecf1;
 }
 
+.heroes-section,
+.equipment-section {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 2px solid #f0f0f0;
+}
+
+.section-title {
+    font-weight: 600;
+    color: #333;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.heroes-list,
+.equipment-list {
+    display: grid;
+    gap: 8px;
+}
+
+.hero-item,
+.equipment-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.hero-name,
+.equipment-name {
+    color: #555;
+    font-weight: 500;
+}
+
+.hero-level,
+.equipment-level {
+    color: #667eea;
+    font-weight: 600;
+}
+
 .clan-info {
     margin-top: 15px;
     padding-top: 15px;
