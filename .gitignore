@@ -1,0 +1,12 @@
+# APIキーが含まれる設定ファイルを除外（必要に応じて）
+# config.js
+
+# macOS
+.DS_Store
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
