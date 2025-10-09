@@ -1,0 +1,20 @@
+{
+  "name": "coc-for-us",
+  "version": "1.0.0",
+  "description": "Clash of Clans player information tool",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "vercel build"
+  },
+  "dependencies": {
+    "clash-of-clans-api": "^3.2.1"
+  },
+  "keywords": [
+    "clash-of-clans",
+    "coc",
+    "api"
+  ],
+  "author": "",
+  "license": "MIT"
+}

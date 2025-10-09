@@ -1,5 +1,33 @@
 // Vercel Serverless Function
 // Clash of Clans APIのプロキシエンドポイント
+// clash-of-clans-apiラッパーを使用して動的にトークンを生成
+
+import { Client } from 'clash-of-clans-api';
+
+// クライアントのキャッシュ（コールドスタート対策）
+let cachedClient = null;
+
+async function getClient() {
+    if (cachedClient) {
+        return cachedClient;
+    }
+
+    const email = process.env.COC_EMAIL;
+    const password = process.env.COC_PASSWORD;
+
+    if (!email || !password) {
+        throw new Error('COC_EMAIL and COC_PASSWORD must be set in environment variables');
+    }
+
+    cachedClient = new Client({
+        keys: [process.env.COC_API_KEY].filter(Boolean),
+        email: email,
+        password: password
+    });
+
+    await cachedClient.login();
+    return cachedClient;
+}
 
 export default async function handler(req, res) {
     // CORSヘッダー設定
@@ -16,13 +44,7 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
 
-    // 環境変数からAPIキーとプレイヤータグを取得
-    const API_KEY = process.env.COC_API_KEY;
     const PLAYER_TAGS = process.env.COC_PLAYER_TAGS;
-
-    if (!API_KEY) {
-        return res.status(500).json({ error: 'API key not configured' });
-    }
 
     if (!PLAYER_TAGS) {
         return res.status(500).json({ error: 'Player tags not configured' });
@@ -32,22 +54,14 @@ export default async function handler(req, res) {
     const playerTagArray = PLAYER_TAGS.split(',').map(tag => tag.trim());
 
     try {
+        const client = await getClient();
+
         // すべてのプレイヤー情報を並列で取得
         const playerPromises = playerTagArray.map(async (tag) => {
-            const url = `https://api.clashofclans.com/v1/players/%23${encodeURIComponent(tag)}`;
-
-            const response = await fetch(url, {
-                headers: {
-                    'Authorization': `Bearer ${API_KEY}`,
-                    'Accept': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`Failed to fetch player ${tag}: ${response.status}`);
-            }
-
-            return await response.json();
+            // タグに#が含まれていない場合は追加
+            const formattedTag = tag.startsWith('#') ? tag : `#${tag}`;
+            const player = await client.getPlayer(formattedTag);
+            return player;
         });
 
         const players = await Promise.all(playerPromises);

@@ -8,6 +8,7 @@ Clash of Clans APIを使用して、身内のプレイヤー情報を一覧表�
 - トロフィー数で自動ソート
 - レスポンシブデザイン対応
 - データベース不要（プレイヤータグは環境変数で設定）
+- **動的トークン生成対応** - IPアドレス制限の問題を解決
 
 ## 表示される情報
 
@@ -21,52 +22,44 @@ Clash of Clans APIを使用して、身内のプレイヤー情報を一覧表�
 - 戦争スター数
 - クラン情報（所属している場合）
 
+## 技術的な特徴
+
+このプロジェクトは **clash-of-clans-api** ラッパーを使用しています。これにより:
+
+- ✅ **IPアドレスの制限なし** - 動的にトークンを生成
+- ✅ **Vercelで動作** - サーバーレス環境でも問題なし
+- ✅ **セキュア** - APIキーをブラウザに公開しない
+- ✅ **自動トークン管理** - メールアドレスとパスワードで認証
+
 ## Vercelへのデプロイ
 
-### 1. APIキーの取得
+### 前提条件
 
-1. [Clash of Clans Developer Portal](https://developer.clashofclans.com/) にアクセス
-2. アカウントを作成してログイン
-3. 「My Account」→「Create New Key」でAPIキーを作成
-   - Name: 任意の名前
-   - Description: 任意の説明
-   - **IP address: `0.0.0.0/0`** （Vercelの動的IPに対応）
+[Clash of Clans Developer Portal](https://developer.clashofclans.com/) でアカウントを作成してください。
+**APIキーを手動で作成する必要はありません**（自動生成されます）。
 
-⚠️ **重要**: Vercelはサーバーレス関数が動的IPアドレスから実行されるため、IP制限を `0.0.0.0/0` に設定する必要があります。
-
-### 2. プレイヤータグの確認
-
-Clash of Clansのゲーム内で：
-1. プレイヤープロフィールを開く
-2. 名前の下に表示されている `#` から始まるタグをコピー
-3. メモしておく（`#` は除く）
-
-### 3. Vercelにデプロイ
+### デプロイ手順
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new)
 
-#### 手順:
-
-1. 上のボタンをクリック、またはVercelにログインしてリポジトリをインポート
+1. 上のボタンをクリック、またはVercelにリポジトリをインポート
 2. 環境変数を設定:
-   - `COC_API_KEY`: 取得したClash of Clans APIキー
-   - `COC_PLAYER_TAGS`: プレイヤータグ（カンマ区切り、`#` は除く）
-     - 例: `Y88VG2CR8,2PP,ABCD1234`
+
+| 変数名 | 説明 | 例 |
+|--------|------|-----|
+| `COC_EMAIL` | Clash of Clans Developer Portalのメールアドレス | `your@email.com` |
+| `COC_PASSWORD` | Clash of Clans Developer Portalのパスワード | `yourpassword` |
+| `COC_PLAYER_TAGS` | プレイヤータグ（カンマ区切り、`#`不要） | `Y88VG2CR8,2PP` |
+
 3. 「Deploy」をクリック
 
-### 4. 環境変数の設定（Vercel Dashboard）
+### 環境変数の設定（Vercel Dashboard）
 
 デプロイ後に環境変数を追加・変更する場合:
 
 1. Vercelダッシュボードでプロジェクトを開く
 2. 「Settings」→「Environment Variables」
-3. 以下の変数を追加:
-
-| Name | Value | 例 |
-|------|-------|-----|
-| `COC_API_KEY` | Clash of Clans APIキー | `eyJ0eXAiOiJKV...` |
-| `COC_PLAYER_TAGS` | プレイヤータグ（カンマ区切り） | `Y88VG2CR8,2PP` |
-
+3. 上記の変数を追加
 4. 保存後、再デプロイ
 
 ## ローカル開発
@@ -78,7 +71,13 @@ git clone <repository-url>
 cd coc-for-us
 ```
 
-### 2. 環境変数を設定
+### 2. 依存関係をインストール
+
+```bash
+npm install
+```
+
+### 3. 環境変数を設定
 
 `.env.example` をコピーして `.env` を作成:
 
@@ -88,22 +87,28 @@ cp .env.example .env
 
 `.env` を編集:
 
-```
-COC_API_KEY=your_api_key_here
-COC_PLAYER_TAGS=Y88VG2CR8,2PP
+```env
+COC_EMAIL=your_email@example.com
+COC_PASSWORD=your_password
+COC_PLAYER_TAGS=P92VRU2PV,QJULRC90U,2Q9V9PRCL
 ```
 
-### 3. Vercel CLIで開発サーバーを起動
+### 4. 開発サーバーを起動
 
 ```bash
-# Vercel CLIをインストール（初回のみ）
-npm i -g vercel
-
-# 開発サーバーを起動
-vercel dev
+npm run dev
 ```
 
 ブラウザで `http://localhost:3000` を開いてください。
+
+## プレイヤータグの確認方法
+
+Clash of Clansのゲーム内で:
+
+1. プレイヤープロフィールを開く
+2. 名前の下に表示されている `#` から始まるタグをコピー
+3. `.env` または Vercel の環境変数に `#` を除いて追加
+   - 例: `#P92VRU2PV` → `P92VRU2PV`
 
 ## ファイル構成
 
@@ -114,6 +119,7 @@ coc-for-us/
 ├── index.html          # メインHTMLファイル
 ├── style.css           # スタイルシート
 ├── app.js              # フロントエンドロジック
+├── package.json        # Node.js依存関係
 ├── vercel.json         # Vercel設定
 ├── .env.example        # 環境変数テンプレート
 ├── .gitignore          # Git除外設定
@@ -125,6 +131,7 @@ coc-for-us/
 - **フロントエンド**: HTML, CSS, Vanilla JavaScript
 - **バックエンド**: Vercel Serverless Functions (Node.js)
 - **API**: Clash of Clans API
+- **ラッパー**: [clash-of-clans-api](https://www.npmjs.com/package/clash-of-clans-api)
 - **ホスティング**: Vercel
 
 ## アーキテクチャ
@@ -134,38 +141,69 @@ coc-for-us/
             ↓
          /api/players (Serverless Function)
             ↓
+    clash-of-clans-api ラッパー
+    （動的トークン生成）
+            ↓
          Clash of Clans API
 ```
 
-フロントエンドから直接Clash of Clans APIを呼び出すのではなく、Vercel Serverless Functionsを経由することで:
-- VercelのIPアドレス制限問題を回避
-- APIキーをブラウザに公開しない（セキュリティ向上）
-- CORS問題を解決
+### なぜラッパーを使うのか？
+
+Clash of Clans APIは**固定IPアドレス**からのリクエストのみを許可します。
+
+- ❌ **問題**: Vercelのサーバーレス関数は動的IPを使用
+- ✅ **解決**: `clash-of-clans-api` ラッパーが自動的にトークンを生成・更新
+  - メールアドレスとパスワードで認証
+  - 現在のIPアドレスに対応したトークンを自動作成
+  - トークンの有効期限管理も自動
+
+## セキュリティ
+
+- ✅ 環境変数を使用（パスワードをコードにハードコードしない）
+- ✅ APIキーをブラウザに公開しない
+- ✅ バックエンドAPIでプロキシ
+- ⚠️ `.env` ファイルは `.gitignore` に含まれています（コミットしないでください）
 
 ## 注意事項
 
-- APIキーは公開リポジトリにコミットしないでください
+- Clash of Clans Developer Portalのメールアドレスとパスワードを環境変数に設定してください
+- パスワードは公開リポジトリにコミットしないでください
 - Clash of Clans APIの利用規約を遵守してください
 - 過度なAPIリクエストを避けてください
-- IP制限 `0.0.0.0/0` はセキュリティリスクがあるため、必要に応じてAPIキーを定期的に更新してください
 
 ## トラブルシューティング
 
-### デプロイ後にプレイヤー情報が表示されない場合
+### デプロイ後にプレイヤー情報が表示されない
 
-1. Vercelダッシュボードの「Deployments」→最新のデプロイ→「Functions」でログを確認
-2. 環境変数 `COC_API_KEY` と `COC_PLAYER_TAGS` が正しく設定されているか確認
-3. Clash of Clans APIのIPアドレス制限が `0.0.0.0/0` になっているか確認
+1. Vercelダッシュボードの「Deployments」→ 最新のデプロイ → 「Functions」でログを確認
+2. 環境変数が正しく設定されているか確認:
+   - `COC_EMAIL`
+   - `COC_PASSWORD`
+   - `COC_PLAYER_TAGS`
+3. Clash of Clans Developer Portalのメールアドレス/パスワードが正しいか確認
 
-### ローカル開発でエラーが出る場合
+### ローカル開発でエラーが出る
 
 - `.env` ファイルが作成されているか確認
-- `vercel dev` コマンドで起動しているか確認（`http-server` などでは環境変数が読み込まれません）
+- `npm install` を実行したか確認
+- `npm run dev`（`vercel dev`）で起動しているか確認
 
-### APIキーエラーが出る場合
+### "Failed to fetch player data" エラー
 
-- APIキーが有効か確認
-- APIキーのIPアドレス制限を確認（Vercelの場合は `0.0.0.0/0`）
+- プレイヤータグが正しいか確認（`#` は除く）
+- Clash of Clans Developer Portalのアカウントが有効か確認
+- ブラウザのコンソールで詳細なエラーメッセージを確認
+
+### "COC_EMAIL and COC_PASSWORD must be set" エラー
+
+- 環境変数 `COC_EMAIL` と `COC_PASSWORD` が設定されているか確認
+- Vercelの場合: Settings → Environment Variables で確認
+
+## 参考リンク
+
+- [Clash of Clans Developer Portal](https://developer.clashofclans.com/)
+- [clash-of-clans-api ドキュメント](https://www.npmjs.com/package/clash-of-clans-api)
+- [Clash of Clans API Discord](https://discord.gg/clashapi) - API関連のサポート
 
 ## ライセンス
 
