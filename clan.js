@@ -19,7 +19,7 @@ function createBasicInfoSection(clan) {
                     <div class="info-icon">🏆</div>
                     <div class="info-content">
                         <div class="info-label">클랜 티어</div>
-                        <div class="info-value">${clan.clanLevel}</div>
+                        <div class="info-value">${clan.clanLevel || 'N/A'}</div>
                     </div>
                 </div>
 
@@ -27,7 +27,7 @@ function createBasicInfoSection(clan) {
                     <div class="info-icon">👥</div>
                     <div class="info-content">
                         <div class="info-label">클랜원 수</div>
-                        <div class="info-value">${clan.members} / 50</div>
+                        <div class="info-value">${clan.memberList?.length || clan.members || 0} / 50</div>
                     </div>
                 </div>
 
