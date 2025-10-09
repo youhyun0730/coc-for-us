@@ -15,7 +15,20 @@ function createHeroesSection(player) {
         return '';
     }
 
-    const heroesHTML = player.heroes.map((hero, index) => {
+    // Battle MachineとBattle Copterを除外
+    const filteredHeroes = player.heroes.filter(hero => {
+        const heroName = hero.name.toLowerCase();
+        return !heroName.includes('battle machine') &&
+               !heroName.includes('battle copter') &&
+               !heroName.includes('배틀 머신') &&
+               !heroName.includes('배틀 콥터');
+    });
+
+    if (filteredHeroes.length === 0) {
+        return '';
+    }
+
+    const heroesHTML = filteredHeroes.map((hero, index) => {
         const heroId = `hero-${player.tag.replace('#', '')}-${index}`;
         const heroEquipment = getEquipmentForHero(hero.name, player.heroEquipment || []);
 
@@ -75,7 +88,16 @@ function calculateTotalHeroLevels(player) {
     if (!player.heroes || player.heroes.length === 0) {
         return 0;
     }
-    return player.heroes.reduce((total, hero) => total + hero.level, 0);
+    // Battle MachineとBattle Copterを除外して合計
+    return player.heroes
+        .filter(hero => {
+            const heroName = hero.name.toLowerCase();
+            return !heroName.includes('battle machine') &&
+                   !heroName.includes('battle copter') &&
+                   !heroName.includes('배틀 머신') &&
+                   !heroName.includes('배틀 콥터');
+        })
+        .reduce((total, hero) => total + hero.level, 0);
 }
 
 // 플레이어 카드를 생성하는 함수
