@@ -4,8 +4,7 @@
   "description": "Clash of Clans player information tool",
   "type": "module",
   "scripts": {
-    "dev": "vercel dev",
-    "build": "vercel build"
+    "dev": "vercel dev"
   },
   "dependencies": {
     "clashofclans.js": "^3.3.22"
