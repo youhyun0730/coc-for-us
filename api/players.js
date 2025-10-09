@@ -2,7 +2,7 @@
 // Clash of Clans APIのプロキシエンドポイント
 // clashofclans.jsラッパーを使用して動的にトークンを生成
 
-import { Client } from 'clashofclans.js';
+const { Client } = require('clashofclans.js');
 
 // クライアントのキャッシュ（コールドスタート対策）
 let cachedClient = null;
@@ -30,7 +30,7 @@ async function getClient() {
     return cachedClient;
 }
 
-export default async function handler(req, res) {
+module.exports = async function handler(req, res) {
     // CORSヘッダー設定
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
@@ -52,31 +52,54 @@ export default async function handler(req, res) {
     }
 
     // カンマ区切りのプレイヤータグを配列に変換
-    const playerTagArray = PLAYER_TAGS.split(',').map(tag => tag.trim());
+    const playerTagArray = PLAYER_TAGS.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
 
     try {
         const client = await getClient();
 
-        // すべてのプレイヤー情報を並列で取得
+        // すべてのプレイヤー情報を並列で取得（エラーハンドリング付き）
         const playerPromises = playerTagArray.map(async (tag) => {
-            // タグに#が含まれていない場合は追加
-            const formattedTag = tag.startsWith('#') ? tag : `#${tag}`;
-            const player = await client.getPlayer(formattedTag);
-            return player;
+            try {
+                // タグに#が含まれていない場合は追加
+                const formattedTag = tag.startsWith('#') ? tag : `#${tag}`;
+                const player = await client.getPlayer(formattedTag);
+                return { success: true, player, tag };
+            } catch (error) {
+                console.error(`Error fetching player ${tag}:`, error.message);
+                return { success: false, tag, error: error.message };
+            }
         });
 
-        const players = await Promise.all(playerPromises);
+        const results = await Promise.all(playerPromises);
+
+        // 成功したプレイヤーのみを抽出
+        const players = results
+            .filter(result => result.success)
+            .map(result => result.player);
+
+        // 失敗したタグをログ出力
+        const failedTags = results
+            .filter(result => !result.success)
+            .map(result => result.tag);
+
+        if (failedTags.length > 0) {
+            console.warn('Failed to fetch players:', failedTags.join(', '));
+        }
 
         // トロフィー数で降順ソート
         players.sort((a, b) => b.trophies - a.trophies);
 
-        res.status(200).json({ players });
+        res.status(200).json({
+            players,
+            failedTags: failedTags.length > 0 ? failedTags : undefined
+        });
 
     } catch (error) {
         console.error('Error fetching player data:', error);
         res.status(500).json({
             error: 'Failed to fetch player data',
-            message: error.message
+            message: error.message,
+            stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
         });
     }
-}
+};
