@@ -1,4 +1,4 @@
-// プレイヤーカードを作成する関数
+// 플레이어 카드를 생성하는 함수
 function createPlayerCard(player) {
     const card = document.createElement('div');
     card.className = 'player-card';
@@ -7,12 +7,12 @@ function createPlayerCard(player) {
         ? `<div class="clan-info">
                <div class="clan-name">${player.clan.name}</div>
                <div class="info-row">
-                   <span class="info-label">クラン役職</span>
+                   <span class="info-label">클랜 직책</span>
                    <span class="info-value">${translateRole(player.role)}</span>
                </div>
            </div>`
         : `<div class="clan-info">
-               <div class="no-clan">クラン未所属</div>
+               <div class="no-clan">클랜 미소속</div>
            </div>`;
 
     card.innerHTML = `
@@ -23,37 +23,37 @@ function createPlayerCard(player) {
 
         <div class="player-info">
             <div class="info-row town-hall">
-                <span class="info-label">タウンホール</span>
-                <span class="info-value">レベル ${player.townHallLevel}</span>
+                <span class="info-label">타운홀</span>
+                <span class="info-value">레벨 ${player.townHallLevel}</span>
             </div>
 
             <div class="info-row trophies">
-                <span class="info-label">トロフィー</span>
+                <span class="info-label">트로피</span>
                 <span class="info-value">${player.trophies.toLocaleString()}</span>
             </div>
 
             <div class="info-row experience-level">
-                <span class="info-label">経験値レベル</span>
+                <span class="info-label">경험치 레벨</span>
                 <span class="info-value">${player.expLevel}</span>
             </div>
 
             <div class="info-row">
-                <span class="info-label">攻撃勝利数</span>
+                <span class="info-label">공격 승리</span>
                 <span class="info-value">${player.attackWins.toLocaleString()}</span>
             </div>
 
             <div class="info-row">
-                <span class="info-label">防衛勝利数</span>
+                <span class="info-label">방어 승리</span>
                 <span class="info-value">${player.defenseWins.toLocaleString()}</span>
             </div>
 
             <div class="info-row">
-                <span class="info-label">最高トロフィー</span>
+                <span class="info-label">최고 트로피</span>
                 <span class="info-value">${player.bestTrophies.toLocaleString()}</span>
             </div>
 
             <div class="info-row">
-                <span class="info-label">戦争スター数</span>
+                <span class="info-label">전쟁 스타</span>
                 <span class="info-value">${player.warStars.toLocaleString()}</span>
             </div>
         </div>
@@ -64,39 +64,39 @@ function createPlayerCard(player) {
     return card;
 }
 
-// 役職を日本語に翻訳
+// 직책을 한국어로 번역
 function translateRole(role) {
     const roles = {
-        'member': 'メンバー',
-        'admin': '長老',
-        'coLeader': '副リーダー',
-        'leader': 'リーダー'
+        'member': '멤버',
+        'admin': '장로',
+        'coLeader': '부리더',
+        'leader': '리더'
     };
     return roles[role] || role;
 }
 
-// エラー表示
+// 에러 표시
 function showError(message) {
     const errorDiv = document.getElementById('error');
     errorDiv.textContent = message;
     errorDiv.style.display = 'block';
 }
 
-// ローディング非表示
+// 로딩 숨김
 function hideLoading() {
     document.getElementById('loading').style.display = 'none';
 }
 
-// すべてのプレイヤー情報を読み込む
+// 모든 플레이어 정보를 로드
 async function loadAllPlayers() {
     const container = document.getElementById('players-container');
 
     try {
-        // バックエンドAPIからプレイヤー情報を取得
+        // 백엔드 API에서 플레이어 정보 가져오기
         const response = await fetch('/api/players');
 
         if (!response.ok) {
-            throw new Error(`APIリクエストに失敗しました (${response.status})`);
+            throw new Error(`API 요청에 실패했습니다 (${response.status})`);
         }
 
         const data = await response.json();
@@ -104,7 +104,7 @@ async function loadAllPlayers() {
 
         hideLoading();
 
-        // プレイヤーカードを作成して表示
+        // 플레이어 카드를 생성하고 표시
         players.forEach(player => {
             const card = createPlayerCard(player);
             container.appendChild(card);
@@ -112,10 +112,10 @@ async function loadAllPlayers() {
 
     } catch (error) {
         hideLoading();
-        showError(`エラーが発生しました: ${error.message}`);
+        showError(`오류가 발생했습니다: ${error.message}`);
         console.error('Error:', error);
     }
 }
 
-// ページ読み込み時に実行
+// 페이지 로드 시 실행
 document.addEventListener('DOMContentLoaded', loadAllPlayers);
