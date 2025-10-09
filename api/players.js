@@ -86,8 +86,23 @@ module.exports = async function handler(req, res) {
             console.warn('Failed to fetch players:', failedTags.join(', '));
         }
 
-        // トロフィー数で降順ソート
-        players.sort((a, b) => b.trophies - a.trophies);
+        // タウンホールレベルが高い順、同じ場合は英雄レベル合計順にソート
+        players.sort((a, b) => {
+            // タウンホールレベルで比較
+            if (b.townHallLevel !== a.townHallLevel) {
+                return b.townHallLevel - a.townHallLevel;
+            }
+
+            // タウンホールレベルが同じ場合、英雄レベルの合計で比較
+            const getTotalHeroLevels = (player) => {
+                if (!player.heroes || player.heroes.length === 0) {
+                    return 0;
+                }
+                return player.heroes.reduce((total, hero) => total + hero.level, 0);
+            };
+
+            return getTotalHeroLevels(b) - getTotalHeroLevels(a);
+        });
 
         res.status(200).json({
             players,
