@@ -31,6 +31,8 @@ async function getClient() {
 }
 
 module.exports = async function handler(req, res) {
+    console.log('Clan API called');
+
     // CORSヘッダー設定
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
@@ -46,6 +48,11 @@ module.exports = async function handler(req, res) {
     }
 
     const CLAN_TAGS = process.env.COC_CLAN_TAGS;
+    console.log('Environment check:', {
+        hasClanTags: !!CLAN_TAGS,
+        hasEmail: !!process.env.COC_EMAIL,
+        hasPassword: !!process.env.COC_PASSWORD
+    });
 
     if (!CLAN_TAGS) {
         return res.status(500).json({ error: 'Clan tags not configured' });
@@ -99,9 +106,12 @@ module.exports = async function handler(req, res) {
 
     } catch (error) {
         console.error('Error fetching clan data:', error);
-        res.status(500).json({
+        console.error('Error stack:', error.stack);
+        return res.status(500).json({
             error: 'Failed to fetch clan data',
             message: error.message,
+            errorName: error.name,
+            clanTagsProvided: !!process.env.COC_CLAN_TAGS,
             stack: process.env.NODE_ENV === 'development' ? error.stack : undefined
         });
     }
