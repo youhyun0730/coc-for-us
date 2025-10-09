@@ -1,0 +1,281 @@
+// クラン詳細情報を表示するスクリプト
+
+// 基本情報セクションを生成
+function createBasicInfoSection(clan) {
+    return `
+        <div class="clan-basic-info">
+            <div class="clan-header">
+                <div class="clan-name-tag">
+                    <h2 class="clan-name">${clan.name}</h2>
+                    <div class="clan-tag">${clan.tag}</div>
+                </div>
+                <div class="clan-badge">
+                    <img src="${clan.badgeUrls?.medium || clan.badgeUrls?.small}" alt="클랜 배지" />
+                </div>
+            </div>
+
+            <div class="info-grid">
+                <div class="info-card tier">
+                    <div class="info-icon">🏆</div>
+                    <div class="info-content">
+                        <div class="info-label">클랜 티어</div>
+                        <div class="info-value">${clan.clanLevel}</div>
+                    </div>
+                </div>
+
+                <div class="info-card members">
+                    <div class="info-icon">👥</div>
+                    <div class="info-content">
+                        <div class="info-label">클랜원 수</div>
+                        <div class="info-value">${clan.members} / 50</div>
+                    </div>
+                </div>
+
+                <div class="info-card capital">
+                    <div class="info-icon">🏰</div>
+                    <div class="info-content">
+                        <div class="info-label">캐피탈 홀 레벨</div>
+                        <div class="info-value">${clan.clanCapital?.capitalHallLevel || 'N/A'}</div>
+                    </div>
+                </div>
+
+                <div class="info-card streak">
+                    <div class="info-icon">🔥</div>
+                    <div class="info-content">
+                        <div class="info-label">클전 연속 승리</div>
+                        <div class="info-value">${clan.warWinStreak || 0}</div>
+                    </div>
+                </div>
+            </div>
+
+            ${clan.description ? `
+                <div class="clan-description">
+                    <h3>클랜 소개</h3>
+                    <p>${clan.description}</p>
+                </div>
+            ` : ''}
+        </div>
+    `;
+}
+
+// 상세 정보 섹션을 生成
+function createDetailedInfoSection(clan) {
+    return `
+        <div class="detailed-info-section">
+            <button class="toggle-details-btn" onclick="toggleDetails()">
+                <span id="toggle-text">상세 정보 보기</span>
+                <span id="toggle-icon">▼</span>
+            </button>
+
+            <div id="detailed-info" class="detailed-info" style="display: none;">
+                <div class="detail-grid">
+                    <!-- 클랜 통계 -->
+                    <div class="detail-card">
+                        <h3>클랜 통계</h3>
+                        <div class="detail-items">
+                            <div class="detail-item">
+                                <span class="detail-label">클랜 포인트</span>
+                                <span class="detail-value">${clan.clanPoints?.toLocaleString() || 0}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">클랜 빌더 베이스 포인트</span>
+                                <span class="detail-value">${clan.clanBuilderBasePoints?.toLocaleString() || 0}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">클랜 캐피탈 포인트</span>
+                                <span class="detail-value">${clan.clanCapitalPoints?.toLocaleString() || 0}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">필요 트로피</span>
+                                <span class="detail-value">${clan.requiredTrophies?.toLocaleString() || 0}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">필요 타운홀 레벨</span>
+                                <span class="detail-value">${clan.requiredTownhallLevel || 'N/A'}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 전쟁 기록 -->
+                    <div class="detail-card">
+                        <h3>전쟁 기록</h3>
+                        <div class="detail-items">
+                            <div class="detail-item">
+                                <span class="detail-label">승리</span>
+                                <span class="detail-value wins">${clan.warWins || 0}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">무승부</span>
+                                <span class="detail-value">${clan.warTies || 0}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">패배</span>
+                                <span class="detail-value losses">${clan.warLosses || 0}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">승률</span>
+                                <span class="detail-value">${calculateWinRate(clan)}%</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">전쟁 빈도</span>
+                                <span class="detail-value">${translateWarFrequency(clan.warFrequency)}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">클랜전 공개</span>
+                                <span class="detail-value">${clan.isWarLogPublic ? '공개' : '비공개'}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 클랜 설정 -->
+                    <div class="detail-card">
+                        <h3>클랜 설정</h3>
+                        <div class="detail-items">
+                            <div class="detail-item">
+                                <span class="detail-label">타입</span>
+                                <span class="detail-value">${translateClanType(clan.type)}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">위치</span>
+                                <span class="detail-value">${clan.location?.name || 'N/A'}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">라벨</span>
+                                <span class="detail-value">${clan.labels?.map(l => l.name).join(', ') || 'N/A'}</span>
+                            </div>
+                            <div class="detail-item">
+                                <span class="detail-label">채팅 언어</span>
+                                <span class="detail-value">${clan.chatLanguage?.name || 'N/A'}</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 캐피탈 정보 -->
+                    ${clan.clanCapital ? `
+                        <div class="detail-card">
+                            <h3>클랜 캐피탈</h3>
+                            <div class="detail-items">
+                                <div class="detail-item">
+                                    <span class="detail-label">캐피탈 홀 레벨</span>
+                                    <span class="detail-value">${clan.clanCapital.capitalHallLevel}</span>
+                                </div>
+                                ${clan.clanCapital.districts ? `
+                                    <div class="detail-item full-width">
+                                        <span class="detail-label">지역</span>
+                                        <div class="districts-list">
+                                            ${clan.clanCapital.districts.map(d => `
+                                                <div class="district-item">
+                                                    <span>${d.name}</span>
+                                                    <span>레벨 ${d.districtHallLevel}</span>
+                                                </div>
+                                            `).join('')}
+                                        </div>
+                                    </div>
+                                ` : ''}
+                            </div>
+                        </div>
+                    ` : ''}
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+// 승률 계산
+function calculateWinRate(clan) {
+    const total = (clan.warWins || 0) + (clan.warLosses || 0) + (clan.warTies || 0);
+    if (total === 0) return 0;
+    return ((clan.warWins || 0) / total * 100).toFixed(1);
+}
+
+// 전쟁 빈도 번역
+function translateWarFrequency(frequency) {
+    const frequencies = {
+        'always': '항상',
+        'moreThanOncePerWeek': '주 2회 이상',
+        'oncePerWeek': '주 1회',
+        'lessThanOncePerWeek': '주 1회 미만',
+        'never': '안 함',
+        'unknown': '알 수 없음'
+    };
+    return frequencies[frequency] || frequency;
+}
+
+// 클랜 타입 번역
+function translateClanType(type) {
+    const types = {
+        'open': '누구나 참가',
+        'inviteOnly': '초대 전용',
+        'closed': '폐쇄'
+    };
+    return types[type] || type;
+}
+
+// 상세 정보 토글
+function toggleDetails() {
+    const detailedInfo = document.getElementById('detailed-info');
+    const toggleText = document.getElementById('toggle-text');
+    const toggleIcon = document.getElementById('toggle-icon');
+
+    if (detailedInfo.style.display === 'none') {
+        detailedInfo.style.display = 'block';
+        toggleText.textContent = '상세 정보 숨기기';
+        toggleIcon.textContent = '▲';
+    } else {
+        detailedInfo.style.display = 'none';
+        toggleText.textContent = '상세 정보 보기';
+        toggleIcon.textContent = '▼';
+    }
+}
+
+// 클랜 카드를 생成
+function createClanCard(clan) {
+    return `
+        <div class="clan-card">
+            ${createBasicInfoSection(clan)}
+            ${createDetailedInfoSection(clan)}
+        </div>
+    `;
+}
+
+// 에러 표시
+function showError(message) {
+    const errorDiv = document.getElementById('error');
+    errorDiv.textContent = message;
+    errorDiv.style.display = 'block';
+}
+
+// 로딩 숨김
+function hideLoading() {
+    document.getElementById('loading').style.display = 'none';
+}
+
+// 클랜 정보를 로드
+async function loadClanInfo() {
+    const container = document.getElementById('clan-container');
+
+    try {
+        // 백엔드 API에서 클랜 정보 가져오기
+        const response = await fetch('/api/clan');
+
+        if (!response.ok) {
+            throw new Error(`API 요청에 실패했습니다 (${response.status})`);
+        }
+
+        const data = await response.json();
+        const clan = data.clan;
+
+        hideLoading();
+
+        // 클랜 카드를 생성하고 표시
+        container.innerHTML = createClanCard(clan);
+
+    } catch (error) {
+        hideLoading();
+        showError(`오류가 발생했습니다: ${error.message}`);
+        console.error('Error:', error);
+    }
+}
+
+// 페이지 로드 시 実行
+document.addEventListener('DOMContentLoaded', loadClanInfo);
