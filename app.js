@@ -1,15 +1,48 @@
+// 英雄の装備を取得
+function getEquipmentForHero(heroName, allEquipment) {
+    const normalizedHeroName = heroNameMapping[heroName] || heroName;
+    const heroEquipmentNames = heroEquipmentMapping[normalizedHeroName] || [];
+
+    return allEquipment.filter(equipment => {
+        const normalizedEquipmentName = equipmentNameMapping[equipment.name] || equipment.name;
+        return heroEquipmentNames.includes(normalizedEquipmentName);
+    });
+}
+
 // 영웅 섹션 생성
 function createHeroesSection(player) {
     if (!player.heroes || player.heroes.length === 0) {
         return '';
     }
 
-    const heroesHTML = player.heroes.map(hero => `
-        <div class="hero-item">
-            <span class="hero-name">${hero.name}</span>
-            <span class="hero-level">레벨 ${hero.level}</span>
-        </div>
-    `).join('');
+    const heroesHTML = player.heroes.map((hero, index) => {
+        const heroId = `hero-${player.tag.replace('#', '')}-${index}`;
+        const heroEquipment = getEquipmentForHero(hero.name, player.heroEquipment || []);
+
+        const equipmentHTML = heroEquipment.length > 0
+            ? heroEquipment.map(eq => `
+                <div class="equipment-item-small">
+                    <span class="equipment-name">${eq.name}</span>
+                    <span class="equipment-level">레벨 ${eq.level}</span>
+                </div>
+            `).join('')
+            : '<div class="no-equipment">装備なし</div>';
+
+        return `
+            <div class="hero-item ${heroEquipment.length > 0 ? 'has-equipment' : ''}" onclick="toggleHeroEquipment('${heroId}')">
+                <div class="hero-main">
+                    <span class="hero-name">${hero.name}</span>
+                    <span class="hero-level">레벨 ${hero.level}</span>
+                    ${heroEquipment.length > 0 ? `<span class="hero-toggle" id="toggle-${heroId}">▼</span>` : ''}
+                </div>
+                ${heroEquipment.length > 0 ? `
+                    <div class="hero-equipment-list" id="${heroId}" style="display: none;">
+                        ${equipmentHTML}
+                    </div>
+                ` : ''}
+            </div>
+        `;
+    }).join('');
 
     return `
         <div class="heroes-section">
@@ -21,33 +54,36 @@ function createHeroesSection(player) {
     `;
 }
 
-// 영웅 장비 섹션 생성
-function createHeroEquipmentSection(player) {
-    if (!player.heroEquipment || player.heroEquipment.length === 0) {
-        return '';
+// 英雄装備トグル機能
+function toggleHeroEquipment(heroId) {
+    const equipmentList = document.getElementById(heroId);
+    const toggle = document.getElementById(`toggle-${heroId}`);
+
+    if (equipmentList && toggle) {
+        if (equipmentList.style.display === 'none') {
+            equipmentList.style.display = 'block';
+            toggle.textContent = '▲';
+        } else {
+            equipmentList.style.display = 'none';
+            toggle.textContent = '▼';
+        }
     }
+}
 
-    const equipmentHTML = player.heroEquipment.map(equipment => `
-        <div class="equipment-item">
-            <span class="equipment-name">${equipment.name}</span>
-            <span class="equipment-level">레벨 ${equipment.level}</span>
-        </div>
-    `).join('');
-
-    return `
-        <div class="equipment-section">
-            <div class="section-title">영웅 장비</div>
-            <div class="equipment-list">
-                ${equipmentHTML}
-            </div>
-        </div>
-    `;
+// 英雄レベルの合計を計算
+function calculateTotalHeroLevels(player) {
+    if (!player.heroes || player.heroes.length === 0) {
+        return 0;
+    }
+    return player.heroes.reduce((total, hero) => total + hero.level, 0);
 }
 
 // 플레이어 카드를 생성하는 함수
 function createPlayerCard(player) {
     const card = document.createElement('div');
     card.className = 'player-card';
+
+    const totalHeroLevels = calculateTotalHeroLevels(player);
 
     const clanInfo = player.clan
         ? `<div class="clan-info">
@@ -82,10 +118,14 @@ function createPlayerCard(player) {
                 <span class="info-label">경험치 레벨</span>
                 <span class="info-value">${player.expLevel}</span>
             </div>
+
+            <div class="info-row hero-total">
+                <span class="info-label">영웅합</span>
+                <span class="info-value">${totalHeroLevels}</span>
+            </div>
         </div>
 
         ${createHeroesSection(player)}
-        ${createHeroEquipmentSection(player)}
 
         ${clanInfo}
     `;

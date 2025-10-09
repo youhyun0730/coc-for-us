@@ -148,6 +148,10 @@ nav {
     background: #d1ecf1;
 }
 
+.hero-total {
+    background: #e7d4f8;
+}
+
 .heroes-section,
 .equipment-section {
     margin-top: 15px;
@@ -168,7 +172,59 @@ nav {
     gap: 8px;
 }
 
-.hero-item,
+.hero-item {
+    background: #f8f9fa;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.hero-item.has-equipment {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.hero-item.has-equipment:hover {
+    background: #e9ecef;
+}
+
+.hero-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+}
+
+.hero-toggle {
+    color: #667eea;
+    font-size: 0.9rem;
+    margin-left: 8px;
+    transition: transform 0.2s ease;
+}
+
+.hero-equipment-list {
+    padding: 8px 12px 12px 12px;
+    background: #ffffff;
+    border-top: 1px solid #dee2e6;
+}
+
+.equipment-item-small {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 8px;
+    margin-top: 4px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.no-equipment {
+    padding: 8px;
+    text-align: center;
+    color: #999;
+    font-style: italic;
+    font-size: 0.9rem;
+}
+
 .equipment-item {
     display: flex;
     justify-content: space-between;
