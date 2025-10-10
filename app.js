@@ -44,7 +44,7 @@ function createHeroesSection(player) {
         return `
             <div class="hero-item ${heroEquipment.length > 0 ? 'has-equipment' : ''}" onclick="toggleHeroEquipment('${heroId}')">
                 <div class="hero-main">
-                    <span class="hero-name">${hero.name}</span>
+                    <span class="hero-name">${translateEquipmentName(hero.name)}</span>
                     <span class="hero-level">레벨 ${hero.level}</span>
                     ${heroEquipment.length > 0 ? `<span class="hero-toggle" id="toggle-${heroId}">▼</span>` : ''}
                 </div>
@@ -81,6 +81,49 @@ function toggleHeroEquipment(heroId) {
             toggle.textContent = '▼';
         }
     }
+}
+
+//　英雄装備を韓国語で表示
+function translateEquipmentName(name) {
+    const equipmentTranslations = {
+        'Barbarian Puppet': '바바리안 인형',
+        'Rage Vial': '분노 마법 병',
+        'Earthquake Boots': '지진 부츠',
+        'Vampstache': '흡혈 수염',
+        'Giant Gauntlet': '자이언트 건틀릿',
+        'Spiky Ball': '스파이키 볼',
+        'Snake Bracelet': '뱀 팔찌',
+
+        'Archer Puppet': '아처 인형',
+        'Invisible Vial': '투명 마법 병',
+        'Giant Arrow': '자이언트 화살',
+        'Healer Puppet': '힐러 인형',
+        'Frozen Arrow': '얼음 화살',
+        'Magic Mirror': '마법 반사경',
+        'Action Figure': '액션 피규어',
+
+        'Eternal Tome': '영원의 책',
+        'Life Gem': '생명의 보석',
+        'Rage Gem': '분노의 보석',
+        'Healing Tome': '치유의 책',
+        'Fireball': '파이어볼',
+        'Lavaloon Puppet': '라벌 인형',
+
+        'Royal Gem': '로얄 보석',
+        'Seeking Shield': '추적 방패',
+        'Haste Vial': '신속 마법 병',
+        'Hog Rider Puppet': '호그 라이더 인형',
+        'Rocket Spear': '로켓 창',
+        'Electro Boots': '일렉트로 부츠',
+
+        'Henchmen Puppet': '보디가드 인형',
+        'Dark Orb': '다크 오브',
+        'Metal Pants': '메탈 바지',
+        'Noble Iron': '노블 아이언',
+        'Dark Crown': '다크 크라운',
+        'Meteor Staff': '메테오 스태프'
+    };
+    return equipmentTranslations[name] || name;
 }
 
 // 英雄レベルの合計を計算

@@ -101,6 +101,11 @@ module.exports = async function handler(req, res) {
                 return player.heroes.reduce((total, hero) => total + hero.level, 0);
             };
 
+            //　タウンホールレベルが同じかつ英雄レベルが同じ場合，経験値で比較
+            if (getTotalHeroLevels(b) === getTotalHeroLevels(a)) {
+                return b.expLevel - a.expLevel;
+            }
+
             return getTotalHeroLevels(b) - getTotalHeroLevels(a);
         });
 
