@@ -132,6 +132,13 @@ nav {
     object-fit: contain;
 }
 
+.clan-league {
+    text-align: right;
+    font-size: 1.5rem;
+    color: #555;
+    margin-top: 10px;
+}
+
 /* 情報グリッド */
 .info-grid {
     display: grid;
