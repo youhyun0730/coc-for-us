@@ -140,16 +140,44 @@ nav {
     color: #333;
 }
 
+.town-hall-level-11 {
+    background: linear-gradient(135deg, #fffcfc 0%, #f9cccc 100%);
+}
+
+.town-hall-level-12 {
+    background: linear-gradient(135deg, #b1c8f6 0%, #f6edba 100%);
+}
+
+.town-hall-level-13 {
+    background: linear-gradient(135deg, #90bcea 0%, #badcee 100%);
+}
+
+.town-hall-level-14 {
+    background: linear-gradient(135deg, #f8f691 0%, #7fed7f 100%);
+}
+
+.town-hall-level-15 {
+    background: linear-gradient(135deg, #cea0dd 0%, #86b6ec 100%);
+}
+
+.town-hall-level-16 {
+    background: linear-gradient(135deg, #ffb9b9 0%, #f6f8a2 100%);
+}
+
+.town-hall-level-17 {
+    background: linear-gradient(135deg, #646367 0%, #c2c876 100%);
+}
+
 .trophies {
-    background: #fff3cd;
+    background: #f0f0f0;
 }
 
 .experience-level {
-    background: #d1ecf1;
+    background: #f0f0f0;
 }
 
 .hero-total {
-    background: #e7d4f8;
+    background: #f0f0f0;
 }
 
 .heroes-section,

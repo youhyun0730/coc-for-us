@@ -177,13 +177,19 @@ function createPlayerCard(player) {
     card.innerHTML = `
         <div class="player-header">
             <div class="player-name">${player.name}</div>
+            <div class="player-tag">${player.tag}</div>
         </div>
-        <div class="player-tag">${player.tag}</div>
 
         <div class="player-info">
-            <div class="info-row town-hall">
+
+            <div class="info-row town-hall town-hall-level-${player.townHallLevel}">
                 <span class="info-label">타운홀</span>
-                <span class="info-value">레벨 ${player.townHallLevel}</span>
+                <span class="info-value">${player.townHallLevel}</span>
+            </div>
+
+            <div class="info-row hero-total">
+                <span class="info-label">영웅합</span>
+                <span class="info-value">${totalHeroLevels}</span>
             </div>
 
             <div class="info-row trophies">
@@ -196,10 +202,6 @@ function createPlayerCard(player) {
                 <span class="info-value">${player.expLevel}</span>
             </div>
 
-            <div class="info-row hero-total">
-                <span class="info-label">영웅합</span>
-                <span class="info-value">${totalHeroLevels}</span>
-            </div>
         </div>
 
         ${createHeroesSection(player)}
