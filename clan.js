@@ -16,8 +16,8 @@ function createBasicInfoSection(clan) {
                 <div class="info-card level">
                     <div class="info-icon">🏆</div>
                     <div class="info-content">
-                        <div class="info-label">클랜 레벨</div>
-                        <div class="info-value">${clan.clanLevel || 'N/A'}</div>
+                        <div class="info-level">클랜 레벨</div>
+                        <div class="info-value">${clan.level || 'N/A'}</div>
                     </div>
                 </div>
 
