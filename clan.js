@@ -70,32 +70,6 @@ function createDetailedInfoSection(clan) {
 
             <div id="detailed-info-${clanTagId}" class="detailed-info" style="display: none;">
                 <div class="detail-grid">
-                    <!-- 클랜 통계 -->
-                    <div class="detail-card">
-                        <h3>클랜 통계</h3>
-                        <div class="detail-items">
-                            <div class="detail-item">
-                                <span class="detail-label">클랜 포인트</span>
-                                <span class="detail-value">${clan.clanPoints?.toLocaleString() || 0}</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">클랜 빌더 베이스 포인트</span>
-                                <span class="detail-value">${clan.clanBuilderBasePoints?.toLocaleString() || 0}</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">클랜 캐피탈 포인트</span>
-                                <span class="detail-value">${clan.clanCapitalPoints?.toLocaleString() || 0}</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">필요 트로피</span>
-                                <span class="detail-value">${clan.requiredTrophies?.toLocaleString() || 0}</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">필요 타운홀 레벨</span>
-                                <span class="detail-value">${clan.requiredTownhallLevel || 'N/A'}</span>
-                            </div>
-                        </div>
-                    </div>
 
                     <!-- 전쟁 기록 -->
                     <div class="detail-card">
@@ -124,29 +98,6 @@ function createDetailedInfoSection(clan) {
                             <div class="detail-item">
                                 <span class="detail-label">클랜전 공개</span>
                                 <span class="detail-value">${clan.isWarLogPublic ? '공개' : '비공개'}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 클랜 설정 -->
-                    <div class="detail-card">
-                        <h3>클랜 설정</h3>
-                        <div class="detail-items">
-                            <div class="detail-item">
-                                <span class="detail-label">타입</span>
-                                <span class="detail-value">${translateClanType(clan.type)}</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">위치</span>
-                                <span class="detail-value">${clan.location?.name || 'N/A'}</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">라벨</span>
-                                <span class="detail-value">${clan.labels?.map(l => l.name).join(', ') || 'N/A'}</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">채팅 언어</span>
-                                <span class="detail-value">${clan.chatLanguage?.name || 'N/A'}</span>
                             </div>
                         </div>
                     </div>
