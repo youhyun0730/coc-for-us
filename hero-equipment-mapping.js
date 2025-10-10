@@ -111,7 +111,23 @@ function getEquipmentForHero(heroName, allEquipment) {
     });
 }
 
-// エクスポート
+// 英雄ごとの装備を韓国語で取得
+function getEquipmentForHeroInKorean(heroName, allEquipment) {
+    const normalizedHeroName = heroNameMapping[heroName] || heroName;
+    const heroEquipmentNames = heroEquipmentMapping[normalizedHeroName] || [];
+
+    return allEquipment.filter(equipment => {
+        const normalizedEquipmentName = equipmentNameMapping[equipment.name] || equipment.name;
+        return heroEquipmentNames.includes(normalizedEquipmentName);
+    }).map(equipment => {
+        // 英語名を韓国語名に変換
+        const koreanName = Object.keys(equipmentNameMapping).find(key => equipmentNameMapping[key] === equipment.name);
+        return {
+            ...equipment,
+            name: koreanName || equipment.name
+        };
+    });
+}
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = {
         heroEquipmentMapping,
