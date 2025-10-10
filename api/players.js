@@ -88,12 +88,12 @@ module.exports = async function handler(req, res) {
 
         // タウンホールレベルが高い順、同じ場合は英雄レベル合計順にソート
         players.sort((a, b) => {
-            // タウンホールレベルで比較
+            // 타운홀 레벨로 비교
             if (b.townHallLevel !== a.townHallLevel) {
                 return b.townHallLevel - a.townHallLevel;
             }
 
-            // タウンホールレベルが同じ場合、英雄レベルの合計で比較
+            // 타운홀 레벨이 같은 경우, 영웅 레벨 합계로 비교
             const getTotalHeroLevels = (player) => {
                 if (!player.heroes || player.heroes.length === 0) {
                     return 0;
@@ -101,12 +101,13 @@ module.exports = async function handler(req, res) {
                 return player.heroes.reduce((total, hero) => total + hero.level, 0);
             };
 
-            //　タウンホールレベルが同じかつ英雄レベルが同じ場合，経験値で比較
-            if (getTotalHeroLevels(b) === getTotalHeroLevels(a)) {
-                return b.expLevel - a.expLevel;
+            const heroLevelDifference = getTotalHeroLevels(b) - getTotalHeroLevels(a);
+            if (heroLevelDifference !== 0) {
+                return heroLevelDifference;
             }
 
-            return getTotalHeroLevels(b) - getTotalHeroLevels(a);
+            // 영웅 레벨도 같은 경우, 경험치 레벨로 비교
+            return b.expLevel - a.expLevel;
         });
 
         res.status(200).json({
