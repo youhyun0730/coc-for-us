@@ -176,7 +176,7 @@ function createPlayerCard(player, index) {
 
     card.innerHTML = `
         <div class="player-header">
-            <div class="player-rank">#${index + 1}</div>
+            <div class="player-rank">#${player.rank}</div>
             <div class="player-name">${player.name}</div>
             <div class="player-tag">${player.tag}</div>
         </div>

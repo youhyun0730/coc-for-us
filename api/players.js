@@ -110,6 +110,11 @@ module.exports = async function handler(req, res) {
             return b.expLevel - a.expLevel;
         });
 
+        players = players.map((player, index) => ({
+            ...player,
+            rank: index + 1   // 1부터 시작
+        }));
+
         res.status(200).json({
             players,
             failedTags: failedTags.length > 0 ? failedTags : undefined
