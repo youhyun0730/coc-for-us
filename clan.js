@@ -18,8 +18,8 @@ function createBasicInfoSection(clan) {
                 <div class="info-card tier">
                     <div class="info-icon">🏆</div>
                     <div class="info-content">
-                        <div class="info-label">클랜 티어</div>
-                        <div class="info-value">${clan.clanLevel || 'N/A'}</div>
+                        <div class="info-label">클랜 리그</div>
+                        <div class="info-value">${clan.warLeague.name || 'N/A'}</div>
                     </div>
                 </div>
 
