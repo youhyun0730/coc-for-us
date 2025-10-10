@@ -99,6 +99,13 @@ nav {
     border-bottom: 2px solid #f0f0f0;
 }
 
+.player-rank {
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #667eea;
+    margin-right: 10px;
+}
+
 .player-name {
     font-size: 1.5rem;
     font-weight: bold;
