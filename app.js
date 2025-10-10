@@ -156,7 +156,7 @@ function calculateTotalHeroLevels(player) {
 }
 
 // 플레이어 카드를 생성하는 함수
-function createPlayerCard(player, rank) {
+function createPlayerCard(player, index) {
     const card = document.createElement('div');
     card.className = 'player-card';
 
@@ -176,7 +176,7 @@ function createPlayerCard(player, rank) {
 
     card.innerHTML = `
         <div class="player-header">
-            <div class="player-rank">#${rank}</div>
+            <div class="player-rank">#${index + 1}</div>
             <div class="player-name">${player.name}</div>
             <div class="player-tag">${player.tag}</div>
         </div>

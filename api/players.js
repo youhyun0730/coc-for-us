@@ -110,11 +110,6 @@ module.exports = async function handler(req, res) {
             return b.expLevel - a.expLevel;
         });
 
-        players.forEach((player, index) => {
-            const playerCard = createPlayerCard(player, index + 1); // 랭킹은 1부터 시작
-            document.querySelector('.players-container').appendChild(playerCard);
-        });
-
         res.status(200).json({
             players,
             failedTags: failedTags.length > 0 ? failedTags : undefined
