@@ -35,7 +35,7 @@ function createHeroesSection(player) {
         const equipmentHTML = heroEquipment.length > 0
             ? heroEquipment.map(eq => `
                 <div class="equipment-item-small">
-                    <span class="equipment-name">${eq.name}</span>
+                    <span class="equipment-name">${translateEquipmentName(eq.name)}</span>
                     <span class="equipment-level">레벨 ${eq.level}</span>
                 </div>
             `).join('')
@@ -44,7 +44,7 @@ function createHeroesSection(player) {
         return `
             <div class="hero-item ${heroEquipment.length > 0 ? 'has-equipment' : ''}" onclick="toggleHeroEquipment('${heroId}')">
                 <div class="hero-main">
-                    <span class="hero-name">${translateEquipmentName(hero.name)}</span>
+                    <span class="hero-name">${translateHeroName(hero.name)}</span>
                     <span class="hero-level">레벨 ${hero.level}</span>
                     ${heroEquipment.length > 0 ? `<span class="hero-toggle" id="toggle-${heroId}">▼</span>` : ''}
                 </div>
@@ -124,6 +124,18 @@ function translateEquipmentName(name) {
         'Meteor Staff': '메테오 스태프'
     };
     return equipmentTranslations[name] || name;
+}
+
+// 영웅 이름을 한국어로 번역
+function translateHeroName(name) {
+    const heroTranslations = {
+        'Barbarian King': '바바리안 킹',
+        'Archer Queen': '아처 퀸',
+        'Grand Warden': '그랜드 워든',
+        'Royal Champion': '로얄 챔피언',
+        'Minion Prince': '미니언 프린스'
+    };
+    return heroTranslations[name] || name;
 }
 
 // 英雄レベルの合計を計算
