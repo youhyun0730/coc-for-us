@@ -100,17 +100,6 @@ const equipmentNameMapping = {
     '메테오 스태프': 'Meteor Staff'
 };
 
-// 英雄に装備が属しているかをチェック
-function getEquipmentForHero(heroName, allEquipment) {
-    const normalizedHeroName = heroNameMapping[heroName] || heroName;
-    const heroEquipmentNames = heroEquipmentMapping[normalizedHeroName] || [];
-
-    return allEquipment.filter(equipment => {
-        const normalizedEquipmentName = equipmentNameMapping[equipment.name] || equipment.name;
-        return heroEquipmentNames.includes(normalizedEquipmentName);
-    });
-}
-
 // 英雄ごとの装備を韓国語で取得
 function getEquipmentForHeroInKorean(heroName, allEquipment) {
     const normalizedHeroName = heroNameMapping[heroName] || heroName;
@@ -133,6 +122,6 @@ if (typeof module !== 'undefined' && module.exports) {
         heroEquipmentMapping,
         heroNameMapping,
         equipmentNameMapping,
-        getEquipmentForHero
+        getEquipmentForHeroInKorean
     };
 }
