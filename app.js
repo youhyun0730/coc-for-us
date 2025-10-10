@@ -156,7 +156,7 @@ function calculateTotalHeroLevels(player) {
 }
 
 // 플레이어 카드를 생성하는 함수
-function createPlayerCard(player) {
+function createPlayerCard(player, index) {
     const card = document.createElement('div');
     card.className = 'player-card';
 
@@ -176,7 +176,7 @@ function createPlayerCard(player) {
 
     card.innerHTML = `
         <div class="player-header">
-            <div class="player-rank">#${player.rank}</div>
+            <div class="player-rank">#${index + 1}</div>
             <div class="player-name">${player.name}</div>
             <div class="player-tag">${player.tag}</div>
         </div>
@@ -236,11 +236,6 @@ function hideLoading() {
     document.getElementById('loading').style.display = 'none';
 }
 
-players = players.map((player, index) => ({
-    ...player,
-    rank: index + 1   // 1부터 시작
-}));
-
 // 모든 플레이어 정보를 로드
 async function loadAllPlayers() {
     const container = document.getElementById('players-container');
@@ -260,7 +255,7 @@ async function loadAllPlayers() {
 
         // 플레이어 카드를 생성하고 표시
         players.forEach(player => {
-            const card = createPlayerCard(player);
+            const card = createPlayerCard(player, index);
             container.appendChild(card);
         });
 
