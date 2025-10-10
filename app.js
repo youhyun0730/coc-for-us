@@ -254,7 +254,7 @@ async function loadAllPlayers() {
         hideLoading();
 
         // 플레이어 카드를 생성하고 표시
-        players.forEach(player => {
+        players.forEach((player, index) => {
             const card = createPlayerCard(player, index);
             container.appendChild(card);
         });
