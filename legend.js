@@ -74,7 +74,7 @@ async function loadLegendPlayers() {
 
     try {
         // 백엔드 API에서 전설 및 경쟁전 플레이어 정보 가져오기
-        const response = await fetch('/api/legend');
+        const response = await fetch('/api/players');
 
         if (!response.ok) {
             throw new Error(`API 요청에 실패했습니다 (${response.status})`);
