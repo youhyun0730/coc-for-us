@@ -201,6 +201,9 @@ function createPlayerCard(player, index) {
             </div>
 
             <div class="info-row trophies">
+                <span class="info-label">
+                    <img src="${player.leagueTier.icon.ulr}" alt="리그 아이콘" class="league-icon" crossorigin="annonymous" referrerpolicy="no-referrer">
+                </span>
                 <span class="info-label">${translateLeague(player.leagueTier.name)}</span>
                 <span class="info-value">${player.trophies.toLocaleString()}</span>
             </div>
@@ -217,7 +220,7 @@ function createPlayerCard(player, index) {
         ${clanInfo}
 
         <button class="toggle-competitive-btn" onclick="toggleCompetitiveInfo('${player.tag.replace('#', '')}')">
-            경쟁전 정보 보기
+            경쟁전 정보 보기 ▼
         </button>
 
         ${competitiveInfo}
