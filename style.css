@@ -286,7 +286,6 @@ nav {
     margin-top: 15px;
     padding-top: 15px;
     border-top: 2px solid #f0f0f0;
-    border-bottom: 2px solid #f0f0f0;
 }
 
 .clan-name {
@@ -326,6 +325,7 @@ nav {
     cursor: pointer;
     font-size: 0.9rem;
     transition: background-color 0.3s ease;
+    border-top: 2px solid #f0f0f0;
 }
 
 .player-card .toggle-competitive-btn:hover {

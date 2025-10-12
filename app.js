@@ -201,15 +201,7 @@ function createPlayerCard(player, index) {
             </div>
 
             <div class="info-row trophies">
-                <span class="info-label">경쟁전 리그</span>
-                <span class="info-value">
-                    <img src="${player.leagueTier.icon.urls || ''}" alt="${player.leagueTier.name}" class="league-icon">
-                    ${player.leagueTier.name}
-                </span>
-            </div>
-
-            <div class="info-row trophies">
-                <span class="info-label">트로피</span>
+                <span class="info-label">${translateLeague(player.leagueTier.name)}</span>
                 <span class="info-value">${player.trophies.toLocaleString()}</span>
             </div>
 
@@ -258,6 +250,39 @@ function translateRole(role) {
         'leader': '리더'
     };
     return roles[role] || role;
+}
+
+// 경쟁전 리그를 한국어로 번역
+function translateLeague(league) {
+    const leagues = {
+        'Unranked': '언랭크',
+        "Wizard League 10": "마법사 10",
+        "Wizard League 11": "마법사 11",
+        "Wizard League 12": "마법사 12",
+        "Valkyrie League 13": "발키리 13",
+        "Valkyrie League 14": "발키리 14",
+        "Valkyrie League 15": "발키리 15",
+        "Witch League 16": "마녀 16",
+        "Witch League 17": "마녀 17",
+        "Witch League 18": "마녀 18",
+        "Golem League 19": "골렘 19",
+        "Golem League 20": "골렘 20",
+        "Golem League 21": "골렘 21",
+        "P.E.K.K.A League 22": "페카 22",
+        "P.E.K.K.A League 23": "페카 23",
+        "P.E.K.K.A League 24": "페카 24",
+        "Titan League 25": "타이탄 25",
+        "Titan League 26": "타이탄 26",
+        "Titan League 27": "타이탄 27",
+        "Dragon League 28": "드래곤 28",
+        "Dragon League 29": "드래곤 29",
+        "Dragon League 30": "드래곤 30",
+        "Electro League 31": "일렉트로 31",
+        "Electro League 32": "일렉트로 32",
+        "Electro League 33": "일렉트로 33",
+        "Legend League": "전설"
+    };
+    return leagues[league] || league;
 }
 
 // 에러 표시
