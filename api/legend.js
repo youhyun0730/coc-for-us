@@ -1,6 +1,3 @@
-// Vercel Serverless Function
-// Clash of Clans Legend League 및 Competitive League API의 프로키시 엔드포인트
-
 const { Client } = require('clashofclans.js');
 
 // 클라이언트 캐싱 (콜드 스타트 방지)
@@ -49,11 +46,17 @@ module.exports = async function handler(req, res) {
     const LEGEND_TAGS = process.env.COC_LEGEND_TAGS;
 
     if (!LEGEND_TAGS) {
+        console.error('Legend tags not configured in environment variables');
         return res.status(500).json({ error: 'Legend tags not configured' });
     }
 
     // 콤마로 구분된 태그를 배열로 변환
     const legendTagArray = LEGEND_TAGS.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+
+    if (legendTagArray.length === 0) {
+        console.error('No valid legend tags found in environment variables');
+        return res.status(400).json({ error: 'No valid legend tags provided' });
+    }
 
     try {
         const client = await getClient();
