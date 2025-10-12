@@ -316,8 +316,8 @@ nav {
 
 
 .player-card .toggle-competitive-btn {
-    margin-top: 10px;
-    padding: 8px 12px;
+    width: 100%;
+    padding: 15px;
     background-color: #4a90e2;
     color: #fff;
     border: none;

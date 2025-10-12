@@ -174,7 +174,7 @@ function createPlayerCard(player, index) {
                <div class="no-clan">클랜 미소속</div>
            </div>`;
 
-    const legend = player.legendStatistics || {};
+    const legend = player.legendStatistics || player.rankedStatistics || {};
 
     // 경쟁전 정보 HTML
     const competitiveInfo = `
@@ -262,9 +262,11 @@ function toggleCompetitiveInfo(playerTag) {
     if (competitiveInfo.style.display === 'none') {
         competitiveInfo.style.display = 'block';
         toggleButton.textContent = '경쟁전 정보 숨기기';
+        toggleIcon.textContent = '▲';
     } else {
         competitiveInfo.style.display = 'none';
         toggleButton.textContent = '경쟁전 정보 보기';
+        toggleIcon.textContent = '▼';
     }
 }
 
