@@ -307,6 +307,7 @@ async function loadAllPlayers() {
 
         const data = await response.json();
         const players = data.players;
+        console.log('API에서 가져온 플레이어 데이터:', players); // API 응답 데이터 확인
 
         hideLoading();
 
