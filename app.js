@@ -174,39 +174,10 @@ function createPlayerCard(player, index) {
                <div class="no-clan">클랜 미소속</div>
            </div>`;
 
-    const legend = player.legendStatistics || player.rankedStatistics || {};
-
     // 경쟁전 정보 HTML
     const competitiveInfo = `
         <div class="competitive-info" id="competitive-${player.tag.replace('#', '')}" style="display: none;">
-            <div class="info-row">
-                <span class="info-label">참여 리그</span>
-                <span class="info-value">${player.league?.name || 'N/A'}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">현재 점수</span>
-                <span class="info-value">${legend.currentSeason?.trophies || player.trophies || 'N/A'}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">현재 등수</span>
-                <span class="info-value">${legend.currentSeason?.rank || 'N/A'}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">공격 소모</span>
-                <span class="info-value">${legend.currentSeason?.attacks || 0} / ${legend.currentSeason?.totalAttacks || 8}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">완파</span>
-                <span class="info-value">${legend.currentSeason?.starEarned || 0} / ${legend.currentSeason?.attacks || 0}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">방어 소모</span>
-                <span class="info-value">${legend.currentSeason?.defenses || 0} / ${legend.currentSeason?.totalDefenses || 8}</span>
-            </div>
-            <div class="info-row">
-                <span class="info-label">방어 성공</span>
-                <span class="info-value">${legend.currentSeason?.defensesWon || 0} / ${legend.currentSeason?.defenses || 0}</span>
-            </div>
+            <div>경쟁전 정보 api 준비중...</div>
         </div>
     `;
 
@@ -227,6 +198,12 @@ function createPlayerCard(player, index) {
             <div class="info-row hero-total">
                 <span class="info-label">영웅합</span>
                 <span class="info-value">${totalHeroLevels}</span>
+            </div>
+
+            <div class="info-row trophies">
+                <span class="info-label">경쟁전 리그</span>
+                <span class="info-value">${player.leagueTier.icon}</span>
+                <span class="info-value">${player.leagueTier.name}</span>
             </div>
 
             <div class="info-row trophies">
