@@ -229,7 +229,7 @@ nav {
 }
 
 .hero-toggle {
-    color: #667eea;
+    color: black;
     font-size: 0.9rem;
     margin-left: 8px;
     transition: transform 0.2s ease;
@@ -275,7 +275,7 @@ nav {
 
 .hero-level,
 .equipment-level {
-    color: #667eea;
+    color: black;
     font-weight: 600;
     margin-left: auto;
     text-align: right;
@@ -289,7 +289,7 @@ nav {
 
 .clan-name {
     font-weight: 600;
-    color: #667eea;
+    color: black;
     font-size: 1.1rem;
 }
 
