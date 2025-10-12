@@ -278,6 +278,7 @@ nav {
 .equipment-level {
     color: #667eea;
     font-weight: 600;
+    margin-left: auto;
     text-align: right;
 }
 
