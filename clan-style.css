@@ -153,7 +153,7 @@ nav {
     padding: 20px;
     border-radius: 15px;
     background: linear-gradient(135deg, #f8f9fa);
-    color: white;
+    color: black;
     box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
