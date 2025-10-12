@@ -266,31 +266,5 @@ async function loadAllPlayers() {
     }
 }
 
-function calculateStatistics(players) {
-    const statistics = {};
-
-    players.forEach(player => {
-        const townHallLevel = player.townHallLevel;
-        if (!statistics[townHallLevel]) {
-            statistics[townHallLevel] = 0;
-        }
-        statistics[townHallLevel]++;
-    });
-
-    return statistics;
-}
-
-function renderStatistics(statistics) {
-    const statisticsList = document.getElementById('statistics-list');
-    statisticsList.innerHTML = ''; // 기존 통계 초기화
-
-    Object.keys(statistics).sort((a, b) => a - b).forEach(level => {
-        const count = statistics[level];
-        const listItem = document.createElement('li');
-        listItem.textContent = `타운홀 ${level}: ${count}명`;
-        statisticsList.appendChild(listItem);
-    });
-}
-
 // 페이지 로드 시 실행
 document.addEventListener('DOMContentLoaded', loadAllPlayers);
