@@ -174,6 +174,8 @@ function createPlayerCard(player, index) {
                <div class="no-clan">클랜 미소속</div>
            </div>`;
 
+    const legend = player.legendStatistics || {};
+
     // 경쟁전 정보 HTML
     const competitiveInfo = `
         <div class="competitive-info" id="competitive-${player.tag.replace('#', '')}" style="display: none;">
@@ -183,27 +185,27 @@ function createPlayerCard(player, index) {
             </div>
             <div class="info-row">
                 <span class="info-label">현재 점수</span>
-                <span class="info-value">${player.trophies || 'N/A'}</span>
+                <span class="info-value">${legend.currentSeason?.trophies || player.trophies || 'N/A'}</span>
             </div>
             <div class="info-row">
                 <span class="info-label">현재 등수</span>
-                <span class="info-value">${player.rank || 'N/A'}</span>
+                <span class="info-value">${legend.currentSeason?.rank || 'N/A'}</span>
             </div>
             <div class="info-row">
                 <span class="info-label">공격 소모</span>
-                <span class="info-value">${player.attacksUsed || 0} / ${player.totalAttacks || 8}</span>
+                <span class="info-value">${legend.currentSeason?.attacks || 0} / ${legend.currentSeason?.totalAttacks || 8}</span>
             </div>
             <div class="info-row">
                 <span class="info-label">완파</span>
-                <span class="info-value">${player.starsEarned || 0} / ${player.totalStars || 3}</span>
+                <span class="info-value">${legend.currentSeason?.starEarned || 0} / ${legend.currentSeason?.attacks || 0}</span>
             </div>
             <div class="info-row">
                 <span class="info-label">방어 소모</span>
-                <span class="info-value">${player.defensesUsed || 0} / ${player.totalDefenses || 8}</span>
+                <span class="info-value">${legend.currentSeason?.defenses || 0} / ${legend.currentSeason?.totalDefenses || 8}</span>
             </div>
             <div class="info-row">
                 <span class="info-label">방어 성공</span>
-                <span class="info-value">${player.defensesWon || 0} / ${player.defensesUsed || 0}</span>
+                <span class="info-value">${legend.currentSeason?.defensesWon || 0} / ${legend.currentSeason?.defenses || 0}</span>
             </div>
         </div>
     `;
