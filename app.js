@@ -202,8 +202,10 @@ function createPlayerCard(player, index) {
 
             <div class="info-row trophies">
                 <span class="info-label">경쟁전 리그</span>
-                <span class="info-value">${player.leagueTier.icon}</span>
-                <span class="info-value">${player.leagueTier.name}</span>
+                <span class="info-value">
+                    <img src="${player.leagueTier.icon.urls || ''}" alt="${player.leagueTier.name}" class="league-icon">
+                    ${player.leagueTier.name}
+                </span>
             </div>
 
             <div class="info-row trophies">
