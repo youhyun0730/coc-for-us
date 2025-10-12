@@ -229,16 +229,13 @@ function createPlayerCard(player, index) {
 function toggleCompetitiveInfo(playerTag) {
     const competitiveInfo = document.getElementById(`competitive-${playerTag}`);
     const toggleButton = document.querySelector(`button[onclick="toggleCompetitiveInfo('${playerTag}')"]`);
-    const toggleIcon = toggleButton.querySelector('span:last-child');
 
     if (competitiveInfo.style.display === 'none') {
         competitiveInfo.style.display = 'block';
-        toggleButton.textContent = '경쟁전 정보 숨기기';
-        toggleIcon.textContent = '▲';
+        toggleButton.textContent = '경쟁전 정보 숨기기 ▲';
     } else {
         competitiveInfo.style.display = 'none';
-        toggleButton.textContent = '경쟁전 정보 보기';
-        toggleIcon.textContent = '▼';
+        toggleButton.textContent = '경쟁전 정보 보기 ▼';
     }
 }
 
