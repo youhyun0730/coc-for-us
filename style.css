@@ -278,6 +278,7 @@ nav {
 .equipment-level {
     color: #667eea;
     font-weight: 600;
+    text-align: right;
 }
 
 .clan-info {
