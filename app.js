@@ -174,6 +174,40 @@ function createPlayerCard(player, index) {
                <div class="no-clan">클랜 미소속</div>
            </div>`;
 
+    // 경쟁전 정보 HTML
+    const competitiveInfo = `
+        <div class="competitive-info" id="competitive-${player.tag.replace('#', '')}" style="display: none;">
+            <div class="info-row">
+                <span class="info-label">참여 리그</span>
+                <span class="info-value">${player.league?.name || 'N/A'}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">현재 점수</span>
+                <span class="info-value">${player.trophies || 'N/A'}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">현재 등수</span>
+                <span class="info-value">${player.rank || 'N/A'}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">공격 소모</span>
+                <span class="info-value">${player.attacksUsed || 0} / ${player.totalAttacks || 8}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">완파</span>
+                <span class="info-value">${player.starsEarned || 0} / ${player.totalStars || 3}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">방어 소모</span>
+                <span class="info-value">${player.defensesUsed || 0} / ${player.totalDefenses || 8}</span>
+            </div>
+            <div class="info-row">
+                <span class="info-label">방어 성공</span>
+                <span class="info-value">${player.defensesWon || 0} / ${player.defensesUsed || 0}</span>
+            </div>
+        </div>
+    `;
+
     card.innerHTML = `
         <div class="player-header">
             <div class="player-rank">#${index + 1}</div>
@@ -208,9 +242,28 @@ function createPlayerCard(player, index) {
         ${createHeroesSection(player)}
 
         ${clanInfo}
+
+        <button class="toggle-competitive-btn" onclick="toggleCompetitiveInfo('${player.tag.replace('#', '')}')">
+            경쟁전 정보 보기
+        </button>
+
+        ${competitiveInfo}
     `;
 
     return card;
+}
+
+function toggleCompetitiveInfo(playerTag) {
+    const competitiveInfo = document.getElementById(`competitive-${playerTag}`);
+    const toggleButton = document.querySelector(`button[onclick="toggleCompetitiveInfo('${playerTag}')"]`);
+
+    if (competitiveInfo.style.display === 'none') {
+        competitiveInfo.style.display = 'block';
+        toggleButton.textContent = '경쟁전 정보 숨기기';
+    } else {
+        competitiveInfo.style.display = 'none';
+        toggleButton.textContent = '경쟁전 정보 보기';
+    }
 }
 
 // 직책을 한국어로 번역
