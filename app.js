@@ -229,6 +229,7 @@ function createPlayerCard(player, index) {
 function toggleCompetitiveInfo(playerTag) {
     const competitiveInfo = document.getElementById(`competitive-${playerTag}`);
     const toggleButton = document.querySelector(`button[onclick="toggleCompetitiveInfo('${playerTag}')"]`);
+    const toggleIcon = toggleButton.querySelector('span:last-child');
 
     if (competitiveInfo.style.display === 'none') {
         competitiveInfo.style.display = 'block';

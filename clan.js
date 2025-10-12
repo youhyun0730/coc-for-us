@@ -214,6 +214,7 @@ async function loadAllClans() {
 
         const data = await response.json();
         const clans = data.clans;
+        console.log('API에서 가져온 플레이어 데이터:', clans); // 디버그용 로그
 
         hideLoading();
 
