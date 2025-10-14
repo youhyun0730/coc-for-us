@@ -9,13 +9,12 @@ function createBasicInfoSection(clan) {
                     <h2 class="clan-name">${clan.name}</h2>
                     <div class="clan-tag">${clan.tag}</div>
                 </div>
-                <div class="clan-league-icon">
-                    <img 
-                        src="images/cwl/Icon_HV_CWL_${getWarLeagueNumber(clan.warLeague.name)}.png"
-                        alt="${clan.warLeague.name}"
-                        onerror="this.style.display='none';"
-                    />
-                </div>
+                <img 
+                    class="clan-league-icon" 
+                    src="images/cwl/Icon_HV_CWL_${getWarLeagueNumber(clan.warLeague.name)}.png"
+                    alt="${clan.warLeague.name}"
+                    onerror="this.style.display='none';"
+                />
             </div>
 
             <div class="info-grid">
