@@ -6,7 +6,7 @@ function createBasicInfoSection(clan) {
         <div class="clan-basic-info">
             <div class="clan-header">
                 <div class="clan-name-tag">
-                    <h2 class="clan-name">${clan.name}</h2>
+                    <div class="clan-name">${clan.name}</div>
                     <div class="clan-tag">${clan.tag}</div>
                 </div>
                 <img 
