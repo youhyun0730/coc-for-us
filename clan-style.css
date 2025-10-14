@@ -335,6 +335,12 @@ nav {
     border-left: 3px solid black;
 }
 
+.clan-league-icon img {
+    width: 50px;
+    height: 50px;
+    object-fit: contain;
+}
+
 /* レスポンシブデザイン */
 @media (max-width: 1024px) {
     .clan-container {

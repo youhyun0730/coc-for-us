@@ -9,7 +9,13 @@ function createBasicInfoSection(clan) {
                     <h2 class="clan-name">${clan.name}</h2>
                     <div class="clan-tag">${clan.tag}</div>
                 </div>
-                <div class="clan-league">${clan.warLeague.name}</div>
+                <div class="clan-league-icon">
+                    <img 
+                        src="images/league/Icon_HV_CWL_${getWarLeagueNumber(clan.warLeague.name)}.png"
+                        alt="${clan.warLeague.name}"
+                        onerror="this.style.display='none';"
+                    />
+                </div>
             </div>
 
             <div class="info-grid">
@@ -55,6 +61,33 @@ function createBasicInfoSection(clan) {
         </div>
     `;
 }
+
+//  clan.warleague를 입력하면 숫자로 출력하는 함수
+function getWarLeagueNumber(warLeague) {
+    const leagueMap = {
+        'Unranked': 0,
+        'Bronze League III': Bronze_3,
+        'Bronze League II': Bronze_2,
+        'Bronze League I': Bronze_1,
+        'Silver League III': Silver_3,
+        'Silver League II': Silver_2,
+        'Silver League I': Silver_1,
+        'Gold League III': Gold_3,
+        'Gold League II': Gold_2,
+        'Gold League I': Gold_1,
+        'Crystal League III': Crystal_3,
+        'Crystal League II': Crystal_2,
+        'Crystal League I': Crystal_1,
+        'Master League III': Master_3,
+        'Master League II': Master_2,
+        'Master League I': Master_1,
+        'Champion League III': Champion_3,
+        'Champion League II': Champion_2,
+        'Champion League I': Champion_1
+    };
+    return leagueMap[warLeague] || 0;
+}
+
 
 // 상세 정보 섹션을 生成
 function createDetailedInfoSection(clan) {
