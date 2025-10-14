@@ -65,24 +65,24 @@ function createBasicInfoSection(clan) {
 function getWarLeagueNumber(warLeague) {
     const leagueMap = {
         'Unranked': 0,
-        'Bronze League III': Bronze_3,
-        'Bronze League II': Bronze_2,
-        'Bronze League I': Bronze_1,
-        'Silver League III': Silver_3,
-        'Silver League II': Silver_2,
-        'Silver League I': Silver_1,
-        'Gold League III': Gold_3,
-        'Gold League II': Gold_2,
-        'Gold League I': Gold_1,
-        'Crystal League III': Crystal_3,
-        'Crystal League II': Crystal_2,
-        'Crystal League I': Crystal_1,
-        'Master League III': Master_3,
-        'Master League II': Master_2,
-        'Master League I': Master_1,
-        'Champion League III': Champion_3,
-        'Champion League II': Champion_2,
-        'Champion League I': Champion_1
+        'Bronze League III': 1,
+        'Bronze League II': 2,
+        'Bronze League I': 3,
+        'Silver League III': 4,
+        'Silver League II': 5,
+        'Silver League I': 6,
+        'Gold League III': 7,
+        'Gold League II': 8,
+        'Gold League I': 9,
+        'Crystal League III': 10,
+        'Crystal League II': 11,
+        'Crystal League I': 12,
+        'Master League III': 13,
+        'Master League II': 14,
+        'Master League I': 15,
+        'Champion League III': 16,
+        'Champion League II': 17,
+        'Champion League I': 18
     };
     return leagueMap[warLeague] || 0;
 }
