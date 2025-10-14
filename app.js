@@ -184,6 +184,12 @@ function createPlayerCard(player, index) {
     card.innerHTML = `
         <div class="player-header">
             <div class="player-rank">#${index + 1}</div>
+            <img 
+                class="town-hall-image" 
+                src="images/town-hall/Building_HV_Town_Hall_level_${player.townHallLevel}.png" 
+                alt="타운홀 ${player.townHallLevel}" 
+                onerror="this.style.display='none';" 
+            />
             <div class="player-name">${player.name}</div>
             <div class="player-tag">${player.tag}</div>
         </div>
