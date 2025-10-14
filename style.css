@@ -112,6 +112,14 @@ nav {
     flex: 1;
 }
 
+.town-hall-image {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+    border-radius: 5px;
+    object-fit: cover;
+}
+
 .player-tag {
     font-size: 0.9rem;
     color: #666;
@@ -352,12 +360,4 @@ nav {
 
 .competitive-info .info-value {
     color: #333;
-}
-
-.town-hall-image {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
-    border-radius: 5px;
-    object-fit: cover;
 }

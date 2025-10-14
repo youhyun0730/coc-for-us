@@ -121,6 +121,12 @@ nav {
     font-family: monospace;
 }
 
+.clan-league-icon img {
+    width: 25px;
+    height: 25px;
+    object-fit: cover;
+}
+
 .clan-badge {
     flex-shrink: 0;
 }
@@ -333,12 +339,6 @@ nav {
     background: white;
     border-radius: 8px;
     border-left: 3px solid black;
-}
-
-.clan-league-icon img {
-    width: 25px;
-    height: 25px;
-    object-fit: contain;
 }
 
 /* レスポンシブデザイン */
