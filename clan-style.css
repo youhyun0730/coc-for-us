@@ -121,7 +121,7 @@ nav {
     font-family: monospace;
 }
 
-.clan-league-icon img {
+.clan-league-icon {
     width: 25px;
     height: 25px;
     object-fit: cover;
