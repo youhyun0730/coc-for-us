@@ -11,7 +11,7 @@ function createBasicInfoSection(clan) {
                 </div>
                 <div class="clan-league-icon">
                     <img 
-                        src="images/league/Icon_HV_CWL_${getWarLeagueNumber(clan.warLeague.name)}.png"
+                        src="images/cwl/Icon_HV_CWL_${getWarLeagueNumber(clan.warLeague.name)}.png"
                         alt="${clan.warLeague.name}"
                         onerror="this.style.display='none';"
                     />
