@@ -95,7 +95,13 @@ module.exports = async function handler(req, res) {
         if (failedTags.length > 0) {
             console.warn('Failed to fetch clans:', failedTags.join(', '));
         }
+    
+        res.status(200).json({
+            clans,
+            failedTags: failedTags.length > 0 ? failedTags : undefined
+        });
 
+        
     } catch (error) {
         console.error('Error fetching clan data:', error);
         console.error('Error stack:', error.stack);
