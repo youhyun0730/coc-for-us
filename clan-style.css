@@ -16,12 +16,6 @@
   font-display: swap;
 }
 
-/* ✅ 실제 적용 */
-body {
-  font-family: 'Clash', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: 400;
-}
-
 * {
     margin: 0;
     padding: 0;
@@ -29,10 +23,11 @@ body {
 }
 
 body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Clash', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, white);
     min-height: 100vh;
     padding: 20px;
+    font-weight: 400; /* Clash Regular 기본 적용 */
 }
 
 .container {
