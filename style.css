@@ -368,8 +368,9 @@ nav {
     margin-right: 10px;
     border-radius: 6px;
     object-fit: contain; /* 👈 cover → contain 으로 변경 */
-    background: #e9ecef;
+    background: transparent;
     vertical-align: middle;
+    border: 1px solid rgba(0,0,0,0.05);
 }
 
 .hero-main .hero-image {
@@ -387,8 +388,9 @@ nav {
     margin-right: 8px;
     border-radius: 4px;
     object-fit: contain; /* 👈 cover → contain */
-    background: #e9ecef;
+    background: transparent;
     vertical-align: middle;
+    border: 1px solid rgba(0,0,0,0.05);
 }
 
 .equipment-item-small .equipment-name,
