@@ -190,6 +190,14 @@ nav {
     object-fit: contain;
 }
 
+/* 캐피탈 홀 아이콘 */
+.clan-capital-icon {
+    width: 25px;
+    height: 25px;
+    object-fit: contain;
+    margin-right: 8px;
+}
+
 /* 리그 이름 텍스트 */
 .clan-league {
     text-align: right;

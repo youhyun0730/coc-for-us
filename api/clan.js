@@ -96,14 +96,6 @@ module.exports = async function handler(req, res) {
             console.warn('Failed to fetch clans:', failedTags.join(', '));
         }
 
-        // クランレベルで降順ソート
-        clans.sort((a, b) => b.clanLevel - a.clanLevel);
-
-        res.status(200).json({
-            clans,
-            failedTags: failedTags.length > 0 ? failedTags : undefined
-        });
-
     } catch (error) {
         console.error('Error fetching clan data:', error);
         console.error('Error stack:', error.stack);

@@ -53,7 +53,7 @@ function createBasicInfoSection(clan) {
                 <div class="info-card members">
                     <div class="info-icon">👥</div>
                     <div class="info-content">
-                        <div class="info-label">클랜원 수</div>
+                        <div class="info-label">클랜원</div>
                         <div class="info-value">
                             ${Array.isArray(clan.members) ? clan.members.length : (clan.members || 0)} / 50
                         </div>
@@ -61,9 +61,15 @@ function createBasicInfoSection(clan) {
                 </div>
 
                 <div class="info-card capital">
-                    <div class="info-icon">🏰</div>
+                    <!-- 🔽 캐피탈 아이콘 -->
+                <img 
+                    class="clan-capital-icon" 
+                    src="images/capital-hall/Building_CC_Capital_Hall_level_${clan.clanCapital?.capitalHallLevel}.png"
+                    alt="Capital Hall Level ${clan.clanCapital?.capitalHallLevel || 'N/A'}"
+                    onerror="this.style.display='none';"
+                />
                     <div class="info-content">
-                        <div class="info-label">캐피탈 홀 레벨</div>
+                        <div class="info-label">캐피탈 홀</div>
                         <div class="info-value">${clan.clanCapital?.capitalHallLevel || 'N/A'}</div>
                     </div>
                 </div>
@@ -272,7 +278,7 @@ async function loadAllClans() {
 
         const data = await response.json();
         const clans = data.clans;
-        console.log('API에서 가져온 플레이어 데이터:', clans); // 디버그용 로그
+        console.log('API에서 가져온 클랜 데이터:', clans); // 디버그용 로그
 
         hideLoading();
 

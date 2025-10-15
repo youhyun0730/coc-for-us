@@ -385,6 +385,15 @@ function translateRole(role) {
 function translateLeague(league) {
     const leagues = {
         'Unranked': '언랭크',
+        "Skeleton League 1" : "해골 1",
+        "Skeleton League 2" : "해골 2",
+        "Skeleton League 3" : "해골 3",
+        "Barbarian League 4": "바바리안 4",
+        "Barbarian League 5": "바바리안 5",
+        "Barbarian League 6": "바바리안 6",
+        "Archer League 7": "아처 7",
+        "Archer League 8": "아처 8",
+        "Archer League 9": "아처 9",
         "Wizard League 10": "마법사 10",
         "Wizard League 11": "마법사 11",
         "Wizard League 12": "마법사 12",
@@ -440,7 +449,7 @@ async function loadAllPlayers() {
 
         const data = await response.json();
         const players = data.players;
-        console.log('API에서 가져온 클랜 데이터:', players); // API 응답 데이터 확인
+        console.log('API에서 가져온 플레이어 데이터:', players); // API 응답 데이터 확인
 
         hideLoading();
 
