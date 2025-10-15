@@ -266,6 +266,7 @@ nav {
     color: #333;
     font-size: 1rem;
     margin-top: 8px;
+    margin-bottom: 8px;
 }
 
 .heroes-list,
@@ -459,10 +460,6 @@ nav {
     align-items: center;
 }
 
-h1, h2, .clan-name {
+h1, h2, .clan-name, .player-name {
   font-weight: 900; /* Black */
-}
-
-strong, .player-name {
-  font-weight: 700; /* Bold */
 }

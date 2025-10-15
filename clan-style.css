@@ -467,10 +467,6 @@ nav {
     }
 }
 
-h1, h2, .clan-name {
+h1, h2, .clan-name, .player-name {
   font-weight: 900; /* Black */
-}
-
-strong, .player-name {
-  font-weight: 700; /* Bold */
 }
