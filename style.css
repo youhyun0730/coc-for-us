@@ -16,11 +16,19 @@
     font-display: swap;
 }
 
-/* Hangul 폰트 추가 */
+/* ===== Korean Fonts: KoBrawlGothic ===== */
 @font-face {
-  font-family: 'Hangul';
-  src: url('./font/hangul.ttf') format('truetype');
-  font-weight: 400;
+  font-family: 'KoBrawlGothic';
+  src: url('./font/KoBrawlGothicBold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'KoBrawlGothic';
+  src: url('./font/KoBrawlGothicBlack.otf') format('opentype');
+  font-weight: 900;
   font-style: normal;
   font-display: swap;
 }
@@ -32,7 +40,7 @@
 }
 
 body {
-    font-family: 'Clash', 'Hangul', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Clash', 'KoBrawlGothic', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, white);
     min-height: 100vh;
     padding: 20px;
@@ -497,4 +505,12 @@ nav {
   vertical-align: middle;
   background: transparent;
   flex-shrink: 0;
+}
+
+h1, h2, .clan-name {
+  font-weight: 900; /* Black */
+}
+
+strong, .player-name {
+  font-weight: 700; /* Bold */
 }
