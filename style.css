@@ -292,7 +292,47 @@ nav {
 .clan-info {
     margin-top: 15px;
     padding-top: 15px;
-    border-top: 2px solid #f0f0f0;
+}
+
+/* 플레이어 카드 하단: 클랜 배지 + 이름 + 직책 박스 */
+.player-clan-box {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: #f8f9fa;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 10px;
+}
+
+.player-clan-badge {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  object-position: center;
+  background: transparent;
+  border: 1px solid rgba(0,0,0,0.06);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.player-clan-meta {
+  display: grid;
+  gap: 4px;
+}
+
+.player-clan-name {
+  font-weight: 800;
+  color: #111;
+  font-size: 1.05rem;
+  line-height: 1.1;
+}
+
+.player-clan-role {
+  color: #333;
+  font-weight: 600;
+  font-size: 0.95rem;
+  opacity: 0.9;
 }
 
 .clan-name {
@@ -319,6 +359,10 @@ nav {
         flex-direction: column;
         gap: 10px;
     }
+    .player-clan-badge {
+    width: 40px;
+    height: 40px;
+  }
 }
 
 
