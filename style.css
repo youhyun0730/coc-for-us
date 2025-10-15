@@ -1,25 +1,19 @@
 /* Clash Regular */
 @font-face {
-  font-family: 'Clash';
-  src: url('../fonts/Clash_Regular.otf') format('opentype');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
+    font-family: 'Clash';
+    src: url('./font/Clash_Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
 }
 
 /* Clash Bold */
 @font-face {
-  font-family: 'Clash';
-  src: url('../fonts/Clash_Bold.otf') format('opentype');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* ✅ 실제 적용 */
-body {
-  font-family: 'Clash', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  font-weight: 400;
+    font-family: 'Clash';
+    src: url('./font/Clash_Bold.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
 }
 
 * {
