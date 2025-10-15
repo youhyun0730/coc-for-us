@@ -153,14 +153,6 @@ function createDetailedInfoSection(clan) {
                                 <span class="detail-label">승률</span>
                                 <span class="detail-value">${calculateWinRate(clan)}%</span>
                             </div>
-                            <div class="detail-item">
-                                <span class="detail-label">전쟁 빈도</span>
-                                <span class="detail-value">${translateWarFrequency(clan.warFrequency)}</span>
-                            </div>
-                            <div class="detail-item">
-                                <span class="detail-label">클랜전 공개</span>
-                                <span class="detail-value">${clan.isWarLogPublic ? '공개' : '비공개'}</span>
-                            </div>
                         </div>
                     </div>
 
@@ -200,29 +192,6 @@ function calculateWinRate(clan) {
     const total = (clan.warWins || 0) + (clan.warLosses || 0) + (clan.warTies || 0);
     if (total === 0) return 0;
     return ((clan.warWins || 0) / total * 100).toFixed(1);
-}
-
-// 전쟁 빈도 번역
-function translateWarFrequency(frequency) {
-    const frequencies = {
-        'always': '항상',
-        'moreThanOncePerWeek': '주 2회 이상',
-        'oncePerWeek': '주 1회',
-        'lessThanOncePerWeek': '주 1회 미만',
-        'never': '안 함',
-        'unknown': '알 수 없음'
-    };
-    return frequencies[frequency] || frequency;
-}
-
-// 클랜 타입 번역
-function translateClanType(type) {
-    const types = {
-        'open': '누구나 참가',
-        'inviteOnly': '초대 전용',
-        'closed': '폐쇄'
-    };
-    return types[type] || type;
 }
 
 // 상세 정보 토글（각クランカードごとに動作）

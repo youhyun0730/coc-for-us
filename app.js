@@ -57,7 +57,7 @@ function createHeroesSection(player) {
                     </div>
                 `;
             }).join('')
-            : '<div class="no-equipment">装備なし</div>';
+            : '<div class="no-equipment">장비 없음</div>';
 
         const hasEquipment = heroEquipment && heroEquipment.length > 0;
 
