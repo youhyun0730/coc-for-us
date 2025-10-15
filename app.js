@@ -9,7 +9,7 @@ function getEquipmentForHero(heroName, allEquipment) {
     });
 }
 
-// 영웅 섹션 생성 (이미지 + 토글 포함)
+// 영웅 섹션 생성 (이미지 + 장비 정렬 + 토글 포함)
 function createHeroesSection(player) {
     if (!player.heroes || player.heroes.length === 0) return '';
 
@@ -32,6 +32,9 @@ function createHeroesSection(player) {
         const heroEquipment = getEquipmentForHero
             ? getEquipmentForHero(hero.name, player.heroEquipment || [])
             : [];
+
+        // 🔽 장비 레벨 내림차순 정렬
+        heroEquipment.sort((a, b) => b.level - a.level || a.name.localeCompare(b.name));
 
         // 장비 HTML (이미지 + 이름 + 레벨)
         const equipmentHTML = (heroEquipment && heroEquipment.length > 0)
