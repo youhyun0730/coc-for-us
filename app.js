@@ -92,6 +92,9 @@ function createHeroesSection(player) {
             <div class="heroes-list">
                 ${heroesHTML}
             </div>
+            // 영웅합
+            <div class="total-hero-level">영웅합: ${calculateTotalHeroLevels(player)}</div>
+            <div class="total-hero-level">영웅합: ${totalHeroLevels}}</div>
         </div>
     `;
 }
