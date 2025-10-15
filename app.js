@@ -330,7 +330,7 @@ function createPlayerCard(player, index) {
     <!-- ✅ 리그 아이콘 추가 (트로피 라벨 왼쪽) -->
     <div class="competitive-section">
         <div class="section-title">경쟁전</div>
-        <span class="info-label">
+        <span class="competitive-info">
           ${leagueIconUrl ? `
             <img
               class="league-icon"
@@ -342,8 +342,8 @@ function createPlayerCard(player, index) {
             />
           ` : ''}
           ${translateLeague(player.leagueTier.name)}
-          <div class="info-icon">🏆</div>
-          <span class="info-value">${player.trophies.toLocaleString()}</span>
+          <div class="trophy-icon">🏆</div>
+          <span class="trophy-value">${player.trophies.toLocaleString()}</span>
         </span>
     </div>
 
