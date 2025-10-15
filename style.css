@@ -93,7 +93,7 @@ nav {
 .player-header {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 15px;
     margin-bottom: 20px;
     padding-bottom: 15px;
     border-bottom: 2px solid #f0f0f0;
@@ -120,23 +120,24 @@ nav {
 }
 
 .player-name {
-    font-size: 0.9rem;
-    font-weight: bold;
-    color: #333;
-    line-height: 1.2;
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: #222;
+    line-height: 1.3;
 }
 
 .town-hall-image {
-    width: 40px;
-    height: 40px;
-    margin-right: 10px;
-    border-radius: 5px;
-    object-fit: cover;
+    width: 55px;
+    height: 55px;
+    margin-right: 12px;
+    border-radius: 8px;
+    object-fit: contain;
+    background: transparent;
 }
 
 .player-tag {
-    font-size: 0.9rem;
-    color: #666;
+    font-size: 0.95rem;
+    color: #777;
     font-family: monospace;
     margin-top: 4px;
 }

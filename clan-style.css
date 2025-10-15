@@ -123,8 +123,8 @@ nav {
 
 /* 클랜 배지 이미지 */
 .clan-badge {
-    width: 80px;
-    height: 80px;
+    width: 70px;
+    height: 70px;
     object-fit: contain;   /* 비율 유지 + 잘림 방지 */
     object-position: center;
     background: transparent;   /* 회색 배경 (투명 PNG 대비) */
@@ -134,15 +134,15 @@ nav {
 
 /* 클랜 이름 */
 .clan-name {
-    font-size: 2.5rem;
-    font-weight: bold;
+    font-size: 1.9rem;
+    font-weight: 700;
     color: #333;
     margin-bottom: 4px;
 }
 
 /* 클랜 태그 */
 .clan-tag {
-    font-size: 1.1rem;
+    font-size: 1rem;
     color: #666;
     font-family: monospace;
 }
