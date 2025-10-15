@@ -342,7 +342,7 @@ function createPlayerCard(player, index) {
           ` : ''}
           ${translateLeague(player.leagueTier.name)}
         </span>
-        <span class="info-value">${player.trophies.toLocaleString()}</span>
+        <span class="info-value">🏆 ${player.trophies.toLocaleString()}</span>
     </div>
 
     ${createHeroesSection(player)}
