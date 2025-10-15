@@ -109,7 +109,10 @@ nav {
     font-size: 1.5rem;
     font-weight: bold;
     color: #333;
-    flex: 1;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    line-height: 1.2;
 }
 
 .town-hall-image {
@@ -121,9 +124,10 @@ nav {
 }
 
 .player-tag {
-    font-size: 0.9rem;
-    color: #666;
+    font-size: 0.85rem;
+    color: #777;
     font-family: monospace;
+    margin-top: 2px;
 }
 
 .player-info {
@@ -311,7 +315,6 @@ nav {
   object-fit: contain;
   object-position: center;
   background: transparent;
-  border: 1px solid rgba(0,0,0,0.06);
   border-radius: 8px;
   flex-shrink: 0;
 }
