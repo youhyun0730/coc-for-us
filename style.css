@@ -16,6 +16,15 @@
     font-display: swap;
 }
 
+/* Hangul 폰트 추가 */
+@font-face {
+  font-family: 'Hangul';
+  src: url('./font/hangul.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -23,11 +32,11 @@
 }
 
 body {
-    font-family: 'Clash', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    font-family: 'Clash', 'Hangul', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     background: linear-gradient(135deg, white);
     min-height: 100vh;
     padding: 20px;
-    font-weight: 400; /* Clash Regular 기본 적용 */
+    font-weight: 400;
 }
 
 .container {
