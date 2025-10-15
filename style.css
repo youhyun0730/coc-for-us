@@ -99,8 +99,8 @@ nav {
 }
 
 .logo {
-    width: 48px;
-    height: 48px;
+    width: 60px;
+    height: 60px;
     vertical-align: middle;
     margin-right: 12px;
     object-fit: contain;
@@ -273,6 +273,13 @@ nav {
     font-weight: 600;
     color: #333;
     font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.total-hero-level {
+    font-weight: 600;
+    color: #333;
+    font-size: 1rem;
     margin-bottom: 10px;
 }
 
