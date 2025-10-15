@@ -1,18 +1,41 @@
 // クラン詳細情報を表示するスクリプト
 
-// 基本情報セクションを生成
+// クラン基本情報セクションを生成
 function createBasicInfoSection(clan) {
+    // 배지 URL 선택 (large → medium → small 순)
+    const badgeUrl =
+        clan.badgeUrls?.large ||
+        clan.badgeUrls?.medium ||
+        clan.badgeUrls?.small ||
+        '';
+
     return `
         <div class="clan-basic-info">
             <div class="clan-header">
+
+                <!-- 🔽 클랜 이름 + 배지 그룹 -->
                 <div class="clan-name-tag">
-                    <div class="clan-name">${clan.name}</div>
-                    <div class="clan-tag">${clan.tag}</div>
+                    ${badgeUrl ? `
+                        <img
+                            class="clan-badge"
+                            src="${badgeUrl}"
+                            alt="${clan.name} badge"
+                            loading="lazy"
+                            decoding="async"
+                            onerror="this.style.display='none';"
+                        />
+                    ` : ''}
+                    <div class="clan-name-info">
+                        <div class="clan-name">${clan.name}</div>
+                        <div class="clan-tag">${clan.tag}</div>
+                    </div>
                 </div>
+
+                <!-- 🔽 리그 아이콘 (오른쪽 끝) -->
                 <img 
                     class="clan-league-icon" 
-                    src="images/cwl/Icon_HV_CWL_${getWarLeagueNumber(clan.warLeague.name)}.png"
-                    alt="${clan.warLeague.name}"
+                    src="images/cwl/Icon_HV_CWL_${getWarLeagueNumber(clan.warLeague?.name)}.png"
+                    alt="${clan.warLeague?.name || 'Unranked'}"
                     onerror="this.style.display='none';"
                 />
             </div>
@@ -21,7 +44,7 @@ function createBasicInfoSection(clan) {
                 <div class="info-card level">
                     <div class="info-icon">🏆</div>
                     <div class="info-content">
-                        <div class="info-level">클랜 레벨</div>
+                        <div class="info-label">클랜 레벨</div>
                         <div class="info-value">${clan.level || 'N/A'}</div>
                     </div>
                 </div>
