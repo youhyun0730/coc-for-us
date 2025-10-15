@@ -361,3 +361,35 @@ nav {
 .competitive-info .info-value {
     color: #333;
 }
+
+.hero-image {
+    width: 28px;
+    height: 28px;
+    margin-right: 10px;
+    border-radius: 6px;
+    object-fit: cover;
+    background: #e9ecef;
+    vertical-align: middle;
+}
+.hero-main .hero-image {
+    flex-shrink: 0;
+}
+.hero-main .hero-name {
+    display: flex;
+    align-items: center;
+}
+
+.equipment-image {
+    width: 22px;
+    height: 22px;
+    margin-right: 8px;
+    border-radius: 4px;
+    object-fit: cover;
+    background: #e9ecef;
+    vertical-align: middle;
+}
+.equipment-item-small .equipment-name,
+.equipment-item .equipment-name {
+    display: flex;
+    align-items: center;
+}

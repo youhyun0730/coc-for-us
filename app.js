@@ -108,6 +108,7 @@ function translateEquipmentName(name) {
         'Healing Tome': '치유의 책',
         'Fireball': '파이어볼',
         'Lavaloon Puppet': '라벌 인형',
+        'Heroic Torch': '투지의 횃불',
 
         'Royal Gem': '로얄 보석',
         'Seeking Shield': '추적 방패',
@@ -121,7 +122,7 @@ function translateEquipmentName(name) {
         'Metal Pants': '메탈 바지',
         'Noble Iron': '노블 아이언',
         'Dark Crown': '다크 크라운',
-        'Meteor Staff': '메테오 스태프'
+        'Meteor Staff': '유성우 지팡이'
     };
     return equipmentTranslations[name] || name;
 }
@@ -136,6 +137,80 @@ function translateHeroName(name) {
         'Minion Prince': '미니언 프린스'
     };
     return heroTranslations[name] || name;
+}
+
+// 영웅 이미지를 취득
+function getHeroImageSrc(heroName) {
+    const heroImageNames = {
+        'Barbarian King': 'Icon_HV_Hero_Barbarian_King.png',
+        'Archer Queen': 'Icon_HV_Hero_Archer_Queen.png',
+        'Grand Warden': 'Icon_HV_Hero_Grand_Warden.png',
+        'Royal Champion': 'Icon_HV_Hero_Royal_Champion.png',
+        'Minion Prince': 'Icon_HV_Hero_Minion_Prince.png'
+    };
+    const fileName = heroImageNames[heroName];
+    return fileName ? `images/hero/${fileName}` : '';
+}
+
+// 영웅 장비 이미지를 취득
+function getEquipmentImageSrc(equipmentName, heroName) {
+    // 영웅별 접두어
+    const heroPrefixes = {
+        'Barbarian King': 'BK',
+        'Archer Queen': 'AQ',
+        'Grand Warden': 'GW',
+        'Royal Champion': 'RC',
+        'Minion Prince': 'MP'
+    };
+
+    // 장비별 파일명(영웅별 접두어 필요)
+    const equipmentFileNames = {
+        'Barbarian Puppet': 'Barbarian_Puppet',
+        'Rage Vial': 'Rage_Vial',
+        'Earthquake Boots': 'Earthquake_Boots',
+        'Vampstache': 'Vampstache',
+        'Giant Gauntlet': 'Giant_Gauntlet',
+        'Spiky Ball': 'Spiky_Ball',
+        'Snake Bracelet': 'Snake_Bracelet',
+
+        'Archer Puppet': 'Archer_Puppet',
+        'Invisible Vial': 'Invisible_Vial',
+        'Giant Arrow': 'Giant_Arrow',
+        'Healer Puppet': 'Healer_Puppet',
+        'Frozen Arrow': 'Frozen_Arrow',
+        'Magic Mirror': 'Magic_Mirror',
+        'Action Figure': 'Action_Figure',
+
+        'Eternal Tome': 'Eternal_Tome',
+        'Life Gem': 'Life_Gem',
+        'Rage Gem': 'Rage_Gem',
+        'Healing Tome': 'Healing_Tome',
+        'Fireball': 'Fireball',
+        'Lavaloon Puppet': 'Lavaloon_Puppet',
+        'Heroic Torch': 'Heroic_Torch',
+
+        'Royal Gem': 'Royal_Gem',
+        'Seeking Shield': 'Seeking_Shield',
+        'Haste Vial': 'Haste_Vial',
+        'Hog Rider Puppet': 'Hog_Rider_Puppet',
+        'Rocket Spear': 'Rocket_Spear',
+        'Electro Boots': 'Electro_Boots',
+
+        'Henchmen Puppet': 'Henchmen_Puppet',
+        'Dark Orb': 'Dark_Orb',
+        'Metal Pants': 'Metal_Pants',
+        'Noble Iron': 'Noble_Iron',
+        'Dark Crown': 'Dark_Crown',
+        'Meteor Staff': 'Meteor_Staff'
+    };
+
+    const prefix = heroPrefixes[heroName];
+    const fileBase = equipmentFileNames[equipmentName];
+    if (prefix && fileBase) {
+        return `images/equipment/Hero_Equipment_${prefix}_${fileBase}.png`;
+    }
+    // fallback: 기존 파일명 패턴
+    return '';
 }
 
 // 英雄レベルの合計を計算
