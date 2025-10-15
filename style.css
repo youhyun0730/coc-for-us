@@ -1,3 +1,27 @@
+/* Clash Regular */
+@font-face {
+  font-family: 'Clash';
+  src: url('../fonts/Clash_Regular.otf') format('opentype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Clash Bold */
+@font-face {
+  font-family: 'Clash';
+  src: url('../fonts/Clash_Bold.otf') format('opentype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* ✅ 실제 적용 */
+body {
+  font-family: 'Clash', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-weight: 400;
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -93,7 +117,7 @@ nav {
 .player-header {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 8px;
     margin-bottom: 20px;
     padding-bottom: 15px;
     border-bottom: 2px solid #f0f0f0;
@@ -129,8 +153,8 @@ nav {
 .town-hall-image {
     width: 55px;
     height: 55px;
-    margin-right: 12px;
-    border-radius: 8px;
+    margin-right: 6px;
+    border-radius: 6px;
     object-fit: contain;
     background: transparent;
 }
