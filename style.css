@@ -416,47 +416,6 @@ nav {
   }
 }
 
-
-.player-card .toggle-competitive-btn {
-    width: 100%;
-    padding: 10px;
-    background-color: #59595a;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 0.8rem;
-    transition: background-color 0.3s ease;
-    border-top: 2px solid #f0f0f0;
-}
-
-.player-card .toggle-competitive-btn:hover {
-    background-color: #59595a;
-}
-
-.competitive-info {
-    margin-top: 10px;
-    padding: 10px;
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-}
-
-.competitive-info .info-row {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-}
-
-.competitive-info .info-label {
-    font-weight: bold;
-    color: #555;
-}
-
-.competitive-info .info-value {
-    color: #333;
-}
-
 .hero-image {
     width: 28px;
     height: 28px;

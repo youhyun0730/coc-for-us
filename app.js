@@ -305,13 +305,6 @@ function createPlayerCard(player, index) {
         <div class="no-clan">클랜 미소속</div>
       </div>`;
 
-  // 경쟁전 정보 HTML
-  const competitiveInfo = `
-    <div class="competitive-info" id="competitive-${player.tag.replace('#', '')}" style="display: none;">
-      <div>경쟁전 정보 api 준비중...</div>
-    </div>
-  `;
-
   // ✅ 카드 본문
   card.innerHTML = `
     <div class="player-header">
@@ -372,27 +365,9 @@ function createPlayerCard(player, index) {
 
     ${clanInfo}
 
-    <button class="toggle-competitive-btn" onclick="toggleCompetitiveInfo('${player.tag.replace('#', '')}')">
-      경쟁전 정보 보기 ▼
-    </button>
-
-    ${competitiveInfo}
   `;
 
   return card;
-}
-
-function toggleCompetitiveInfo(playerTag) {
-    const competitiveInfo = document.getElementById(`competitive-${playerTag}`);
-    const toggleButton = document.querySelector(`button[onclick="toggleCompetitiveInfo('${playerTag}')"]`);
-
-    if (competitiveInfo.style.display === 'none') {
-        competitiveInfo.style.display = 'block';
-        toggleButton.textContent = '경쟁전 정보 숨기기 ▲';
-    } else {
-        competitiveInfo.style.display = 'none';
-        toggleButton.textContent = '경쟁전 정보 보기 ▼';
-    }
 }
 
 // 직책을 한국어로 번역
