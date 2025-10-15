@@ -1,19 +1,20 @@
 // クラン詳細情報を表示するスクリプト
 
-// クラン基本情報セクションを生成
+// クラン基本情報セクションを生成（최종 버전）
 function createBasicInfoSection(clan) {
-    // 배지 URL 선택 (large → medium → small 순)
+    // 🔽 badge.url 또는 badgeUrls.large/medium/small 중 존재하는 값 선택
     const badgeUrl =
-        clan.badgeUrls?.large ||
-        clan.badgeUrls?.medium ||
-        clan.badgeUrls?.small ||
+        clan?.badge?.url ||
+        clan?.badgeUrls?.large ||
+        clan?.badgeUrls?.medium ||
+        clan?.badgeUrls?.small ||
         '';
 
     return `
         <div class="clan-basic-info">
             <div class="clan-header">
 
-                <!-- 🔽 클랜 이름 + 배지 그룹 -->
+                <!-- 🔽 배지 + 이름 + 태그 -->
                 <div class="clan-name-tag">
                     ${badgeUrl ? `
                         <img
@@ -31,7 +32,7 @@ function createBasicInfoSection(clan) {
                     </div>
                 </div>
 
-                <!-- 🔽 리그 아이콘 (오른쪽 끝) -->
+                <!-- 🔽 리그 아이콘 -->
                 <img 
                     class="clan-league-icon" 
                     src="images/cwl/Icon_HV_CWL_${getWarLeagueNumber(clan.warLeague?.name)}.png"
@@ -53,7 +54,9 @@ function createBasicInfoSection(clan) {
                     <div class="info-icon">👥</div>
                     <div class="info-content">
                         <div class="info-label">클랜원 수</div>
-                        <div class="info-value">${Array.isArray(clan.members) ? clan.members.length : (clan.members || 0)} / 50</div>
+                        <div class="info-value">
+                            ${Array.isArray(clan.members) ? clan.members.length : (clan.members || 0)} / 50
+                        </div>
                     </div>
                 </div>
 
