@@ -64,6 +64,13 @@ header h1 {
     margin-bottom: 20px;
 }
 
+footer {
+    text-align: center;
+    margin-top: 30px;
+    color: #555;
+    font-size: 0.9rem;
+}
+
 nav {
     display: flex;
     justify-content: center;
