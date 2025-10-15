@@ -107,9 +107,8 @@ nav {
 }
 
 .logo {
-    width: 150px;
+    width: 300px;
     vertical-align: middle;
-    margin-right: 12px;
     object-fit: contain;
     background: transparent;
 }
