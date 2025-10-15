@@ -92,8 +92,7 @@ function createHeroesSection(player) {
             <div class="heroes-list">
                 ${heroesHTML}
             </div>
-            // 영웅합
-            <div class="total-hero-level">영웅합: ${calculateTotalHeroLevels(player)}</div>
+            <div class="total-hero-level">영웅합 : ${calculateTotalHeroLevels(player)}</div>
         </div>
     `;
 }
@@ -328,19 +327,8 @@ function createPlayerCard(player, index) {
       </div>
     </div>
 
-    <div class="player-info">
-      <div class="info-row town-hall town-hall-level-${player.townHallLevel}">
-        <span class="info-label">타운홀</span>
-        <span class="info-value">${player.townHallLevel}</span>
-      </div>
-
-      <div class="info-row hero-total">
-        <span class="info-label">영웅합</span>
-        <span class="info-value">${totalHeroLevels}</span>
-      </div>
-
-      <!-- ✅ 리그 아이콘 추가 (트로피 라벨 왼쪽) -->
-      <div class="info-row trophies">
+    <!-- ✅ 리그 아이콘 추가 (트로피 라벨 왼쪽) -->
+    <div class="competitive-info">
         <span class="info-label label-with-icon">
           ${leagueIconUrl ? `
             <img
@@ -355,12 +343,6 @@ function createPlayerCard(player, index) {
           ${translateLeague(player.leagueTier.name)}
         </span>
         <span class="info-value">${player.trophies.toLocaleString()}</span>
-      </div>
-
-      <div class="info-row experience-level">
-        <span class="info-label">경험치 레벨</span>
-        <span class="info-value">${player.expLevel}</span>
-      </div>
     </div>
 
     ${createHeroesSection(player)}

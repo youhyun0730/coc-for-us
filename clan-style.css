@@ -98,6 +98,14 @@ nav {
     background: rgba(255, 255, 255, 0.3);
 }
 
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
 .logo {
     width: 60px;
     height: 60px;

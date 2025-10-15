@@ -98,6 +98,14 @@ nav {
     background: rgba(255, 255, 255, 0.3);
 }
 
+.header-top {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 10px;
+}
+
 .logo {
     width: 60px;
     height: 60px;
@@ -194,7 +202,7 @@ nav {
     margin-top: 4px;
 }
 
-.player-info {
+.competitive-info {
     display: grid;
     gap: 12px;
 }
@@ -217,44 +225,7 @@ nav {
     font-weight: 500;
 }
 
-.town-hall {
-    background: linear-gradient(135deg, #a8b5ff 0%, #c4b5fd 100%);
-    color: #333;
-}
-
-.town-hall-level-11 {
-    background: linear-gradient(135deg, #fffcfc 0%, #f9cccc 100%);
-}
-
-.town-hall-level-12 {
-    background: linear-gradient(135deg, #b1c8f6 0%, #f6edba 100%);
-}
-
-.town-hall-level-13 {
-    background: linear-gradient(135deg, #90bcea 0%, #badcee 100%);
-}
-
-.town-hall-level-14 {
-    background: linear-gradient(135deg, #f8f691 0%, #7fed7f 100%);
-}
-
-.town-hall-level-15 {
-    background: linear-gradient(135deg, #cea0dd 0%, #86b6ec 100%);
-}
-
-.town-hall-level-16 {
-    background: linear-gradient(135deg, #ffb9b9 0%, #f6f8a2 100%);
-}
-
-.town-hall-level-17 {
-    background: linear-gradient(135deg, #aaa3c0 0%, #c2c876 100%);
-}
-
 .trophies {
-    background: #f0f0f0;
-}
-
-.experience-level {
     background: #f0f0f0;
 }
 
@@ -280,7 +251,7 @@ nav {
     font-weight: 600;
     color: #333;
     font-size: 1rem;
-    margin-bottom: 10px;
+    margin-top: 8px;
 }
 
 .heroes-list,
