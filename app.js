@@ -267,7 +267,10 @@ function createPlayerCard(player, index) {
 
   const totalHeroLevels = calculateTotalHeroLevels(player);
 
-  // 🆕 클랜 배지 URL 추출 (새/구 구조 모두 대응)
+  // ✅ 리그 아이콘 URL (없으면 빈 문자열)
+  const leagueIconUrl = player.leagueTier?.icon?.url || '';
+
+  // ✅ 클랜 배지 URL 추출 (새/구 구조 모두 대응)
   const clanBadgeUrl = player.clan
     ? (player.clan.badge?.url ||
        player.clan.badgeUrls?.medium ||
@@ -276,31 +279,31 @@ function createPlayerCard(player, index) {
        '')
     : '';
 
-  // 🆕 클랜 정보 박스 (배지 + 이름 + 직책)
+  // ✅ 클랜 정보 박스 (배지 + 이름 + 직책)
   const clanInfo = player.clan
-  ? `
-    <div class="clan-info">
-      <div class="player-clan-box">
-        ${clanBadgeUrl ? `
-          <img
-            class="player-clan-badge"
-            src="${clanBadgeUrl}"
-            alt="${player.clan.name} badge"
-            loading="lazy"
-            decoding="async"
-            onerror="this.style.display='none';"
-          />
-        ` : ''}
-        <div class="player-clan-meta">
-          <div class="player-clan-name">${player.clan.name}</div>
-          <div class="player-clan-role">${translateRole(player.role)}</div>
+    ? `
+      <div class="clan-info">
+        <div class="player-clan-box">
+          ${clanBadgeUrl ? `
+            <img
+              class="player-clan-badge"
+              src="${clanBadgeUrl}"
+              alt="${player.clan.name} badge"
+              loading="lazy"
+              decoding="async"
+              onerror="this.style.display='none';"
+            />
+          ` : ''}
+          <div class="player-clan-meta">
+            <div class="player-clan-name">${player.clan.name}</div>
+            <div class="player-clan-role">${translateRole(player.role)}</div>
+          </div>
         </div>
-      </div>
-    </div>`
-  : `
-    <div class="clan-info">
-      <div class="no-clan">클랜 미소속</div>
-    </div>`;
+      </div>`
+    : `
+      <div class="clan-info">
+        <div class="no-clan">클랜 미소속</div>
+      </div>`;
 
   // 경쟁전 정보 HTML
   const competitiveInfo = `
@@ -309,17 +312,25 @@ function createPlayerCard(player, index) {
     </div>
   `;
 
+  // ✅ 카드 본문
   card.innerHTML = `
     <div class="player-header">
       <div class="player-rank">#${index + 1}</div>
+
       <img
         class="town-hall-image"
         src="images/town-hall/Building_HV_Town_Hall_level_${player.townHallLevel}.png"
         alt="타운홀 ${player.townHallLevel}"
         onerror="this.style.display='none';"
       />
-      <div class="player-name">${player.name}</div>
-      <div class="player-tag">${player.tag}</div>
+
+      <!-- ✅ 이름/태그 묶음 -->
+      <div class="player-name-tag">
+        <div class="player-name-info">
+          <div class="player-name">${player.name}</div>
+          <div class="player-tag">${player.tag}</div>
+        </div>
+      </div>
     </div>
 
     <div class="player-info">
@@ -333,8 +344,21 @@ function createPlayerCard(player, index) {
         <span class="info-value">${totalHeroLevels}</span>
       </div>
 
+      <!-- ✅ 리그 아이콘 추가 (트로피 라벨 왼쪽) -->
       <div class="info-row trophies">
-        <span class="info-label">${translateLeague(player.leagueTier.name)}</span>
+        <span class="info-label label-with-icon">
+          ${leagueIconUrl ? `
+            <img
+              class="league-icon"
+              src="${leagueIconUrl}"
+              alt="${player.leagueTier?.name || 'League'}"
+              loading="lazy"
+              decoding="async"
+              onerror="this.style.display='none';"
+            />
+          ` : ''}
+          ${translateLeague(player.leagueTier.name)}
+        </span>
         <span class="info-value">${player.trophies.toLocaleString()}</span>
       </div>
 
