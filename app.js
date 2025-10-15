@@ -262,79 +262,100 @@ function calculateTotalHeroLevels(player) {
 
 // 플레이어 카드를 생성하는 함수
 function createPlayerCard(player, index) {
-    const card = document.createElement('div');
-    card.className = 'player-card';
+  const card = document.createElement('div');
+  card.className = 'player-card';
 
-    const totalHeroLevels = calculateTotalHeroLevels(player);
+  const totalHeroLevels = calculateTotalHeroLevels(player);
 
-    const clanInfo = player.clan
-        ? `<div class="clan-info">
-               <div class="clan-name">${player.clan.name}</div>
-               <div class="info-row">
-                   <span class="info-label">클랜 직책</span>
-                   <span class="info-value">${translateRole(player.role)}</span>
-               </div>
-           </div>`
-        : `<div class="clan-info">
-               <div class="no-clan">클랜 미소속</div>
-           </div>`;
+  // 🆕 클랜 배지 URL 추출 (새/구 구조 모두 대응)
+  const clanBadgeUrl = player.clan
+    ? (player.clan.badge?.url ||
+       player.clan.badgeUrls?.medium ||
+       player.clan.badgeUrls?.large ||
+       player.clan.badgeUrls?.small ||
+       '')
+    : '';
 
-    // 경쟁전 정보 HTML
-    const competitiveInfo = `
-        <div class="competitive-info" id="competitive-${player.tag.replace('#', '')}" style="display: none;">
-            <div>경쟁전 정보 api 준비중...</div>
+  // 🆕 클랜 정보 박스 (배지 + 이름 + 직책)
+  const clanInfo = player.clan
+  ? `
+    <div class="clan-info">
+      <div class="player-clan-box">
+        ${clanBadgeUrl ? `
+          <img
+            class="player-clan-badge"
+            src="${clanBadgeUrl}"
+            alt="${player.clan.name} badge"
+            loading="lazy"
+            decoding="async"
+            onerror="this.style.display='none';"
+          />
+        ` : ''}
+        <div class="player-clan-meta">
+          <div class="player-clan-name">${player.clan.name}</div>
+          <div class="player-clan-role">${translateRole(player.role)}</div>
         </div>
-    `;
+      </div>
+    </div>`
+  : `
+    <div class="clan-info">
+      <div class="no-clan">클랜 미소속</div>
+    </div>`;
 
-    card.innerHTML = `
-        <div class="player-header">
-            <div class="player-rank">#${index + 1}</div>
-            <img 
-                class="town-hall-image" 
-                src="images/town-hall/Building_HV_Town_Hall_level_${player.townHallLevel}.png" 
-                alt="타운홀 ${player.townHallLevel}" 
-                onerror="this.style.display='none';" 
-            />
-            <div class="player-name">${player.name}</div>
-            <div class="player-tag">${player.tag}</div>
-        </div>
+  // 경쟁전 정보 HTML
+  const competitiveInfo = `
+    <div class="competitive-info" id="competitive-${player.tag.replace('#', '')}" style="display: none;">
+      <div>경쟁전 정보 api 준비중...</div>
+    </div>
+  `;
 
-        <div class="player-info">
+  card.innerHTML = `
+    <div class="player-header">
+      <div class="player-rank">#${index + 1}</div>
+      <img
+        class="town-hall-image"
+        src="images/town-hall/Building_HV_Town_Hall_level_${player.townHallLevel}.png"
+        alt="타운홀 ${player.townHallLevel}"
+        onerror="this.style.display='none';"
+      />
+      <div class="player-name">${player.name}</div>
+      <div class="player-tag">${player.tag}</div>
+    </div>
 
-            <div class="info-row town-hall town-hall-level-${player.townHallLevel}">
-                <span class="info-label">타운홀</span>
-                <span class="info-value">${player.townHallLevel}</span>
-            </div>
+    <div class="player-info">
+      <div class="info-row town-hall town-hall-level-${player.townHallLevel}">
+        <span class="info-label">타운홀</span>
+        <span class="info-value">${player.townHallLevel}</span>
+      </div>
 
-            <div class="info-row hero-total">
-                <span class="info-label">영웅합</span>
-                <span class="info-value">${totalHeroLevels}</span>
-            </div>
+      <div class="info-row hero-total">
+        <span class="info-label">영웅합</span>
+        <span class="info-value">${totalHeroLevels}</span>
+      </div>
 
-            <div class="info-row trophies">
-                <span class="info-label">${translateLeague(player.leagueTier.name)}</span>
-                <span class="info-value">${player.trophies.toLocaleString()}</span>
-            </div>
+      <div class="info-row trophies">
+        <span class="info-label">${translateLeague(player.leagueTier.name)}</span>
+        <span class="info-value">${player.trophies.toLocaleString()}</span>
+      </div>
 
-            <div class="info-row experience-level">
-                <span class="info-label">경험치 레벨</span>
-                <span class="info-value">${player.expLevel}</span>
-            </div>
+      <div class="info-row experience-level">
+        <span class="info-label">경험치 레벨</span>
+        <span class="info-value">${player.expLevel}</span>
+      </div>
+    </div>
 
-        </div>
+    ${createHeroesSection(player)}
 
-        ${createHeroesSection(player)}
+    ${clanInfo}
 
-        ${clanInfo}
+    <button class="toggle-competitive-btn" onclick="toggleCompetitiveInfo('${player.tag.replace('#', '')}')">
+      경쟁전 정보 보기 ▼
+    </button>
 
-        <button class="toggle-competitive-btn" onclick="toggleCompetitiveInfo('${player.tag.replace('#', '')}')">
-            경쟁전 정보 보기 ▼
-        </button>
+    ${competitiveInfo}
+  `;
 
-        ${competitiveInfo}
-    `;
-
-    return card;
+  return card;
 }
 
 function toggleCompetitiveInfo(playerTag) {
@@ -355,8 +376,8 @@ function translateRole(role) {
     const roles = {
         'member': '멤버',
         'admin': '장로',
-        'coLeader': '부리더',
-        'leader': '리더'
+        'coLeader': '공동 대표',
+        'leader': '대표'
     };
     return roles[role] || role;
 }
@@ -420,7 +441,7 @@ async function loadAllPlayers() {
 
         const data = await response.json();
         const players = data.players;
-        console.log('API에서 가져온 플레이어 데이터:', players); // API 응답 데이터 확인
+        console.log('API에서 가져온 클랜 데이터:', players); // API 응답 데이터 확인
 
         hideLoading();
 
