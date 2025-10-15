@@ -9,46 +9,72 @@ function getEquipmentForHero(heroName, allEquipment) {
     });
 }
 
-// 영웅 섹션 생성
+// 영웅 섹션 생성 (이미지 + 토글 포함)
 function createHeroesSection(player) {
-    if (!player.heroes || player.heroes.length === 0) {
-        return '';
-    }
+    if (!player.heroes || player.heroes.length === 0) return '';
 
-    // Battle MachineとBattle Copterを除外
+    // Battle Machine / Battle Copter 제외
     const filteredHeroes = player.heroes.filter(hero => {
-        const heroName = hero.name.toLowerCase();
-        return !heroName.includes('battle machine') &&
-               !heroName.includes('battle copter') &&
-               !heroName.includes('배틀 머신') &&
-               !heroName.includes('배틀 콥터');
+        const n = (hero.name || '').toLowerCase();
+        return !n.includes('battle machine') &&
+               !n.includes('battle copter') &&
+               !n.includes('배틀 머신') &&
+               !n.includes('배틀 콥터');
     });
-
-    if (filteredHeroes.length === 0) {
-        return '';
-    }
+    if (filteredHeroes.length === 0) return '';
 
     const heroesHTML = filteredHeroes.map((hero, index) => {
         const heroId = `hero-${player.tag.replace('#', '')}-${index}`;
-        const heroEquipment = getEquipmentForHero(hero.name, player.heroEquipment || []);
+        const heroDisplayName = translateHeroName ? translateHeroName(hero.name) : hero.name;
+        const heroImgSrc = getHeroImageSrc ? getHeroImageSrc(hero.name) : '';
 
-        const equipmentHTML = heroEquipment.length > 0
-            ? heroEquipment.map(eq => `
-                <div class="equipment-item-small">
-                    <span class="equipment-name">${translateEquipmentName(eq.name)}</span>
-                    <span class="equipment-level">레벨 ${eq.level}</span>
-                </div>
-            `).join('')
+        // 해당 영웅의 장비 목록 가져오기
+        const heroEquipment = getEquipmentForHero
+            ? getEquipmentForHero(hero.name, player.heroEquipment || [])
+            : [];
+
+        // 장비 HTML (이미지 + 이름 + 레벨)
+        const equipmentHTML = (heroEquipment && heroEquipment.length > 0)
+            ? heroEquipment.map(eq => {
+                const eqName = translateEquipmentName ? translateEquipmentName(eq.name) : eq.name;
+                const eqImgSrc = getEquipmentImageSrc ? getEquipmentImageSrc(eq.name, hero.name) : '';
+                return `
+                    <div class="equipment-item-small">
+                        <div class="equipment-name">
+                            <img
+                                class="equipment-image"
+                                src="${eqImgSrc}"
+                                alt="${eqName}"
+                                loading="lazy"
+                                onerror="this.style.display='none';"
+                            />
+                            <span>${eqName}</span>
+                        </div>
+                        <span class="equipment-level">레벨 ${eq.level}</span>
+                    </div>
+                `;
+            }).join('')
             : '<div class="no-equipment">装備なし</div>';
 
+        const hasEquipment = heroEquipment && heroEquipment.length > 0;
+
         return `
-            <div class="hero-item ${heroEquipment.length > 0 ? 'has-equipment' : ''}" onclick="toggleHeroEquipment('${heroId}')">
+            <div class="hero-item ${hasEquipment ? 'has-equipment' : ''}" ${hasEquipment ? `onclick="toggleHeroEquipment('${heroId}')"` : ''}>
                 <div class="hero-main">
-                    <span class="hero-name">${translateHeroName(hero.name)}</span>
+                    <div class="hero-name">
+                        <img
+                            class="hero-image"
+                            src="${heroImgSrc}"
+                            alt="${heroDisplayName}"
+                            loading="lazy"
+                            onerror="this.style.display='none';"
+                        />
+                        <span>${heroDisplayName}</span>
+                    </div>
                     <span class="hero-level">레벨 ${hero.level}</span>
-                    ${heroEquipment.length > 0 ? `<span class="hero-toggle" id="toggle-${heroId}">▼</span>` : ''}
+                    ${hasEquipment ? `<span class="hero-toggle" id="toggle-${heroId}" aria-controls="${heroId}">▼</span>` : ''}
                 </div>
-                ${heroEquipment.length > 0 ? `
+                ${hasEquipment ? `
                     <div class="hero-equipment-list" id="${heroId}" style="display: none;">
                         ${equipmentHTML}
                     </div>
@@ -66,6 +92,7 @@ function createHeroesSection(player) {
         </div>
     `;
 }
+
 
 // 英雄装備トグル機能
 function toggleHeroEquipment(heroId) {
@@ -207,7 +234,7 @@ function getEquipmentImageSrc(equipmentName, heroName) {
     const prefix = heroPrefixes[heroName];
     const fileBase = equipmentFileNames[equipmentName];
     if (prefix && fileBase) {
-        return `images/equipment/Hero_Equipment_${prefix}_${fileBase}.png`;
+        return `images/hero-equipment/Hero_Equipment_${prefix}_${fileBase}.png`;
     }
     // fallback: 기존 파일명 패턴
     return '';
