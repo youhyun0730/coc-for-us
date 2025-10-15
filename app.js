@@ -88,7 +88,7 @@ function createHeroesSection(player) {
 
     return `
         <div class="heroes-section">
-            <div class="section-title">영웅</div>
+            <div class="section-title">영웅 및 장비</div>
             <div class="heroes-list">
                 ${heroesHTML}
             </div>
@@ -328,8 +328,9 @@ function createPlayerCard(player, index) {
     </div>
 
     <!-- ✅ 리그 아이콘 추가 (트로피 라벨 왼쪽) -->
-    <div class="competitive-info">
-        <span class="info-label label-with-icon">
+    <div class="competitive-section">
+        <div class="section-title">경쟁전</div>
+        <span class="info-label">
           ${leagueIconUrl ? `
             <img
               class="league-icon"
