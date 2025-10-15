@@ -367,13 +367,15 @@ nav {
     height: 28px;
     margin-right: 10px;
     border-radius: 6px;
-    object-fit: cover;
+    object-fit: contain; /* 👈 cover → contain 으로 변경 */
     background: #e9ecef;
     vertical-align: middle;
 }
+
 .hero-main .hero-image {
     flex-shrink: 0;
 }
+
 .hero-main .hero-name {
     display: flex;
     align-items: center;
@@ -384,10 +386,11 @@ nav {
     height: 22px;
     margin-right: 8px;
     border-radius: 4px;
-    object-fit: cover;
+    object-fit: contain; /* 👈 cover → contain */
     background: #e9ecef;
     vertical-align: middle;
 }
+
 .equipment-item-small .equipment-name,
 .equipment-item .equipment-name {
     display: flex;

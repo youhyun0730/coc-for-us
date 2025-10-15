@@ -122,7 +122,7 @@ function translateEquipmentName(name) {
         'Snake Bracelet': '뱀 팔찌',
 
         'Archer Puppet': '아처 인형',
-        'Invisible Vial': '투명 마법 병',
+        'Invisibility Vial': '투명 마법 병',
         'Giant Arrow': '자이언트 화살',
         'Healer Puppet': '힐러 인형',
         'Frozen Arrow': '얼음 화살',
@@ -201,7 +201,7 @@ function getEquipmentImageSrc(equipmentName, heroName) {
         'Snake Bracelet': 'Snake_Bracelet',
 
         'Archer Puppet': 'Archer_Puppet',
-        'Invisible Vial': 'Invisible_Vial',
+        'Invisibility Vial': 'Invisibility_Vial',
         'Giant Arrow': 'Giant_Arrow',
         'Healer Puppet': 'Healer_Puppet',
         'Frozen Arrow': 'Frozen_Arrow',
