@@ -189,7 +189,7 @@ function createDetailedInfoSection(clan) {
 
 // 승률 계산
 function calculateWinRate(clan) {
-    const total = (clan.warWins || 0) + (clan.warLosses || 0) + (clan.warTies || 0);
+    const total = (clan.warWins || 0) + (clan.warLosses || 0);
     if (total === 0) return 0;
     return ((clan.warWins || 0) / total * 100).toFixed(1);
 }
