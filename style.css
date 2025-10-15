@@ -201,36 +201,49 @@ nav {
 }
 
 .competitive-section {
-    display: grid;
-    gap: 12px;
+  display: grid;
+  gap: 12px;
 }
 
+/* 전체 한 줄 레이아웃 */
 .competitive-info {
-    display: flex;
-    justify-content: space-between;
-    font-weight: 600;
-    color: #555;
+  display: flex;
+  justify-content: space-between; /* 좌우 배치 */
+  align-items: center;             /* 세로 중앙 정렬 */
+  font-weight: 600;
+  color: #555;
+}
+
+/* 왼쪽 영역: 리그 아이콘 + 리그명 */
+.left-info {
+  display: flex;
+  align-items: center; /* 세로 중앙 */
+  gap: 8px;
 }
 
 .league-icon {
-    width: 50px;
-    height: 50px;
-    object-fit: contain;
-    vertical-align: middle;
-    background: transparent;
-    flex-shrink: 0;
+  width: 50px;
+  height: 50px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* 오른쪽 영역: 🏆 + 값 */
+.right-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
 }
 
 .trophy-icon {
-    text-align: right;
-    font-size: 1.5rem;
-    flex-shrink: 0;
+  font-size: 1.5rem;
+  flex-shrink: 0;
 }
 
 .trophy-value {
-    color: #333;
-    font-weight: 500;
-    text-align: right;
+  color: #333;
+  font-weight: 500;
+  text-align: right;
 }
 
 .heroes-section,

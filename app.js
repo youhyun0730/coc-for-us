@@ -330,22 +330,28 @@ function createPlayerCard(player, index) {
     <!-- ✅ 리그 아이콘 추가 (트로피 라벨 왼쪽) -->
     <div class="competitive-section">
         <div class="section-title">경쟁전</div>
-        <span class="competitive-info">
-          ${leagueIconUrl ? `
-            <img
-              class="league-icon"
-              src="${leagueIconUrl}"
-              alt="${player.leagueTier?.name || 'League'}"
-              loading="lazy"
-              decoding="async"
-              onerror="this.style.display='none';"
+        <div class="competitive-info">
+            <div class="left-info">
+                ${leagueIconUrl ? `
+                <img
+                class="league-icon"
+                src="${leagueIconUrl}"
+                alt="${player.leagueTier?.name || 'League'}"
+                loading="lazy"
+                decoding="async"
+                onerror="this.style.display='none';"
             />
-          ` : ''}
-          ${translateLeague(player.leagueTier.name)}
-          <div class="trophy-icon">🏆</div>
-          <span class="trophy-value">${player.trophies.toLocaleString()}</span>
-        </span>
+        ` : ''}
+            <span class="league-name">${translateLeague(player.leagueTier.name)}</span>
+        </div>
+
+        <div class="right-info">
+            <span class="trophy-icon">🏆</span>
+            <span class="trophy-value">${player.trophies.toLocaleString()}</span>
+        </div>
     </div>
+</div>
+
 
     ${createHeroesSection(player)}
 
