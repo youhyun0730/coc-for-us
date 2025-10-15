@@ -346,7 +346,14 @@ function createPlayerCard(player, index) {
         </div>
 
         <div class="right-info">
-            <img class="trophy-icon" src="images/trophy.png" alt="Trophy">
+            <img
+                class="trophy-icon"
+                src="images/icon/Trophy.png"
+                alt="Trophy"
+                loading="lazy"
+                decoding="async"
+                onerror="this.style.display='none';"
+            />
             <span class="trophy-value">${player.trophies.toLocaleString()}</span>
         </div>
     </div>
