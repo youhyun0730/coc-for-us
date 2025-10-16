@@ -540,3 +540,70 @@ nav {
 h1, h2, .clan-name, .player-name {
   font-weight: 900; /* Black */
 }
+
+/* 영웅합 통계 피일 */
+.stat-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: 9999px;
+  background: linear-gradient(180deg, #fff, #f7f7f7);
+  border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  margin-top: 10px;
+}
+
+.stat-icon {
+  width: 18px;
+  height: 18px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.stat-label {
+  color: #555;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.stat-value {
+  color: #111;
+  font-weight: 800;
+  font-size: 1.05rem;
+}
+
+/* 영웅 레벨 칩 리스트 */
+.hero-level-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.hero-level-chips .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border-radius: 9999px;
+  background: #f4f5f7;
+  border: 1px solid rgba(0,0,0,0.05);
+  color: #333;
+  font-size: 0.9rem;
+}
+
+.hero-level-chips .chip b {
+  color: #111;
+  font-weight: 800;
+}
+
+/* 미보유 장비의 행 가독성(선택) */
+.equipment-item-small.missing { opacity: .85; }
+.equipment-item-small.missing .equipment-level { opacity: .75; }
+
+/* 모바일 보정 */
+@media (max-width: 768px) {
+  .hero-level-chips { gap: 6px; }
+  .hero-level-chips .chip { padding: 5px 9px; font-size: 0.88rem; }
+}
