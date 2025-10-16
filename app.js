@@ -50,43 +50,37 @@ function createHeroesSection(player) {
       ownedMap.set(norm, eq);
     });
 
-    // 정렬: 레벨 내림차순, 미보유(-1)는 항상 마지막, 동레벨은 이름 오름차순
-    const rows = allEquipmentNamesForHero.map(normName => {
-      const owned = ownedMap.get(normName) || null;
-      const level = owned?.level ?? -1;
-      const displayName = translateEquipmentName ? translateEquipmentName(normName) : normName;
-      const eqImgSrc = getEquipmentImageSrc ? getEquipmentImageSrc(normName, hero.name) : '';
-      return { normName, displayName, eqImgSrc, level, owned };
-    });
+// ✅ 정렬 없이, 매핑된 기본 순서대로 그대로 사용
+const rows = allEquipmentNamesForHero.map(normName => {
+  const owned = ownedMap.get(normName) || null;
+  const level = owned?.level ?? -1; // 미보유면 -1(표시용)
+  const displayName = translateEquipmentName ? translateEquipmentName(normName) : normName;
+  const eqImgSrc = getEquipmentImageSrc ? getEquipmentImageSrc(normName, hero.name) : '';
+  return { normName, displayName, eqImgSrc, level, owned };
+});
 
-    rows.sort((a, b) => {
-      if (a.level === -1 && b.level !== -1) return 1;
-      if (a.level !== -1 && b.level === -1) return -1;
-      if (a.level !== b.level) return b.level - a.level;
-      return a.displayName.localeCompare(b.displayName, 'ko');
-    });
+// 장비 HTML (미보유는 흑백 + "미보유")
+const equipmentHTML = rows.length
+  ? rows.map(row => {
+      const imgStyle = row.owned ? '' : 'filter: grayscale(100%); opacity:.55;';
+      const levelLabel = row.owned ? `레벨 ${row.level}` : '미보유';
+      return `
+        <div class="equipment-item-small ${row.owned ? '' : 'missing'}">
+          <div class="equipment-name">
+            <img class="equipment-image"
+                 src="${row.eqImgSrc}"
+                 alt="${row.displayName}"
+                 loading="lazy"
+                 onerror="this.style.display='none';"
+                 style="${imgStyle}" />
+            <span>${row.displayName}</span>
+          </div>
+          <span class="equipment-level">${levelLabel}</span>
+        </div>
+      `;
+    }).join('')
+  : '<div class="no-equipment">장비 없음</div>';
 
-    // 장비 HTML (미보유는 흑백 + "미보유")
-    const equipmentHTML = rows.length
-      ? rows.map(row => {
-          const imgStyle = row.owned ? '' : 'filter: grayscale(100%); opacity:.55;';
-          const levelLabel = row.owned ? `레벨 ${row.level}` : '미보유';
-          return `
-            <div class="equipment-item-small ${row.owned ? '' : 'missing'}">
-              <div class="equipment-name">
-                <img class="equipment-image"
-                     src="${row.eqImgSrc}"
-                     alt="${row.displayName}"
-                     loading="lazy"
-                     onerror="this.style.display='none';"
-                     style="${imgStyle}" />
-                <span>${row.displayName}</span>
-              </div>
-              <span class="equipment-level">${levelLabel}</span>
-            </div>
-          `;
-        }).join('')
-      : '<div class="no-equipment">장비 없음</div>';
 
     const hasEquipmentSlots = rows.length > 0;
 
@@ -113,35 +107,24 @@ function createHeroesSection(player) {
     `;
   }).join('');
 
-  // 합계
-  const total = calculateTotalHeroLevels(player);
+// 합계
+const total = calculateTotalHeroLevels(player);
 
-  // 영웅 합(뱃지형) + 칩 요약 추가
-  const chipsHTML = filteredHeroes.map(h => `
-    <span class="chip">
-      ${translateHeroName ? translateHeroName(h.name) : h.name}
-      <b>${h.level}</b>
-    </span>
-  `).join('');
-
-  return `
-    <div class="heroes-section">
-      <div class="section-title">영웅 및 장비</div>
-      <div class="heroes-list">
-        ${heroesHTML}
-      </div>
-
-      <div class="total-hero-level stat-pill" data-target="${total}">
-        <img class="stat-icon" src="images/icon/Crown.png" alt="합계" loading="lazy" onerror="this.style.display='none';">
-        <span class="stat-label">영웅 합</span>
-        <span class="stat-value">0</span>
-      </div>
-
-      <div class="hero-level-chips" aria-label="영웅 레벨 요약">
-        ${chipsHTML}
-      </div>
+return `
+  <div class="heroes-section">
+    <div class="section-title">영웅 및 장비</div>
+    <div class="heroes-list">
+      ${heroesHTML}
     </div>
-  `;
+
+    <!-- 👉 애니메이션 없이도 바로 숫자 보이게 -->
+    <div class="total-hero-level stat-pill">
+      <img class="stat-icon" src="images/icon/Crown.png" alt="합계" loading="lazy" onerror="this.style.display='none';">
+      <span class="stat-label">영웅 합</span>
+      <span class="stat-value">${total.toLocaleString()}</span>
+    </div>
+  </div>
+`;
 }
 
 // 英雄装備トグル機能
@@ -388,7 +371,7 @@ function createPlayerCard(player, index) {
                 onerror="this.style.display='none';"
             />
         ` : ''}
-            <span class="league-name">${translateLeague(player.leagueTier.name)}</span>
+            <span class="league-name">${translateLeague(player.leagueTier?.name)}</span>
         </div>
 
         <div class="right-info">
@@ -523,13 +506,6 @@ async function loadAllPlayers() {
         console.error('Error:', error);
     }
 }
-
-// ✅ 영웅합 숫자 애니메이션 실행
-document.querySelectorAll('.stat-pill').forEach(pill => {
-  const to = Number(pill.getAttribute('data-target')) || 0;
-  const valueEl = pill.querySelector('.stat-value');
-  if (valueEl) animateCounter(valueEl, to);
-});
 
 // 페이지 로드 시 실행
 document.addEventListener('DOMContentLoaded', loadAllPlayers);
