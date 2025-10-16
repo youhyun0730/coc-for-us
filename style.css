@@ -274,6 +274,18 @@ nav {
   white-space: nowrap;             /* 제목이 긴 경우 한 줄 유지 (줄바꿈 원하면 제거) */
 }
 
+.competitive-section .section-title::before,
+.heroes-section .section-title::before,
+.equipment-section .section-title::before {
+  content: "";
+  display: inline-block;
+  width: 10px;                   /* ← 왼쪽 라인 길이 (원하면 6~14px 정도로 조정 가능) */
+  height: var(--section-divider); /* 동일한 두께 */
+  background: #f0f0f0;            /* 동일한 색상 */
+  border-radius: 999px;           /* 라인 끝 둥글게 */
+  flex-shrink: 0;                 /* 줄어들지 않게 */
+}
+
 .competitive-section .section-title::after,
 .heroes-section .section-title::after,
 .equipment-section .section-title::after {
