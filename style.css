@@ -557,17 +557,16 @@ h1, h2, .clan-name, .player-name {
   margin-top: 10px;
 }
 
-/* ==== PETS 전용 레이아웃/간격 ==== */
+/* ====== PETS 섹션 (보더라인은 기존 공통 규칙에 pets-section 추가한 상태 가정) ====== */
 .pets-section {
   margin-top: var(--section-space);
-  /* 다음 섹션(예: 클랜 정보) 보더라인과 간격 벌리기 */
-  margin-bottom: 14px;   /* ← 가까웠던 보더라인 문제 해결 포인트 */
+  margin-bottom: 16px;            /* 두번째 줄 아래 보더라인과 간격 확보 */
 }
 
 .pets-rows {
   display: grid;
-  gap: 12px 0;           /* 행 간격 */
-  margin-bottom: 8px;    /* 2번째 줄 아래 추가 여백 */
+  gap: 12px 0;                    /* 1행-2행 사이 간격 */
+  margin-bottom: 10px;            /* 아래 섹션과 여백 */
 }
 
 .pets-row {
@@ -576,7 +575,7 @@ h1, h2, .clan-name, .player-name {
   gap: 10px;
 }
 
-/* 1행: 6컬럼, 2행: 5컬럼 */
+/* 두 줄 고정: 1행 6개, 2행 5개 (절대 줄이지 않음!) */
 .pets-row.row-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 .pets-row.row-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 
@@ -586,7 +585,7 @@ h1, h2, .clan-name, .player-name {
   align-items: center;
 }
 
-/* 이미지 크기(겹침 방지), 배지 유지 */
+/* 기본 크기 (데스크톱) */
 .pet-image-container {
   position: relative;
   width: 46px;
@@ -603,6 +602,7 @@ h1, h2, .clan-name, .player-name {
   object-fit: contain;
 }
 
+/* 레벨 배지 */
 .pet-level-badge {
   position: absolute;
   bottom: 3px;
@@ -613,10 +613,10 @@ h1, h2, .clan-name, .player-name {
   font-weight: 800;
   border-radius: 4px;
   color: #fff;
-  background-color: rgba(0, 0, 0, 0.85);
+  background-color: rgba(0,0,0,0.85);
 }
 .pet-level-badge.max {
-  background-color: #facc15; /* 만렙: 노랑 */
+  background-color: #facc15;  /* 만렙 노랑 */
   color: #000;
 }
 
@@ -631,21 +631,22 @@ h1, h2, .clan-name, .player-name {
   text-overflow: ellipsis;
 }
 
-/* 반응형 */
+/* ===== 반응형: '컬럼 수'는 유지하고 '이미지 크기'만 줄이기 ===== */
 @media (max-width: 860px) {
-  .pets-row.row-6 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-  .pets-row.row-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
-}
-@media (max-width: 620px) {
-  .pets-row.row-6,
-  .pets-row.row-5 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .pet-image-container { width: 44px; height: 44px; }
-  .pet-name { max-width: 60px; font-size: 10px; }
-}
-@media (max-width: 420px) {
   .pet-image-container { width: 42px; height: 42px; }
-  .pet-level-badge { font-size: 9.5px; padding: 1px 3px; }
-  .pet-name { max-width: 56px; font-size: 9.5px; }
+  .pet-level-badge { font-size: 9.5px; padding: 1px 3.5px; }
+  .pet-name { max-width: 62px; font-size: 10px; }
+}
+
+@media (max-width: 620px) {
+  .pet-image-container { width: 38px; height: 38px; }
+  .pet-name { max-width: 58px; font-size: 9.8px; }
+}
+
+@media (max-width: 420px) {
+  .pet-image-container { width: 34px; height: 34px; }
+  .pet-level-badge { font-size: 9px; padding: 1px 3px; }
+  .pet-name { max-width: 52px; font-size: 9.5px; }
 }
 
 .stat-icon {
