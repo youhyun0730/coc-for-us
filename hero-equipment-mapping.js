@@ -12,7 +12,7 @@ const heroEquipmentMapping = {
     ],
     'Archer Queen': [
         'Archer Puppet',
-        'Invisible Vial',
+        'Invisibility Vial',
         'Giant Arrow',
         'Healer Puppet',
         'Frozen Arrow',
@@ -68,7 +68,7 @@ const equipmentNameMapping = {
 
     // Archer Queen
     '아처 인형': 'Archer Puppet',
-    '투명 마법 병': 'Invisible Vial',
+    '투명 마법 병': 'Invisibility Vial',
     '자이언트 화살': 'Giant Arrow',
     '힐러 인형': 'Healer Puppet',
     '얼음 화살': 'Frozen Arrow',
