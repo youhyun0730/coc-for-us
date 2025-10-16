@@ -1,12 +1,28 @@
 // 英雄の装備を取得
 function getEquipmentForHero(heroName, allEquipment) {
-    const normalizedHeroName = heroNameMapping[heroName] || heroName;
-    const heroEquipmentNames = heroEquipmentMapping[normalizedHeroName] || [];
+  const normalizedHeroName = heroNameMapping[heroName] || heroName;
+  const heroEquipmentNames = heroEquipmentMapping[normalizedHeroName] || [];
 
-    return allEquipment.filter(equipment => {
-        const normalizedEquipmentName = equipmentNameMapping[equipment.name] || equipment.name;
-        return heroEquipmentNames.includes(normalizedEquipmentName);
-    });
+  // 1️⃣ 장비 이름 매핑
+  const owned = allEquipment.map(equipment => {
+    const normalizedEquipmentName = equipmentNameMapping[equipment.name] || equipment.name;
+    return { ...equipment, normalizedName: normalizedEquipmentName };
+  });
+
+  // 2️⃣ 영웅이 가질 수 있는 장비 목록(heroEquipmentNames)을 기준으로 전체 배열 생성
+  const completeList = heroEquipmentNames.map(name => {
+    const match = owned.find(e => e.normalizedName === name);
+    if (match) {
+      // 보유 장비 (정상 표시)
+      return { ...match, owned: true };
+    } else {
+      // 미보유 장비 (레벨 없음)
+      return { name, level: '', owned: false }; 
+    }
+  });
+
+  // 3️⃣ heroEquipmentNames 순서 유지
+  return completeList;
 }
 
 function createHeroesSection(player) {
@@ -21,11 +37,16 @@ function createHeroesSection(player) {
         ${heroes.map((hero, idx) => {
           const img = getHeroImageSrc(hero.name);
           const isSelected = idx === 0;
+        
+          // ✅ 만렙 여부 판정
+          const isMax = hero.level >= hero.maxLevel;
+          const levelClass = isMax ? 'max' : '';
+
           return `
             <div class="hero-card ${isSelected ? 'selected' : ''}" 
-                 onclick="selectHero('${hero.name}', this)">
+                onclick="selectHero('${hero.name}', this)">
               <img class="hero-image" src="${img}" alt="${hero.name}" />
-              <div class="hero-level">${hero.level}</div>
+              <div class="hero-level ${levelClass}">${hero.level}</div>
             </div>
           `;
         }).join('')}
@@ -34,24 +55,39 @@ function createHeroesSection(player) {
   };
 
   const renderEquipmentRows = (hero) => {
-    const equipments = getEquipmentForHero(hero.name, player.heroEquipment || []);
-    const normal = equipments.filter(e => e.rarity !== 'rare');
-    const rare = equipments.filter(e => e.rarity === 'rare');
+  const equipments = getEquipmentForHero(hero.name, player.heroEquipment || []);
 
-    const renderEquipRow = (list) => list.map(e => `
-      <div class="equip-card">
-        <img class="equip-image" src="${getEquipmentImageSrc(e.name)}" alt="${e.name}" />
-        <div class="equip-level">${e.level}</div>
-      </div>
-    `).join('');
+  // 첫 4개 / 나머지 3개로 단순 분할
+  const firstRow = equipments.slice(0, 4);
+  const secondRow = equipments.slice(4, 7);
 
-    return `
-      <div class="equip-section" id="equip-section">
-        <div class="equip-row normal">${renderEquipRow(normal)}</div>
-        <div class="equip-row rare">${renderEquipRow(rare)}</div>
-      </div>
-    `;
-  };
+  const renderEquipRow = (list, isSecondRow = false) => list.map(e => {
+      const img = getEquipmentImageSrc(e.name, hero.name);
+      const extraClass = isSecondRow ? 'second-row' : 'first-row';
+      const style = e.owned ? '' : 'filter: grayscale(100%); opacity: 0.4;';
+      const isMaxLevel = e.level >= e.maxLevel;
+      const maxlevelClass = isMaxLevel ? 'max' : 'normal';
+      // ✅ 레벨 박스는 보유 장비일 때만 생성
+      const levelBox = e.owned
+        ? `<div class="equip-level ${maxlevelClass}">${e.level}</div>`
+        : '';
+
+      return `
+        <div class="equip-card">
+          <img class="equip-image ${extraClass}" src="${img}" alt="${e.name}" style="${style}" />
+          ${levelBox}
+        </div>
+      `;
+    }).join('');
+
+  return `
+    <div class="equip-section" id="equip-section">
+      <div class="equip-row">${renderEquipRow(firstRow, false)}</div>
+      <div class="equip-row">${renderEquipRow(secondRow, true)}</div>
+    </div>
+  `;
+};
+
 
   return `
     <div class="heroes-section">
@@ -70,30 +106,49 @@ function selectHero(heroName, el) {
   el.classList.add('selected');
 
   const playerIndex = section.closest('.player-card').dataset.index;
-  const player = window.PLAYERS[playerIndex];
-  const hero = player.heroes.find(h => h.name === heroName);
+  const player = window.PLAYERS?.[playerIndex];
+  const hero = player?.heroes?.find(h => h.name === heroName);
+  if (!hero) return;
 
-  const equipContainer = section.querySelector('#equip-section');
-  equipContainer.outerHTML = createEquipHTML(hero, player.heroEquipment);
+  const oldEquip = section.querySelector('#equip-section');
+  if (!oldEquip) return;
+
+  // 🔥 replaceWith는 outerHTML보다 안전
+  const newEquip = document.createElement('div');
+  newEquip.innerHTML = createEquipHTML(hero, player.heroEquipment || []);
+  oldEquip.replaceWith(newEquip.firstElementChild);
 }
 
 // === 장비 표시 갱신용 함수 ===
 function createEquipHTML(hero, heroEquipment) {
   const equipments = getEquipmentForHero(hero.name, heroEquipment || []);
-  const normal = equipments.filter(e => e.rarity !== 'rare');
-  const rare = equipments.filter(e => e.rarity === 'rare');
+  const firstRow = equipments.slice(0, 4);
+  const secondRow = equipments.slice(4, 7);
 
-  const renderEquipRow = (list) => list.map(e => `
-    <div class="equip-card">
-      <img class="equip-image" src="${getEquipmentImageSrc(e.name)}" alt="${e.name}" />
-      <div class="equip-level">${e.level}</div>
-    </div>
-  `).join('');
+  const renderEquipRow = (list, isSecondRow = false) => list.map(e => {
+    const img = getEquipmentImageSrc(e.name, hero.name);
+    const style = e.owned ? '' : 'filter: grayscale(100%); opacity: 0.4;';
+    const level = e.owned ? e.level : '';
+    const extraClass = isSecondRow ? 'second-row' : 'first-row';
+    const isMaxLevel = (e) => e.level >= e.maxLevel;
+    const maxlevelClass = (e) => isMaxLevel(e) ? 'max' : 'normal';
+
+    const levelBox = e.owned
+      ? `<div class="equip-level ${maxlevelClass(e)}">${level}</div>`
+      : '';
+
+    return `
+      <div class="equip-card">
+        <img class="equip-image ${extraClass}" src="${img}" alt="${e.name}" style="${style}" />
+        ${levelBox}
+      </div>
+    `;
+  }).join('');
 
   return `
     <div class="equip-section" id="equip-section">
-      <div class="equip-row normal">${renderEquipRow(normal)}</div>
-      <div class="equip-row rare">${renderEquipRow(rare)}</div>
+      <div class="equip-row">${renderEquipRow(firstRow, false)}</div>
+      <div class="equip-row">${renderEquipRow(secondRow, true)}</div>
     </div>
   `;
 }
@@ -277,7 +332,7 @@ function getPetImageSrc(officialName) {
 }
 function getPetsFromPlayer(player) {
   const troops = Array.isArray(player.troops) ? player.troops : [];
-  const order = window.PETS?.CANONICAL_ORDER || [];
+  const order = window.PETS?.CANONICAL_ORDER || window.PETS?.ORDER || [];
   const set = new Set(order);
 
   const pets = troops
@@ -335,6 +390,7 @@ function createPetsSection(player) {
 function createPlayerCard(player, index) {
   const card = document.createElement('div');
   card.className = 'player-card';
+  card.dataset.index = index;
 
   const totalHeroLevels = calculateTotalHeroLevels(player);
 
@@ -521,6 +577,9 @@ async function loadAllPlayers() {
         const data = await response.json();
         const players = data.players;
         console.log('API에서 가져온 플레이어 데이터:', players); // API 응답 데이터 확인
+        
+        // 전역으로 플레이어 데이터 저장 (선택 사항)
+        window.PLAYERS = players;
 
         hideLoading();
 

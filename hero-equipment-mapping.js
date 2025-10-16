@@ -100,68 +100,15 @@ const equipmentNameMapping = {
     '메테오 스태프': 'Meteor Staff'
 };
 
-// 装備の希少度情報
-const equipmentRarityMapping = {
-    // Barbarian King
-    'Barbarian Puppet': 'normal',
-    'Rage Vial': 'normal',
-    'Earthquake Boots': 'normal',
-    'Vampstache': 'normal',
-    'Giant Gauntlet': 'rare',
-    'Spiky Ball': 'rare',
-    'Snake Bracelet': 'rare',
-
-    // Archer Queen
-    'Archer Puppet': 'normal',
-    'Invisibility Vial': 'normal',
-    'Giant Arrow': 'normal',
-    'Healer Puppet': 'normal',
-    'Frozen Arrow': 'rare',
-    'Magic Mirror': 'rare',
-    'Action Figure': 'rare',
-
-    // Grand Warden
-    'Eternal Tome': 'normal',
-    'Life Gem': 'normal',
-    'Rage Gem': 'normal',
-    'Healing Tome': 'normal',
-    'Fireball': 'rare',
-    'Lavaloon Puppet': 'rare',
-    'Heroic Torch': 'rare',
-
-    // Royal Champion
-    'Royal Gem': 'normal',
-    'Seeking Shield': 'normal',
-    'Hog Rider Puppet': 'normal',
-    'Haste Vial': 'normal',
-    'Rocket Spear': 'rare',
-    'Electro Boots': 'rare',
-
-    // Minion Prince
-    'Henchmen Puppet': 'normal',
-    'Dark Orb': 'normal',
-    'Metal Pants': 'normal',
-    'Noble Iron': 'normal',
-    'Dark Crown': 'rare',
-    'Meteor Staff': 'rare'
-};
-
-
 // 英雄に装備が属しているかをチェック
 function getEquipmentForHero(heroName, allEquipment) {
     const normalizedHeroName = heroNameMapping[heroName] || heroName;
     const heroEquipmentNames = heroEquipmentMapping[normalizedHeroName] || [];
 
-    return allEquipment
-        .filter(equipment => {
+    return allEquipment.filter(equipment => {
             const normalizedEquipmentName = equipmentNameMapping[equipment.name] || equipment.name;
             return heroEquipmentNames.includes(normalizedEquipmentName);
         })
-        .map(equipment => {
-            const normalizedName = equipmentNameMapping[equipment.name] || equipment.name;
-            const rarity = equipmentRarityMapping[normalizedName] || 'normal';
-        return { ...equipment, rarity };
-        });
 }
 
 if (typeof module !== 'undefined' && module.exports) {
@@ -169,7 +116,6 @@ if (typeof module !== 'undefined' && module.exports) {
         heroEquipmentMapping,
         heroNameMapping,
         equipmentNameMapping,
-        equipmentRarityMapping,
         getEquipmentForHero
     };
 }
