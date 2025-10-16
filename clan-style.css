@@ -455,9 +455,6 @@ nav {
 }
 
 @media (max-width: 480px) {
-    .clan-container {
-        grid-template-columns: 1fr;
-    }
 }
 
 /* ===== 모바일 환경 긴 한글 제목 세로깨짐 방지 ===== */

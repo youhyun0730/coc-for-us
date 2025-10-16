@@ -377,6 +377,9 @@ nav {
     font-size: 0.9rem;
 }
 
+.equipment-item-small.missing { opacity: .8; }
+.equipment-item-small.missing .equipment-level { opacity: .75; }
+
 .no-equipment {
     padding: 8px;
     text-align: center;
