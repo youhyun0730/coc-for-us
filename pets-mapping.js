@@ -1,9 +1,18 @@
 // pets-mapping.js
 window.PETS = window.PETS || {};
 
-window.PETS.CANONICAL_ORDER = [
-  'L.A.S.S.I','Electro Owl','Mighty Yak','Unicorn','Phoenix',
-  'Poison Lizard','Diggy','Frosty','Spirit Fox','Angry Jelly','Sneezy',
+window.PETS.ORDER = [
+  'L.A.S.S.I',
+  'Electro Owl',
+  'Mighty Yak',
+  'Unicorn',
+  'Frosty',
+  'Diggy',
+  'Poison Lizard',
+  'Phoenix',
+  'Spirit Fox',
+  'Angry Jelly',
+  'Sneezy'
 ];
 
 window.PETS.ALIASES = {
