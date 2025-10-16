@@ -609,24 +609,34 @@ h1, h2, .clan-name, .player-name {
   object-fit: contain;
 }
 
+/* 레벨 배지: 좌하단, 숫자 전용 폰트 + 탭울러 숫자 */
 .pet-level-badge {
   position: absolute;
   bottom: 3px;
   left: 3px;
-  padding: 1px 4px;
-  font-size: 10px;
+  padding: 1px 5px;                  /* 살짝 좌우 여유 */
+  font-size: 11px;                   /* 숫자 가독성 향상 */
   line-height: 1;
-  font-weight: 800;
+  font-weight: 800;                  /* 두껍게 */
   border-radius: 4px;
   color: #fff;
-  background-color: rgba(0,0,0,0.85);
-}
-.pet-level-badge.max {
-  background-color: #facc15; /* 만렙 노랑 */
-  color: #000;
+  background-color: rgba(0,0,0,0.9); /* 일반: 검정 */
+  border: 1px solid rgba(255,255,255,0.08);
+  /* 숫자 폰트 스택: 커스텀 → 시스템 모노 → 일반 */
+  font-family: 'Digits', 'JetBrains Mono', 'Roboto Mono', 'SFMono-Regular',
+               'Menlo', 'Consolas', 'Liberation Mono', monospace, 'Clash', 'KoBrawlGothic', sans-serif;
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "lnum" 1; /* 탭울러/라이닝 숫자 */
+  text-shadow: 0 1px 0 rgba(0,0,0,0.25);     /* 어두운 배경에서 미세 강조 */
 }
 
-/* 이름은 제거했으므로 기존 .pet-name 규칙이 있으면 삭제하거나 무시됩니다. */
+/* 만렙: 노란 박스 + 흰색 숫자 (인게임 느낌) */
+.pet-level-badge.max {
+  background-color: #facc15;         /* yellow-400 계열 */
+  color: #fff;                        /* ← 흰색 숫자 */
+  border: 1px solid #d4b014;          /* 약간 어둡게 둘레 */
+  text-shadow: 0 1px 0 rgba(0,0,0,0.25); /* 대비 보강 */
+}
 
 /* 반응형 — 컬럼 수는 고정, 이미지 크기만 축소 */
 @media (max-width: 860px) {
