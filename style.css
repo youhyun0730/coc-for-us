@@ -554,6 +554,78 @@ h1, h2, .clan-name, .player-name {
   margin-top: 10px;
 }
 
+/* ==== PETS ==== */
+.pets-section {
+  margin-top: 18px;
+}
+
+.pets-divider {
+  text-align: center;
+  font-weight: 700;
+  color: #333;
+  margin: 10px 0 12px 0;
+  letter-spacing: 1px;
+  border-bottom: 1px solid rgba(0,0,0,0.15);
+  padding-bottom: 6px;
+}
+
+.pets-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+  gap: 14px;
+  justify-items: center;
+}
+
+.pet-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+
+.pet-image-container {
+  position: relative;
+  width: 80px;
+  height: 80px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: rgba(255,255,255,0.4);
+  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+}
+
+.pet-image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.pet-level-badge {
+  position: absolute;
+  bottom: 5px;
+  left: 5px;
+  font-size: 13px;
+  font-weight: 700;
+  color: white;
+  background-color: rgba(0,0,0,0.8);
+  border-radius: 5px;
+  padding: 2px 6px;
+  line-height: 1;
+}
+
+.pet-level-badge.max {
+  background-color: #facc15; /* 노란색 (Tailwind yellow-400 정도) */
+  color: #000;
+  font-weight: 800;
+}
+
+.pet-name {
+  margin-top: 6px;
+  font-weight: 600;
+  text-align: center;
+  font-size: 14px;
+}
+/* ==== /PETS ==== */
+
 .stat-icon {
   width: 18px;
   height: 18px;

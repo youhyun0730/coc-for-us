@@ -290,6 +290,66 @@ function calculateTotalHeroLevels(player) {
         .reduce((total, hero) => total + hero.level, 0);
 }
 
+// ==== PETS: helpers (uses window.PETS) ====
+function normalizePetName(raw) {
+  if (!raw) return '';
+  const s = String(raw).trim();
+  return (window.PETS?.ALIASES && window.PETS.ALIASES[s]) ? window.PETS.ALIASES[s] : s;
+}
+function translatePetName(name) {
+  return (window.PETS?.KO && window.PETS.KO[name]) ? window.PETS.KO[name] : name;
+}
+function getPetImageSrc(officialName) {
+  const file = window.PETS?.IMG ? window.PETS.IMG[officialName] : '';
+  return file ? `images/pets/${file}` : '';
+}
+function getPetsFromPlayer(player) {
+  const troops = Array.isArray(player.troops) ? player.troops : [];
+  const order = window.PETS?.CANONICAL_ORDER || [];
+  const set = new Set(order);
+
+  const pets = troops
+    .filter(t => t && t.village === 'home')
+    .map(t => ({ ...t, officialName: normalizePetName(t.name) }))
+    .filter(t => set.has(t.officialName));
+
+  pets.sort((a, b) => order.indexOf(a.officialName) - order.indexOf(b.officialName));
+  return pets;
+}
+function createPetsSection(player) {
+  const pets = getPetsFromPlayer(player);
+  if (pets.length === 0) return '';
+
+  const items = pets.map(p => {
+    const name = translatePetName(p.officialName);
+    const img = getPetImageSrc(p.officialName);
+    const owned = Number.isFinite(p.level);
+    const isMax = owned && p.level >= p.maxLevel; // 만렙 여부
+    const level = owned ? p.level : '?';
+    const style = owned ? '' : 'filter: grayscale(100%) opacity(.55);';
+    const badgeColor = isMax ? 'max' : 'normal';
+
+    return `
+      <div class="pet-card">
+        <div class="pet-image-container">
+          <img class="pet-image" src="${img}" alt="${name}" loading="lazy"
+               onerror="this.style.display='none';" style="${style}" />
+          <div class="pet-level-badge ${badgeColor}">
+            ${owned ? level : '-'}
+          </div>
+        </div>
+        <div class="pet-name">${name}</div>
+      </div>`;
+  }).join('');
+
+  return `
+    <div class="pets-section">
+      <div class="pets-divider">─ 펫 ───────────────</div>
+      <div class="pets-grid">${items}</div>
+    </div>`;
+}
+// ==== /PETS helpers ====
+
 // 플레이어 카드를 생성하는 함수
 function createPlayerCard(player, index) {
   const card = document.createElement('div');
@@ -390,7 +450,7 @@ function createPlayerCard(player, index) {
 
 
     ${createHeroesSection(player)}
-
+    ${createPetsSection(player)}
     ${clanInfo}
 
   `;
