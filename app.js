@@ -9,123 +9,95 @@ function getEquipmentForHero(heroName, allEquipment) {
     });
 }
 
-// 영웅 섹션 생성 (이미지 + 장비 정렬 + 토글 포함)
 function createHeroesSection(player) {
   if (!player.heroes || player.heroes.length === 0) return '';
 
-  // Battle Machine / Battle Copter 제외
-  const filteredHeroes = player.heroes.filter(hero => {
-    const n = (hero.name || '').toLowerCase();
-    return !n.includes('battle machine') &&
-           !n.includes('battle copter') &&
-           !n.includes('배틀 머신') &&
-           !n.includes('배틀 콥터');
-  });
-  if (filteredHeroes.length === 0) return '';
+  const heroes = player.heroes.filter(h => h.village === 'home');
+  const selectedHero = heroes[0]; // 기본 첫 번째 영웅 선택
 
-  const heroesHTML = filteredHeroes.map((hero, index) => {
-    const heroId = `hero-${player.tag.replace('#', '')}-${index}`;
-    const heroDisplayName = translateHeroName ? translateHeroName(hero.name) : hero.name;
-    const heroImgSrc = getHeroImageSrc ? getHeroImageSrc(hero.name) : '';
-
-    // 이 영웅이 가질 수 있는 "전체 장비 이름 목록" (정규화)
-    const normalizedHeroName =
-      (typeof heroNameMapping !== 'undefined' && heroNameMapping[hero.name])
-        ? heroNameMapping[hero.name]
-        : hero.name;
-
-    const allEquipmentNamesForHero =
-      (typeof heroEquipmentMapping !== 'undefined' && heroEquipmentMapping[normalizedHeroName])
-        ? heroEquipmentMapping[normalizedHeroName]
-        : [];
-
-    // 플레이어 보유 장비 맵 (정규화된 이름 → 장비 객체)
-    const ownedMap = new Map();
-    const playerEquip = Array.isArray(player.heroEquipment) ? player.heroEquipment : [];
-    playerEquip.forEach(eq => {
-      const norm =
-        (typeof equipmentNameMapping !== 'undefined' && equipmentNameMapping[eq.name])
-          ? equipmentNameMapping[eq.name]
-          : eq.name;
-      ownedMap.set(norm, eq);
-    });
-
-// ✅ 정렬 없이, 매핑된 기본 순서대로 그대로 사용
-const rows = allEquipmentNamesForHero.map(normName => {
-  const owned = ownedMap.get(normName) || null;
-  const level = owned?.level ?? -1; // 미보유면 -1(표시용)
-  const displayName = translateEquipmentName ? translateEquipmentName(normName) : normName;
-  const eqImgSrc = getEquipmentImageSrc ? getEquipmentImageSrc(normName, hero.name) : '';
-  return { normName, displayName, eqImgSrc, level, owned };
-});
-
-// 장비 HTML (미보유는 흑백 + "미보유")
-const equipmentHTML = rows.length
-  ? rows.map(row => {
-      const imgStyle = row.owned ? '' : 'filter: grayscale(100%); opacity:.55;';
-      const levelLabel = row.owned ? `레벨 ${row.level}` : '미보유';
-      return `
-        <div class="equipment-item-small ${row.owned ? '' : 'missing'}">
-          <div class="equipment-name">
-            <img class="equipment-image"
-                 src="${row.eqImgSrc}"
-                 alt="${row.displayName}"
-                 loading="lazy"
-                 onerror="this.style.display='none';"
-                 style="${imgStyle}" />
-            <span>${row.displayName}</span>
-          </div>
-          <span class="equipment-level">${levelLabel}</span>
-        </div>
-      `;
-    }).join('')
-  : '<div class="no-equipment">장비 없음</div>';
-
-
-    const hasEquipmentSlots = rows.length > 0;
-
+  const renderHeroRow = () => {
     return `
-      <div class="hero-item ${hasEquipmentSlots ? 'has-equipment' : ''}" ${hasEquipmentSlots ? `onclick="toggleHeroEquipment('${heroId}')"` : ''}>
-        <div class="hero-main">
-          <div class="hero-name">
-            <img class="hero-image"
-                 src="${heroImgSrc}"
-                 alt="${heroDisplayName}"
-                 loading="lazy"
-                 onerror="this.style.display='none';" />
-            <span>${heroDisplayName}</span>
-          </div>
-          <span class="hero-level">레벨 ${hero.level}</span>
-          ${hasEquipmentSlots ? `<span class="hero-toggle" id="toggle-${heroId}" aria-controls="${heroId}">▼</span>` : ''}
-        </div>
-        ${hasEquipmentSlots ? `
-          <div class="hero-equipment-list" id="${heroId}" style="display:none;">
-            ${equipmentHTML}
-          </div>` : ''
-        }
+      <div class="hero-row">
+        ${heroes.map((hero, idx) => {
+          const img = getHeroImageSrc(hero.name);
+          const isSelected = idx === 0;
+          return `
+            <div class="hero-card ${isSelected ? 'selected' : ''}" 
+                 onclick="selectHero('${hero.name}', this)">
+              <img class="hero-image" src="${img}" alt="${hero.name}" />
+              <div class="hero-level">${hero.level}</div>
+            </div>
+          `;
+        }).join('')}
       </div>
     `;
-  }).join('');
+  };
 
-// 합계
-const total = calculateTotalHeroLevels(player);
+  const renderEquipmentRows = (hero) => {
+    const equipments = getEquipmentForHero(hero.name, player.heroEquipment || []);
+    const normal = equipments.filter(e => e.rarity !== 'rare');
+    const rare = equipments.filter(e => e.rarity === 'rare');
 
-return `
-  <div class="heroes-section">
-    <div class="section-title">영웅 및 장비</div>
-    <div class="heroes-list">
-      ${heroesHTML}
+    const renderEquipRow = (list) => list.map(e => `
+      <div class="equip-card">
+        <img class="equip-image" src="${getEquipmentImageSrc(e.name)}" alt="${e.name}" />
+        <div class="equip-level">${e.level}</div>
+      </div>
+    `).join('');
+
+    return `
+      <div class="equip-section" id="equip-section">
+        <div class="equip-row normal">${renderEquipRow(normal)}</div>
+        <div class="equip-row rare">${renderEquipRow(rare)}</div>
+      </div>
+    `;
+  };
+
+  return `
+    <div class="heroes-section">
+      <div class="section-title">영웅 및 장비</div>
+      ${renderHeroRow()}
+      ${renderEquipmentRows(selectedHero)}
     </div>
-
-    <!-- 👉 애니메이션 없이도 바로 숫자 보이게 -->
-    <div class="total-hero-level stat-pill">
-      <img class="stat-icon" src="images/icon/Crown.png" alt="합계" loading="lazy" onerror="this.style.display='none';">
-      <span class="stat-label">영웅 합</span>
-      <span class="stat-value">${total.toLocaleString()}</span>
-    </div>
-  </div>
-`;
+  `;
 }
+
+// === 클릭 이벤트 함수 (전역 함수로 추가) ===
+function selectHero(heroName, el) {
+  const section = el.closest('.heroes-section');
+  const heroes = section.querySelectorAll('.hero-card');
+  heroes.forEach(h => h.classList.remove('selected'));
+  el.classList.add('selected');
+
+  const playerIndex = section.closest('.player-card').dataset.index;
+  const player = window.PLAYERS[playerIndex];
+  const hero = player.heroes.find(h => h.name === heroName);
+
+  const equipContainer = section.querySelector('#equip-section');
+  equipContainer.outerHTML = createEquipHTML(hero, player.heroEquipment);
+}
+
+// === 장비 표시 갱신용 함수 ===
+function createEquipHTML(hero, heroEquipment) {
+  const equipments = getEquipmentForHero(hero.name, heroEquipment || []);
+  const normal = equipments.filter(e => e.rarity !== 'rare');
+  const rare = equipments.filter(e => e.rarity === 'rare');
+
+  const renderEquipRow = (list) => list.map(e => `
+    <div class="equip-card">
+      <img class="equip-image" src="${getEquipmentImageSrc(e.name)}" alt="${e.name}" />
+      <div class="equip-level">${e.level}</div>
+    </div>
+  `).join('');
+
+  return `
+    <div class="equip-section" id="equip-section">
+      <div class="equip-row normal">${renderEquipRow(normal)}</div>
+      <div class="equip-row rare">${renderEquipRow(rare)}</div>
+    </div>
+  `;
+}
+
 
 // 英雄装備トグル機能
 function toggleHeroEquipment(heroId) {

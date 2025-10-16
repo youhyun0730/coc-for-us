@@ -304,12 +304,6 @@ nav {
   border-radius: 999px;
 }
 
-.heroes-list,
-.equipment-list {
-  display: grid;
-  gap: var(--block-gap);
-}
-
 .section-title {
   margin-bottom: var(--block-gap);
 }
@@ -334,89 +328,81 @@ nav {
     margin-bottom: 8px;
 }
 
-.heroes-list,
-.equipment-list {
-    display: grid;
-    gap: 8px;
+.heroes-section {
+  margin-top: 20px;
 }
 
-.hero-item {
-    background: #f8f9fa;
-    border-radius: 8px;
-    overflow: hidden;
+.hero-row {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
 }
 
-.hero-item.has-equipment {
-    cursor: pointer;
-    transition: background-color 0.2s ease;
+.hero-card {
+  position: relative;
+  cursor: pointer;
+  border-radius: 10px;
+  overflow: hidden;
+  transition: transform 0.2s;
 }
 
-.hero-item.has-equipment:hover {
-    background: #e9ecef;
+.hero-card.selected {
+  outline: 3px solid gold;
+  transform: scale(1.05);
 }
 
-.hero-main {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 8px 12px;
+.hero-image {
+  width: 70px;
+  height: 70px;
+  border-radius: 10px;
 }
 
-.hero-toggle {
-    color: black;
-    font-size: 0.9rem;
-    margin-left: 8px;
-    transition: transform 0.2s ease;
+.hero-level {
+  position: absolute;
+  bottom: 5px;
+  right: 5px;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  font-size: 12px;
+  padding: 2px 5px;
+  border-radius: 5px;
 }
 
-.hero-equipment-list {
-    padding: 8px 12px 12px 12px;
-    background: #ffffff;
-    border-top: 1px solid #dee2e6;
+.equip-section {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
-.equipment-item-small {
-    display: flex;
-    justify-content: space-between;
-    padding: 6px 8px;
-    margin-top: 4px;
-    background: #f8f9fa;
-    border-radius: 6px;
-    font-size: 0.9rem;
+.equip-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 }
 
-.equipment-item-small.missing { opacity: .8; }
-.equipment-item-small.missing .equipment-level { opacity: .75; }
-
-.no-equipment {
-    padding: 8px;
-    text-align: center;
-    color: #999;
-    font-style: italic;
-    font-size: 0.9rem;
+.equip-card {
+  position: relative;
 }
 
-.equipment-item {
-    display: flex;
-    justify-content: space-between;
-    padding: 8px 12px;
-    background: #f8f9fa;
-    border-radius: 8px;
+.equip-image {
+  width: 55px;
+  height: 55px;
+  border-radius: 8px;
 }
 
-.hero-name,
-.equipment-name {
-    color: #555;
-    font-weight: 500;
+.equip-level {
+  position: absolute;
+  bottom: 3px;
+  right: 3px;
+  background: rgba(0,0,0,0.6);
+  color: white;
+  font-size: 11px;
+  padding: 2px 4px;
+  border-radius: 4px;
 }
 
-.hero-level,
-.equipment-level {
-    color: black;
-    font-weight: 600;
-    margin-left: auto;
-    text-align: right;
-}
 
 /* 플레이어 카드 하단: 클랜 배지 + 이름 + 직책 박스 */
 .player-clan-box {
