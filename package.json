@@ -3,10 +3,12 @@
   "version": "1.0.0",
   "description": "Clash of Clans player information tool",
   "scripts": {
-    "dev": "vercel dev"
+    "dev": "node server.js",
+    "start": "node server.js"
   },
   "dependencies": {
-    "clashofclans.js": "^3.3.22"
+    "clashofclans.js": "^3.3.22",
+    "dotenv": "^16.4.5"
   },
   "keywords": [
     "clash-of-clans",
