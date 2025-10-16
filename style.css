@@ -201,11 +201,6 @@ nav {
     margin-top: 4px;
 }
 
-.competitive-section {
-  display: grid;
-  gap: 12px;
-}
-
 /* 전체 한 줄 레이아웃 */
 .competitive-info {
   display: flex;
@@ -248,11 +243,44 @@ nav {
   text-align: right;
 }
 
+:root {
+  --section-space: 16px;   /* 섹션 위/안쪽 여백 */
+  --block-gap: 8px;        /* 내부 아이템 간격 */
+  --section-divider: 2px;  /* 섹션 구분선 두께 */
+}
+
+.competitive-section,
 .heroes-section,
 .equipment-section {
-    margin-top: 15px;
-    padding-top: 15px;
-    border-top: 2px solid #f0f0f0;
+  margin-top: var(--section-space);
+  padding-top: var(--section-space);
+  border-top: var(--section-divider) solid #f0f0f0;
+}
+
+/* 첫 섹션은 이중선 방지 */
+.player-card > .section:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.competitive-section { 
+  display: grid;
+  gap: var(--block-gap);
+}
+
+.heroes-list,
+.equipment-list {
+  display: grid;
+  gap: var(--block-gap);
+}
+
+.section-title {
+  margin-bottom: var(--block-gap);
+}
+.player-card .equipment-section:last-child,
+.player-card .heroes-section:last-child,
+.player-card .competitive-section:last-child {
+  margin-bottom: 0;
 }
 
 .section-title {
