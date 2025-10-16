@@ -249,7 +249,6 @@ nav {
   --section-divider: 2px;  /* 섹션 구분선 두께 */
 }
 
-.competitive-section,
 .heroes-section,
 .equipment-section {
   margin-top: var(--section-space);
@@ -263,9 +262,27 @@ nav {
   padding-top: 0;
 }
 
-.competitive-section { 
-  display: grid;
-  gap: var(--block-gap);
+/* 경쟁전 제목 오른쪽 라인 스타일 */
+.competitive-section {
+  border-top: 0;
+  padding-top: 0;
+  margin-top: var(--section-space);
+}
+
+.competitive-section .section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: var(--block-gap) !important; /* 여백 고정 */
+  white-space: nowrap; /* 제목이 긴 경우 한 줄 유지 (줄바꿈 원하면 제거) */
+}
+
+.competitive-section .section-title::after {
+  content: "";
+  flex: 1 1 auto;
+  height: var(--section-divider);
+  background: #f0f0f0;
+  border-radius: 999px; /* 둥근 끝 */
 }
 
 .heroes-list,
