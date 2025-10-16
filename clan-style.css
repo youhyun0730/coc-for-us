@@ -465,6 +465,9 @@ nav {
         flex-direction: column;
         text-align: center;
     }
+    .clan-container {
+        grid-template-columns: 1fr;
+    }
 }
 
 /* ===== 모바일 환경 긴 한글 제목 세로깨짐 방지 ===== */
@@ -478,7 +481,30 @@ nav {
     flex: 1 1 auto;
     min-width: 0;         /* 텍스트 영역이 찌그러지지 않게 */
   }
-
+  html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+  .header-top {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: nowrap;
+  }
+  .header-top .logo {
+    flex: 0 0 auto;
+    max-width: 180px;
+    width: 36vw;
+    height: auto;
+  }
+  .header-top h1 {
+    flex: 1 1 auto;
+    min-width: 0;
+    white-space: nowrap;    
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: normal;
+    overflow-wrap: normal;
+    writing-mode: horizontal-tb;
+    text-orientation: mixed;
+  }
   .clan-name,
   .clan-tag {
     display: block;
@@ -489,7 +515,7 @@ nav {
     word-break: keep-all;       /* 한글 단어 분해 금지 */
     writing-mode: horizontal-tb;/* 세로쓰기 방지 */
     text-orientation: mixed;
-  }
+  };
 }
 
 h1, h2, .clan-name, .player-name {
