@@ -484,7 +484,6 @@ nav {
   html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   .header-top {
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
@@ -493,7 +492,7 @@ nav {
   }
   .header-top .logo {
     flex: 0 0 auto;
-    width: 80%;
+    width: 100%;
     max-width: 320px;
     height: auto;
   }

@@ -436,14 +436,10 @@ nav {
 }
 
 @media (max-width: 768px) {
-  .player-clan-box {     
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-    flex-wrap: nowrap;
-  }
+    nav {
+        flex-direction: column;
+        gap: 10px;
+    }
   html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   .header-top {
     display: flex;
@@ -455,7 +451,7 @@ nav {
     flex-wrap: nowrap;
   }
   .header-top .logo {
-    width: 80%;
+    width: 100%;
     max-width: 320px;
     height: auto;
     flex: 0 0 auto;
@@ -468,26 +464,6 @@ nav {
     white-space: normal;    
     overflow: visible;
     text-overflow: clip;
-    word-break: keep-all;
-    writing-mode: horizontal-tb;
-    text-orientation: mixed;
-  }
-  .player-clan-badge {
-    flex: 0 0 auto;
-  }
-  .player-clan-meta {
-    display: grid;
-    gap: 4px;
-    flex: 1 1 auto;
-    min-width: 0;
-  }
-  .player-clan-name,
-  .player-clan-role {
-    display: block;
-    max-width: 100%;
-    white-space: nowrap;    
-    overflow: hidden;
-    text-overflow: ellipsis;
     word-break: keep-all;
     writing-mode: horizontal-tb;
     text-orientation: mixed;
