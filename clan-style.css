@@ -467,6 +467,31 @@ nav {
     }
 }
 
+/* ===== 모바일 환경 긴 한글 제목 세로깨짐 방지 ===== */
+@media (max-width: 768px) {
+  .clan-name-tag {
+    flex-wrap: nowrap;    /* 줄바꿈 방지 */
+    min-width: 0;         /* 텍스트 수축 허용 (ellipsis 동작 필수) */
+  }
+
+  .clan-name-info {
+    flex: 1 1 auto;
+    min-width: 0;         /* 텍스트 영역이 찌그러지지 않게 */
+  }
+
+  .clan-name,
+  .clan-tag {
+    display: block;
+    max-width: 100%;
+    white-space: nowrap;        /* 한 줄로 유지 */
+    overflow: hidden;           /* 넘치면 숨김 */
+    text-overflow: ellipsis;    /* … 처리 */
+    word-break: keep-all;       /* 한글 단어 분해 금지 */
+    writing-mode: horizontal-tb;/* 세로쓰기 방지 */
+    text-orientation: mixed;
+  }
+}
+
 h1, h2, .clan-name, .player-name {
   font-weight: 900; /* Black */
 }

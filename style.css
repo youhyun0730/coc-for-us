@@ -436,28 +436,31 @@ nav {
 }
 
 @media (max-width: 768px) {
-  .player-clan-box {        /* 섹션 컨테이너 */
+  .player-clan-box {     
     display: flex;
     align-items: center;
     gap: 10px;
-    flex-wrap: nowrap;      /* 👈 줄바꿈 방지 */
+    flex-wrap: nowrap;
   }
   .player-clan-badge {
-    width: 40px;
-    height: 40px;
     flex: 0 0 auto;
   }
-  .player-clan-meta {       /* 텍스트 래퍼 */
+  .player-clan-meta {
+    display: grid;
+    gap: 4px;
     flex: 1 1 auto;
-    min-width: 0;           /* 👈 flex에서 ellipsis가 먹히려면 필수 */
+    min-width: 0;
   }
   .player-clan-name,
   .player-clan-role {
-    white-space: nowrap;    /* 한 줄 유지 */
-    overflow: hidden;       /* 넘치면 숨김 */
-    text-overflow: ellipsis;/* … 처리 */
-    /* 한국어 줄바꿈이 어색하면 아래도 고려 */
-    /* word-break: keep-all; */
+    display: block;
+    max-width: 100%;
+    white-space: nowrap;    
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-break: keep-all;
+    writing-mode: horizontal-tb;
+    text-orientation: mixed;
   }
 }
 
