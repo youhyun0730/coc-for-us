@@ -455,16 +455,6 @@ nav {
 }
 
 @media (max-width: 480px) {
-    .clan-header {
-        flex-direction: column;
-        text-align: center;
-        gap: 15px;
-    }
-
-    .info-card {
-        flex-direction: column;
-        text-align: center;
-    }
     .clan-container {
         grid-template-columns: 1fr;
     }
@@ -485,6 +475,7 @@ nav {
   .header-top {
     display: flex;
     align-items: center;
+    flex-direction: column;
     justify-content: center;
     text-align: center;
     gap: 10px;
