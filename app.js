@@ -326,22 +326,20 @@ function createPetsSection(player) {
   const renderRow = (rowItems, rowIndex) => {
     const cols = rowIndex === 0 ? 6 : 5; // 1행:6, 2행:5
     const items = rowItems.map(p => {
-      const name = translatePetName(p.officialName);
       const img = getPetImageSrc(p.officialName);
       const owned = Number.isFinite(p.level);
       const isMax = owned && p.level >= p.maxLevel;
       const levelNum = owned ? p.level : '-';
       const badgeColor = isMax ? 'max' : 'normal';
-      const imgStyle = owned ? '' : 'filter: grayscale(100%); opacity:.55;'; // ← 겹침/가독성
+      const imgStyle = owned ? '' : 'filter: grayscale(100%); opacity:.55;';
 
       return `
         <div class="pet-card">
           <div class="pet-image-container">
-            <img class="pet-image" src="${img}" alt="${name}" loading="lazy"
+            <img class="pet-image" src="${img}" alt="${p.officialName}" loading="lazy"
                  onerror="this.style.display='none';" style="${imgStyle}" />
             <div class="pet-level-badge ${badgeColor}">${levelNum}</div>
           </div>
-          <div class="pet-name" title="${name}">${name}</div>
         </div>
       `;
     }).join('');
@@ -351,9 +349,7 @@ function createPetsSection(player) {
 
   return `
     <div class="pets-section">
-      <!-- 같은 라인에 제목 + 보더라인 -->
       <div class="section-title">펫</div>
-
       <div class="pets-rows">
         ${renderRow(rows[0], 0)}
         ${renderRow(rows[1], 1)}

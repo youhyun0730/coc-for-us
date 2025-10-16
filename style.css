@@ -557,16 +557,16 @@ h1, h2, .clan-name, .player-name {
   margin-top: 10px;
 }
 
-/* ====== PETS 섹션 (보더라인은 기존 공통 규칙에 pets-section 추가한 상태 가정) ====== */
+/* ====== PETS 섹션 ====== */
 .pets-section {
   margin-top: var(--section-space);
-  margin-bottom: 16px;            /* 두번째 줄 아래 보더라인과 간격 확보 */
+  margin-bottom: 16px;            /* 아래 보더라인과 충분히 띄우기 */
 }
 
 .pets-rows {
   display: grid;
-  gap: 12px 0;                    /* 1행-2행 사이 간격 */
-  margin-bottom: 10px;            /* 아래 섹션과 여백 */
+  gap: 12px 0;                    /* 1행-2행 간격 */
+  margin-bottom: 10px;
 }
 
 .pets-row {
@@ -575,17 +575,24 @@ h1, h2, .clan-name, .player-name {
   gap: 10px;
 }
 
-/* 두 줄 고정: 1행 6개, 2행 5개 (절대 줄이지 않음!) */
-.pets-row.row-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
-.pets-row.row-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+/* 1행: 6개 꽉 채움 */
+.pets-row.row-6 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
 
+/* 2행: 6칸 그리드 유지하되 5개만 채워서 6번째 칸은 비움 */
+.pets-row.row-5 {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+/* ⚠️ 이전에 가운데 정렬을 위해 썼던 오프셋( grid-column:2 ) 규칙이 있었다면 반드시 삭제하세요. */
+
+/* 카드 */
 .pet-card {
   display: flex;
   flex-direction: column;
   align-items: center;
 }
 
-/* 기본 크기 (데스크톱) */
 .pet-image-container {
   position: relative;
   width: 46px;
@@ -602,7 +609,6 @@ h1, h2, .clan-name, .player-name {
   object-fit: contain;
 }
 
-/* 레벨 배지 */
 .pet-level-badge {
   position: absolute;
   bottom: 3px;
@@ -616,37 +622,23 @@ h1, h2, .clan-name, .player-name {
   background-color: rgba(0,0,0,0.85);
 }
 .pet-level-badge.max {
-  background-color: #facc15;  /* 만렙 노랑 */
+  background-color: #facc15; /* 만렙 노랑 */
   color: #000;
 }
 
-.pet-name {
-  margin-top: 3px;
-  font-weight: 600;
-  font-size: 10.5px;
-  max-width: 68px;
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
+/* 이름은 제거했으므로 기존 .pet-name 규칙이 있으면 삭제하거나 무시됩니다. */
 
-/* ===== 반응형: '컬럼 수'는 유지하고 '이미지 크기'만 줄이기 ===== */
+/* 반응형 — 컬럼 수는 고정, 이미지 크기만 축소 */
 @media (max-width: 860px) {
   .pet-image-container { width: 42px; height: 42px; }
   .pet-level-badge { font-size: 9.5px; padding: 1px 3.5px; }
-  .pet-name { max-width: 62px; font-size: 10px; }
 }
-
 @media (max-width: 620px) {
   .pet-image-container { width: 38px; height: 38px; }
-  .pet-name { max-width: 58px; font-size: 9.8px; }
 }
-
 @media (max-width: 420px) {
   .pet-image-container { width: 34px; height: 34px; }
   .pet-level-badge { font-size: 9px; padding: 1px 3px; }
-  .pet-name { max-width: 52px; font-size: 9.5px; }
 }
 
 .stat-icon {
