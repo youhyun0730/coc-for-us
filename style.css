@@ -557,25 +557,35 @@ h1, h2, .clan-name, .player-name {
 /* ==== PETS (2행: 1행 6개, 2행 5개) ==== */
 .pets-section { margin-top: 18px; }
 
-/* 기존의 섹션들과 결을 맞추고 싶다면 .section-title 공용 규칙을 이미 쓰고 있을 것.
-   필요하면 아래 라인을 유지/보강하세요. */
+/* 섹션타이틀: 같은 라인에 제목과 보더라인 */
 .pets-section .section-title {
   font-weight: 700;
   margin-bottom: 10px;
-  padding-bottom: 6px;
-  border-bottom: 1px solid rgba(0,0,0,0.15);
+  /* 기존 섹션에 border-bottom을 쓰고 있었다면, pets에서는 line 방식으로 바꿔야 하니 제거 */
+  border: 0;
+  padding: 0;
+}
+.pets-section .section-title.section-line {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pets-section .section-title.section-line::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: rgba(0,0,0,0.15);
 }
 
-.pets-rows { display: grid; gap: 10px 0; }
+.pets-rows { display: grid; gap: 12px 0; }
 
-/* 행 컨테이너: 행마다 고정 컬럼 수 */
 .pets-row {
   display: grid;
   justify-items: center;
   gap: 10px;
 }
 
-/* 1행: 6컬럼, 2행: 5컬럼 (폭이 너무 좁으면 반응형으로 줄 수 있도록 미디어쿼리 아래에 보강) */
+/* 1행: 6컬럼, 2행: 5컬럼 */
 .pets-row.row-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 .pets-row.row-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 
@@ -585,15 +595,15 @@ h1, h2, .clan-name, .player-name {
   align-items: center;
 }
 
-/* 이미지 사이즈 축소 */
+/* 이미지 더 축소 (겹침 방지) */
 .pet-image-container {
   position: relative;
-  width: 64px;   /* 이전 80px → 64px로 축소 */
-  height: 64px;
-  border-radius: 12px;
+  width: 48px;   /* 64px → 48px */
+  height: 48px;
+  border-radius: 10px;
   overflow: hidden;
-  background: rgba(255,255,255,0.4);
-  box-shadow: 0 2px 5px rgba(0,0,0,0.15);
+  background: rgba(255,255,255,0.45);
+  box-shadow: 0 2px 4px rgba(0,0,0,0.12);
 }
 
 .pet-image {
@@ -607,45 +617,44 @@ h1, h2, .clan-name, .player-name {
   position: absolute;
   bottom: 4px;
   left: 4px;
-  padding: 2px 6px;
-  font-size: 12px;
+  padding: 1px 5px;
+  font-size: 11px;
   line-height: 1;
   font-weight: 800;
-  border-radius: 6px;
+  border-radius: 5px;
   color: #fff;
   background-color: rgba(0,0,0,0.85); /* 기본: 검정 */
 }
-
 .pet-level-badge.max {
-  background-color: #facc15; /* 노랑 */
+  background-color: #facc15; /* 노랑 (만렙) */
   color: #000;
 }
 
-/* 이름은 더 작게, 길면 말줄임 */
+/* 이름: 더 작고 말줄임 */
 .pet-name {
-  margin-top: 6px;
+  margin-top: 4px;
   font-weight: 600;
-  font-size: 12px;
-  max-width: 90px;
+  font-size: 11px;
+  max-width: 72px;
   text-align: center;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-/* 반응형: 폭이 좁아지면 컬럼 수를 자동 줄여서 깨짐 방지 */
+/* 반응형: 폭이 좁으면 5/5 → 4/4로 자동 완충 */
 @media (max-width: 860px) {
+  .pets-row.row-6 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+  .pets-row.row-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+}
+@media (max-width: 620px) {
   .pets-row.row-6 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
   .pets-row.row-5 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-  .pet-image-container { width: 56px; height: 56px; }
-  .pet-name { max-width: 80px; font-size: 11px; }
 }
-@media (max-width: 520px) {
-  .pets-row.row-6 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .pets-row.row-5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  .pet-image-container { width: 52px; height: 52px; }
-  .pet-level-badge { font-size: 11px; padding: 1px 5px; }
-  .pet-name { max-width: 72px; font-size: 11px; }
+@media (max-width: 420px) {
+  .pet-image-container { width: 44px; height: 44px; }
+  .pet-level-badge { font-size: 10px; padding: 1px 4px; }
+  .pet-name { max-width: 64px; font-size: 10px; }
 }
 /* ==== /PETS ==== */
 

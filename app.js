@@ -320,7 +320,6 @@ function createPetsSection(player) {
   const pets = getPetsFromPlayer(player);
   if (pets.length === 0) return '';
 
-  // 첫 줄 6개, 나머지 5개(총 11개 기준). 11개 미만이어도 자연스럽게 작동.
   const firstCount = Math.min(6, pets.length);
   const rows = [pets.slice(0, firstCount), pets.slice(firstCount)];
 
@@ -333,13 +332,13 @@ function createPetsSection(player) {
       const isMax = owned && p.level >= p.maxLevel;
       const levelNum = owned ? p.level : '-';
       const badgeColor = isMax ? 'max' : 'normal';
-      const imgStyle = owned ? '' : 'filter: grayscale(100%); opacity:.55;';
+      const imgStyle = owned ? '' : 'filter: grayscale(100%); opacity:.55;'; // ← 겹침/가독성
 
       return `
         <div class="pet-card">
           <div class="pet-image-container">
-            <img class="pet-image" src="${img}" alt="${name}"
-                 loading="lazy" onerror="this.style.display='none';" style="${imgStyle}" />
+            <img class="pet-image" src="${img}" alt="${name}" loading="lazy"
+                 onerror="this.style.display='none';" style="${imgStyle}" />
             <div class="pet-level-badge ${badgeColor}">${levelNum}</div>
           </div>
           <div class="pet-name" title="${name}">${name}</div>
@@ -347,17 +346,17 @@ function createPetsSection(player) {
       `;
     }).join('');
 
-    // 행별 고정 컬럼 개수를 CSS에서 적용하기 위해 클래스에 숫자 포함
     return `<div class="pets-row row-${cols}">${items}</div>`;
   };
 
-  const rowHTML = rows.map((row, i) => renderRow(row, i)).join('');
-
   return `
     <div class="pets-section">
-      <div class="section-title">펫</div>
+      <!-- 같은 라인에 제목 + 보더라인 -->
+      <div class="section-title section-line">펫</div>
+
       <div class="pets-rows">
-        ${rowHTML}
+        ${renderRow(rows[0], 0)}
+        ${renderRow(rows[1], 1)}
       </div>
     </div>
   `;
