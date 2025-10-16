@@ -463,19 +463,6 @@ function hideLoading() {
     document.getElementById('loading').style.display = 'none';
 }
 
-// 카운트업 유틸 함수
-function animateCounter(el, to, duration = 700) {
-  const start = 0;
-  const startTime = performance.now();
-  function tick(now) {
-    const p = Math.min(1, (now - startTime) / duration);
-    const val = Math.floor(start + (to - start) * p);
-    el.textContent = val.toLocaleString();
-    if (p < 1) requestAnimationFrame(tick);
-  }
-  requestAnimationFrame(tick);
-}
-
 // 모든 플레이어 정보를 로드
 async function loadAllPlayers() {
     const container = document.getElementById('players-container');
