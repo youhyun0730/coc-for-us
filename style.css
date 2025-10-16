@@ -455,8 +455,8 @@ nav {
     flex-wrap: nowrap;
   }
   .header-top .logo {
-    width: 60%;
-    max-width: 240px;
+    width: 80%;
+    max-width: 320px;
     height: auto;
     flex: 0 0 auto;
   }
