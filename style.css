@@ -251,6 +251,8 @@ nav {
 
 .heroes-section,
 .competitive-section,
+.clan-section,
+.pets-section,
 .equipment-section {
   margin-top: var(--section-space);
   padding-top: 0;
@@ -263,40 +265,43 @@ nav {
   padding-top: 0;
 }
 
-/* ===== 섹션 제목 오른쪽에 라인 정렬 (경쟁전, 영웅, 장비 공통) ===== */
+/* 섹션 제목 + 양옆 라인 (공통) */
 .competitive-section .section-title,
 .heroes-section .section-title,
 .pets-section .section-title,
-.equipment-section .section-title {
+.equipment-section .section-title,
+.clan-section .section-title {              /* ← 추가 */
   display: flex;
   align-items: center;
-  gap: 8px;                        /* 텍스트와 라인 간격 */
+  gap: 8px;
   margin-bottom: var(--block-gap) !important;
-  white-space: nowrap;             /* 제목이 긴 경우 한 줄 유지 (줄바꿈 원하면 제거) */
+  white-space: nowrap;
 }
 
 .competitive-section .section-title::before,
 .heroes-section .section-title::before,
 .pets-section .section-title::before,
-.equipment-section .section-title::before {
+.equipment-section .section-title::before,
+.clan-section .section-title::before {      /* ← 추가 */
   content: "";
   display: inline-block;
-  width: 10px;                   /* ← 왼쪽 라인 길이 (원하면 6~14px 정도로 조정 가능) */
-  height: var(--section-divider); /* 동일한 두께 */
-  background: #f0f0f0;            /* 동일한 색상 */
-  border-radius: 999px;           /* 라인 끝 둥글게 */
-  flex-shrink: 0;                 /* 줄어들지 않게 */
+  width: 10px;
+  height: var(--section-divider);
+  background: #f0f0f0;
+  border-radius: 999px;
+  flex-shrink: 0;
 }
 
 .competitive-section .section-title::after,
 .heroes-section .section-title::after,
 .pets-section .section-title::after,
-.equipment-section .section-title::after {
+.equipment-section .section-title::after,
+.clan-section .section-title::after {       /* ← 추가 */
   content: "";
-  flex: 1 1 auto;                  /* 남은 공간 모두 라인으로 채움 */
-  height: var(--section-divider);  /* 라인 두께 */
-  background: #f0f0f0;             /* 라인 색상 */
-  border-radius: 999px;            /* 둥근 끝 */
+  flex: 1 1 auto;
+  height: var(--section-divider);
+  background: #f0f0f0;
+  border-radius: 999px;
 }
 
 .heroes-list,
@@ -413,11 +418,6 @@ nav {
     text-align: right;
 }
 
-.clan-info {
-    padding-top: 15px;
-    border-top: 2px solid #f0f0f0;
-}
-
 /* 플레이어 카드 하단: 클랜 배지 + 이름 + 직책 박스 */
 .player-clan-box {
   display: flex;
@@ -427,6 +427,7 @@ nav {
   background: #f8f9fa;
   border: 1px solid rgba(0,0,0,0.06);
   border-radius: 10px;
+  margin-top: 6px;
 }
 
 .player-clan-badge {

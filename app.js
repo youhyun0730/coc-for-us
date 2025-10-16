@@ -378,31 +378,33 @@ function createPlayerCard(player, index) {
        '')
     : '';
 
-  // ✅ 클랜 정보 박스 (배지 + 이름 + 직책)
-  const clanInfo = player.clan
-    ? `
-      <div class="clan-info">
-        <div class="player-clan-box">
-          ${clanBadgeUrl ? `
-            <img
-              class="player-clan-badge"
-              src="${clanBadgeUrl}"
-              alt="${player.clan.name} badge"
-              loading="lazy"
-              decoding="async"
-              onerror="this.style.display='none';"
-            />
-          ` : ''}
-          <div class="player-clan-meta">
-            <div class="player-clan-name">${player.clan.name}</div>
-            <div class="player-clan-role">${translateRole(player.role)}</div>
-          </div>
+// ✅ 클랜 정보 섹션
+const clanInfo = player.clan
+  ? `
+    <div class="clan-section">
+      <div class="section-title">클랜</div>
+      <div class="player-clan-box">
+        ${clanBadgeUrl ? `
+          <img
+            class="player-clan-badge"
+            src="${clanBadgeUrl}"
+            alt="${player.clan.name} badge"
+            loading="lazy"
+            decoding="async"
+            onerror="this.style.display='none';"
+          />
+        ` : ''}
+        <div class="player-clan-meta">
+          <div class="player-clan-name">${player.clan.name}</div>
+          <div class="player-clan-role">${translateRole(player.role)}</div>
         </div>
-      </div>`
-    : `
-      <div class="clan-info">
-        <div class="no-clan">클랜 미소속</div>
-      </div>`;
+      </div>
+    </div>`
+  : `
+    <div class="clan-section">
+      <div class="section-title">클랜</div>
+      <div class="no-clan">클랜 미소속</div>
+    </div>`;
 
   // ✅ 카드 본문
   card.innerHTML = `
