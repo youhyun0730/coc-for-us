@@ -320,33 +320,47 @@ function createPetsSection(player) {
   const pets = getPetsFromPlayer(player);
   if (pets.length === 0) return '';
 
-  const items = pets.map(p => {
-    const name = translatePetName(p.officialName);
-    const img = getPetImageSrc(p.officialName);
-    const owned = Number.isFinite(p.level);
-    const isMax = owned && p.level >= p.maxLevel; // 만렙 여부
-    const level = owned ? p.level : '?';
-    const style = owned ? '' : 'filter: grayscale(100%) opacity(.55);';
-    const badgeColor = isMax ? 'max' : 'normal';
+  // 첫 줄 6개, 나머지 5개(총 11개 기준). 11개 미만이어도 자연스럽게 작동.
+  const firstCount = Math.min(6, pets.length);
+  const rows = [pets.slice(0, firstCount), pets.slice(firstCount)];
 
-    return `
-      <div class="pet-card">
-        <div class="pet-image-container">
-          <img class="pet-image" src="${img}" alt="${name}" loading="lazy"
-               onerror="this.style.display='none';" style="${style}" />
-          <div class="pet-level-badge ${badgeColor}">
-            ${owned ? level : '-'}
+  const renderRow = (rowItems, rowIndex) => {
+    const cols = rowIndex === 0 ? 6 : 5; // 1행:6, 2행:5
+    const items = rowItems.map(p => {
+      const name = translatePetName(p.officialName);
+      const img = getPetImageSrc(p.officialName);
+      const owned = Number.isFinite(p.level);
+      const isMax = owned && p.level >= p.maxLevel;
+      const levelNum = owned ? p.level : '-';
+      const badgeColor = isMax ? 'max' : 'normal';
+      const imgStyle = owned ? '' : 'filter: grayscale(100%); opacity:.55;';
+
+      return `
+        <div class="pet-card">
+          <div class="pet-image-container">
+            <img class="pet-image" src="${img}" alt="${name}"
+                 loading="lazy" onerror="this.style.display='none';" style="${imgStyle}" />
+            <div class="pet-level-badge ${badgeColor}">${levelNum}</div>
           </div>
+          <div class="pet-name" title="${name}">${name}</div>
         </div>
-        <div class="pet-name">${name}</div>
-      </div>`;
-  }).join('');
+      `;
+    }).join('');
+
+    // 행별 고정 컬럼 개수를 CSS에서 적용하기 위해 클래스에 숫자 포함
+    return `<div class="pets-row row-${cols}">${items}</div>`;
+  };
+
+  const rowHTML = rows.map((row, i) => renderRow(row, i)).join('');
 
   return `
     <div class="pets-section">
-      <div class="pets-divider">─ 펫 ───────────────</div>
-      <div class="pets-grid">${items}</div>
-    </div>`;
+      <div class="section-title">펫</div>
+      <div class="pets-rows">
+        ${rowHTML}
+      </div>
+    </div>
+  `;
 }
 // ==== /PETS helpers ====
 

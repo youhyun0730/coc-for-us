@@ -554,40 +554,43 @@ h1, h2, .clan-name, .player-name {
   margin-top: 10px;
 }
 
-/* ==== PETS ==== */
-.pets-section {
-  margin-top: 18px;
-}
+/* ==== PETS (2행: 1행 6개, 2행 5개) ==== */
+.pets-section { margin-top: 18px; }
 
-.pets-divider {
-  text-align: center;
+/* 기존의 섹션들과 결을 맞추고 싶다면 .section-title 공용 규칙을 이미 쓰고 있을 것.
+   필요하면 아래 라인을 유지/보강하세요. */
+.pets-section .section-title {
   font-weight: 700;
-  color: #333;
-  margin: 10px 0 12px 0;
-  letter-spacing: 1px;
-  border-bottom: 1px solid rgba(0,0,0,0.15);
+  margin-bottom: 10px;
   padding-bottom: 6px;
+  border-bottom: 1px solid rgba(0,0,0,0.15);
 }
 
-.pets-grid {
+.pets-rows { display: grid; gap: 10px 0; }
+
+/* 행 컨테이너: 행마다 고정 컬럼 수 */
+.pets-row {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
-  gap: 14px;
   justify-items: center;
+  gap: 10px;
 }
+
+/* 1행: 6컬럼, 2행: 5컬럼 (폭이 너무 좁으면 반응형으로 줄 수 있도록 미디어쿼리 아래에 보강) */
+.pets-row.row-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
+.pets-row.row-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 
 .pet-card {
   display: flex;
   flex-direction: column;
   align-items: center;
-  position: relative;
 }
 
+/* 이미지 사이즈 축소 */
 .pet-image-container {
   position: relative;
-  width: 80px;
-  height: 80px;
-  border-radius: 14px;
+  width: 64px;   /* 이전 80px → 64px로 축소 */
+  height: 64px;
+  border-radius: 12px;
   overflow: hidden;
   background: rgba(255,255,255,0.4);
   box-shadow: 0 2px 5px rgba(0,0,0,0.15);
@@ -599,30 +602,50 @@ h1, h2, .clan-name, .player-name {
   object-fit: contain;
 }
 
+/* 레벨 배지: 좌하단 */
 .pet-level-badge {
   position: absolute;
-  bottom: 5px;
-  left: 5px;
-  font-size: 13px;
-  font-weight: 700;
-  color: white;
-  background-color: rgba(0,0,0,0.8);
-  border-radius: 5px;
+  bottom: 4px;
+  left: 4px;
   padding: 2px 6px;
+  font-size: 12px;
   line-height: 1;
+  font-weight: 800;
+  border-radius: 6px;
+  color: #fff;
+  background-color: rgba(0,0,0,0.85); /* 기본: 검정 */
 }
 
 .pet-level-badge.max {
-  background-color: #facc15; /* 노란색 (Tailwind yellow-400 정도) */
+  background-color: #facc15; /* 노랑 */
   color: #000;
-  font-weight: 800;
 }
 
+/* 이름은 더 작게, 길면 말줄임 */
 .pet-name {
   margin-top: 6px;
   font-weight: 600;
+  font-size: 12px;
+  max-width: 90px;
   text-align: center;
-  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 반응형: 폭이 좁아지면 컬럼 수를 자동 줄여서 깨짐 방지 */
+@media (max-width: 860px) {
+  .pets-row.row-6 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .pets-row.row-5 { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .pet-image-container { width: 56px; height: 56px; }
+  .pet-name { max-width: 80px; font-size: 11px; }
+}
+@media (max-width: 520px) {
+  .pets-row.row-6 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .pets-row.row-5 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .pet-image-container { width: 52px; height: 52px; }
+  .pet-level-badge { font-size: 11px; padding: 1px 5px; }
+  .pet-name { max-width: 72px; font-size: 11px; }
 }
 /* ==== /PETS ==== */
 
