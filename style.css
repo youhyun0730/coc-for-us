@@ -438,29 +438,37 @@ nav {
 @media (max-width: 768px) {
   .player-clan-box {     
     display: flex;
+    flex-direction: column;
     align-items: center;
+    justify-content: center;
     gap: 10px;
     flex-wrap: nowrap;
   }
   html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
   .header-top {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 12px;
+    justify-content: center;
+    text-align: center;
+    gap: 10px;
     flex-wrap: nowrap;
   }
   .header-top .logo {
+    width: 60%;
+    max-width: 240px;
+    height: auto;
     flex: 0 0 auto;
   }
   .header-top h1 {
     flex: 1 1 auto;
+    font-size: 1.8rem;
     min-width: 0;
-    line-height: 1.2;
-    min-width: 0;
-    white-space: nowrap;    
-    overflow: hidden;
-    text-overflow: ellipsis;
-    word-break: normal;
+    line-height: 1.3;
+    white-space: normal;    
+    overflow: visible;
+    text-overflow: clip;
+    word-break: keep-all;
     writing-mode: horizontal-tb;
     text-orientation: mixed;
   }
