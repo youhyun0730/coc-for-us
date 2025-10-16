@@ -352,7 +352,7 @@ function createPetsSection(player) {
   return `
     <div class="pets-section">
       <!-- 같은 라인에 제목 + 보더라인 -->
-      <div class="section-title section-line">펫</div>
+      <div class="section-title">펫</div>
 
       <div class="pets-rows">
         ${renderRow(rows[0], 0)}

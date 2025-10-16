@@ -266,6 +266,7 @@ nav {
 /* ===== 섹션 제목 오른쪽에 라인 정렬 (경쟁전, 영웅, 장비 공통) ===== */
 .competitive-section .section-title,
 .heroes-section .section-title,
+.pets-section .section-title,
 .equipment-section .section-title {
   display: flex;
   align-items: center;
@@ -276,6 +277,7 @@ nav {
 
 .competitive-section .section-title::before,
 .heroes-section .section-title::before,
+.pets-section .section-title::before,
 .equipment-section .section-title::before {
   content: "";
   display: inline-block;
@@ -288,6 +290,7 @@ nav {
 
 .competitive-section .section-title::after,
 .heroes-section .section-title::after,
+.pets-section .section-title::after,
 .equipment-section .section-title::after {
   content: "";
   flex: 1 1 auto;                  /* 남은 공간 모두 라인으로 채움 */
@@ -554,39 +557,18 @@ h1, h2, .clan-name, .player-name {
   margin-top: 10px;
 }
 
-/* ==== PETS 섹션 (경쟁전/영웅 섹션과 동일 라인 스타일) ==== */
+/* ==== PETS 전용 레이아웃/간격 ==== */
 .pets-section {
-  margin-top: 24px;
+  margin-top: var(--section-space);
+  /* 다음 섹션(예: 클랜 정보) 보더라인과 간격 벌리기 */
+  margin-bottom: 14px;   /* ← 가까웠던 보더라인 문제 해결 포인트 */
 }
 
-/* 제목 라인: 위 섹션들과 동일한 두께·색상·여백 */
-.pets-section .section-title.section-line {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;              /* 텍스트 좌우 라인과 간격 */
-  font-weight: 700;
-  font-size: 15px;        /* 영웅 섹션 타이틀과 통일 */
-  color: #222;
-  margin: 12px 0 14px 0;  /* 위/아래 여백 */
-  line-height: 1.2;
+.pets-rows {
+  display: grid;
+  gap: 12px 0;           /* 행 간격 */
+  margin-bottom: 8px;    /* 2번째 줄 아래 추가 여백 */
 }
-
-/* 타이틀 앞/뒤 라인 */
-.pets-section .section-title.section-line::before,
-.pets-section .section-title.section-line::after {
-  content: "";
-  flex: 1;
-  height: 1px;
-  background-color: rgba(0, 0, 0, 0.15);
-  display: block;
-}
-.pets-section .section-title.section-line::before { margin-right: 10px; }
-.pets-section .section-title.section-line::after  { margin-left: 10px;  }
-
-/* ===== PET 이미지 카드 ===== */
-.pets-rows { display: grid; gap: 12px 0; }
 
 .pets-row {
   display: grid;
@@ -594,7 +576,7 @@ h1, h2, .clan-name, .player-name {
   gap: 10px;
 }
 
-/* 1행: 6컬럼, 2행: 5컬럼 (createPetsSection에서 row-6/row-5 클래스 부여) */
+/* 1행: 6컬럼, 2행: 5컬럼 */
 .pets-row.row-6 { grid-template-columns: repeat(6, minmax(0, 1fr)); }
 .pets-row.row-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
 
@@ -604,7 +586,7 @@ h1, h2, .clan-name, .player-name {
   align-items: center;
 }
 
-/* 이미지 크기: 겹침 방지용으로 46px */
+/* 이미지 크기(겹침 방지), 배지 유지 */
 .pet-image-container {
   position: relative;
   width: 46px;
@@ -612,7 +594,7 @@ h1, h2, .clan-name, .player-name {
   border-radius: 9px;
   overflow: hidden;
   background: rgba(255, 255, 255, 0.45);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.12);
 }
 
 .pet-image {
@@ -621,7 +603,6 @@ h1, h2, .clan-name, .player-name {
   object-fit: contain;
 }
 
-/* 레벨 배지: 좌하단, 기본 검정/만렙 노랑 */
 .pet-level-badge {
   position: absolute;
   bottom: 3px;
@@ -639,7 +620,6 @@ h1, h2, .clan-name, .player-name {
   color: #000;
 }
 
-/* 펫 이름: 작게, 말줄임 */
 .pet-name {
   margin-top: 3px;
   font-weight: 600;
@@ -651,7 +631,7 @@ h1, h2, .clan-name, .player-name {
   text-overflow: ellipsis;
 }
 
-/* ==== 반응형 보정 ==== */
+/* 반응형 */
 @media (max-width: 860px) {
   .pets-row.row-6 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
   .pets-row.row-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
@@ -667,7 +647,6 @@ h1, h2, .clan-name, .player-name {
   .pet-level-badge { font-size: 9.5px; padding: 1px 3px; }
   .pet-name { max-width: 56px; font-size: 9.5px; }
 }
-/* ==== /PETS ==== */
 
 .stat-icon {
   width: 18px;
