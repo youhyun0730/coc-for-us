@@ -139,7 +139,7 @@ nav {
 .player-card {
     background: white;
     border-radius: 15px;
-    padding: 25px;
+    padding: 30px 25px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
@@ -153,8 +153,9 @@ nav {
     display: flex;
     align-items: center;
     gap: 8px;
-    margin-bottom: 10px;
-    padding-bottom: 10px;
+    margin-top: 5px;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
 }
 
 .player-name-tag {
