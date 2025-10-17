@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>클랜전 & 리그전 정보</title>
+  <link rel="stylesheet" href="war-style.css"/>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="header-top">
+        <img src="images/icon/logo_Japanese.png" alt="로고" class="logo"/>
+        <h1>우리들의 일그러진 전쟁</h1>
+      </div>
+      <nav>
+        <a href="index.html" class="nav-link">계정 정보</a>
+        <a href="clan.html" class="nav-link">클랜 정보</a>
+        <a href="war.html" class="nav-link active">전쟁 정보</a>
+      </nav>
+    </header>
+
+    <div id="loading" class="loading">불러오는 중...</div>
+    <div id="error" class="error" style="display:none;"></div>
+
+    <main id="war-root" class="war-root">
+      <!-- JS에서 섹션을 채웁니다 -->
+    </main>
+
+    <footer>
+      <p>&copy; 2025 별이삼샵 재일 동포 향우회. All rights reserved. yural</p>
+    </footer>
+  </div>
+  <script src="war.js"></script>
+</body>
+</html>
