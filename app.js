@@ -566,6 +566,11 @@ function hideLoading() {
 async function loadAllPlayers() {
     const container = document.getElementById('players-container');
 
+    // 🧩 ranking.html 에서는 players-container가 없음 → 그냥 데이터만 불러오고 끝
+    if (!container) {
+        console.warn('players-container가 없어, 랭킹 페이지 모드로 동작 중.');
+    }
+
     try {
         // 백엔드 API에서 플레이어 정보 가져오기
         const response = await fetch('/api/players');
@@ -583,11 +588,13 @@ async function loadAllPlayers() {
 
         hideLoading();
 
-        // 플레이어 카드를 생성하고 표시
-        players.forEach((player, index) => {
-            const card = createPlayerCard(player, index);
-            container.appendChild(card);
-        });
+        // ✅ index.html일 때만 append
+        if (container) {
+            players.forEach((player, index) => {
+                const card = createPlayerCard(player, index);
+                container.appendChild(card);
+            });
+        }
 
     } catch (error) {
         hideLoading();

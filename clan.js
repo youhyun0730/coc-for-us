@@ -82,13 +82,6 @@ function createBasicInfoSection(clan) {
                     </div>
                 </div>
             </div>
-
-            ${clan.description ? `
-                <div class="clan-description">
-                    <h3>클랜 소개</h3>
-                    <p>${clan.description}</p>
-                </div>
-            ` : ''}
         </div>
     `;
 }

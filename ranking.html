@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>별이삼샵 재일 동포 향우회</title>
+    <link rel="stylesheet" href="ranking-style.css">
+</head>
+<body>
+    <div class="container">
+    <header>
+        <div class="header-top">
+            <img src="images/icon/logo_Japanese.png" alt="바바리안" class="logo">
+            <h1>우리들의 일그러진 랭킹</h1>
+        </div>
+        <nav>
+            <a href="index.html" class="nav-link">계정 정보</a>
+            <a href="clan.html" class="nav-link">클랜 정보</a>
+            <a href="ranking.html" class="nav-link active">랭킹</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="ranking-header">
+            <h2>🏆 랭킹</h2>
+            <select id="rankingCriteria" class="ranking-select">
+            <option value="townHall">타운 홀</option>
+            <option value="heroSum">영웅 합</option>
+            <option value="competitive">경쟁전</option>
+            <option value="expLevel">XP 레벨</option>
+            </select>
+        </div>
+
+        <div id="loading" class="loading">로딩 중...</div>
+        <div id="error" class="error" style="display: none;"></div>
+        <div id="rankingList" class="ranking-list">
+            <!-- 랭킹 정보가 여기에 표시됩니다 -->
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 별이삼샵 재일 동포 향우회. All rights reserved. yural</p>
+    </footer>
+    </div>
+
+    <script src="hero-equipment-mapping.js"></script>
+    <script src="pets-mapping.js"></script>
+    <script src="app.js"></script>
+    <script src="ranking.js"></script>
+</body>
+</html>
