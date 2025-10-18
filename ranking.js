@@ -60,6 +60,8 @@ window.addEventListener('load', () => {
       sorted.sort((a, b) => b.townHallLevel - a.townHallLevel);
     } else if (criteria === 'heroSum') {
       sorted.sort((a, b) => calculateTotalHeroLevels(b) - calculateTotalHeroLevels(a));
+    } else if (criteria === 'petSum') {
+      sorted.sort((a, b) => calculateTotalPetLevels(b) - calculateTotalPetLevels(a));
     } else if (criteria === 'expLevel') {
       sorted.sort((a, b) => (b.expLevel || 0) - (a.expLevel || 0));
     } else if (criteria === 'competitive') {
@@ -83,6 +85,7 @@ window.addEventListener('load', () => {
       let scoreValue;
       if (criteria === 'townHall') scoreValue = player.townHallLevel;
       else if (criteria === 'heroSum') scoreValue = calculateTotalHeroLevels(player);
+      else if (criteria === 'petSum') scoreValue = calculateTotalPetLevels(player);
       else if (criteria === 'expLevel') scoreValue = player.expLevel;
       else if (criteria === 'competitive')
         scoreValue = `${player.leagueTier?.id || 0}-${player.trophies || 0}`;
@@ -106,6 +109,9 @@ window.addEventListener('load', () => {
       } else if (criteria === 'heroSum') {
         const total = calculateTotalHeroLevels(player);
         scoreText = `영웅 합 ${total}`;
+      } else if (criteria === 'petSum') {
+        const total = calculateTotalPetLevels(player);
+        scoreText = `펫 합 ${total}`;
       } else if (criteria === 'expLevel') {
         scoreText = `경험치 Lv.${player.expLevel}`;
       } else if (criteria === 'competitive') {
@@ -131,8 +137,8 @@ window.addEventListener('load', () => {
 
   /** 🔸 아이콘 이미지 소스 */
   function getIconSrc(player, criteria) {
-    // 타운홀/영웅합 → 타운홀 이미지, 경험치 → xp, 경쟁전 → 리그
-    if (criteria === 'townHall' || criteria === 'heroSum') {
+    // 타운홀/영웅합/펫합 → 타운홀 이미지, 경험치 → xp, 경쟁전 → 리그
+    if (criteria === 'townHall' || criteria === 'heroSum' || criteria === 'petSum') {
       return `images/town-hall/Building_HV_Town_Hall_level_${player.townHallLevel}.png`;
     } else if (criteria === 'competitive') {
       return player.leagueTier?.icon?.url || '';
@@ -157,7 +163,7 @@ window.addEventListener('load', () => {
     }
   }
 
-  /** ✅ app.js의 영웅 레벨 합산 로직 그대로 복사 */
+  /** ✅ 영웅 레벨 합 계산 */
   function calculateTotalHeroLevels(player) {
     if (!player.heroes || player.heroes.length === 0) return 0;
     return player.heroes
@@ -170,6 +176,14 @@ window.addEventListener('load', () => {
       })
       .reduce((total, hero) => total + hero.level, 0);
   }
+
+  /** ✅ 펫 레벨 합 계산 (player.troops 기반) */
+function calculateTotalPetLevels(player) {
+  const pets = getPetsFromPlayer(player);
+  if (!pets || pets.length === 0) return 0;
+
+  return pets.reduce((sum, pet) => sum + (pet.level || 0), 0);
+}
 
   // 초기 실행
   initRanking();
