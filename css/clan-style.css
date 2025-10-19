@@ -1,7 +1,7 @@
 /* Clash Regular */
 @font-face {
     font-family: 'Clash';
-    src: url('./font/Clash_Regular.otf') format('opentype');
+    src: url('../font/Clash_Regular.otf') format('opentype');
     font-weight: 400;
     font-style: normal;
     font-display: swap;
@@ -10,7 +10,7 @@
 /* Clash Bold */
 @font-face {
     font-family: 'Clash';
-    src: url('./font/Clash_Bold.otf') format('opentype');
+    src: url('../font/Clash_Bold.otf') format('opentype');
     font-weight: 700;
     font-style: normal;
     font-display: swap;
@@ -19,7 +19,7 @@
 /* ===== Korean Fonts: KoBrawlGothic ===== */
 @font-face {
   font-family: 'KoBrawlGothic';
-  src: url('./font/KoBrawlGothicBold.otf') format('opentype');
+  src: url('../font/KoBrawlGothicBold.otf') format('opentype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -27,7 +27,7 @@
 
 @font-face {
   font-family: 'KoBrawlGothic';
-  src: url('./font/KoBrawlGothicBlack.otf') format('opentype');
+  src: url('../font/KoBrawlGothicBlack.otf') format('opentype');
   font-weight: 900;
   font-style: normal;
   font-display: swap;

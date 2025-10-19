@@ -116,7 +116,7 @@
   }
 
   async function loadAllActive() {
-    const data = await safeFetch('/api/clan/wars/active');
+    const data = await safeFetch('/api/clan-api/wars/active');
     return data;
   }
 

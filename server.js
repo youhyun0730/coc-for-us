@@ -7,8 +7,8 @@ const path = require('path');
 require('dotenv').config();
 
 // API handler をインポート
-const playersHandler = require('./api/players.js');
-const clanHandler = require('./api/clan.js');
+const playersHandler = require('./api/players-api.js');
+const clanHandler = require('./api/clan-api.js');
 
 const PORT = process.env.PORT || 3000;
 
@@ -49,13 +49,13 @@ const server = http.createServer(async (req, res) => {
     console.log(`${req.method} ${req.url}`);
 
     // API エンドポイント
-    if (req.url.startsWith('/api/players')) {
+    if (req.url.startsWith('/api/playerapi')) {
         const wrappedRes = createResponseWrapper(res);
         await playersHandler(req, wrappedRes);
         return;
     }
 
-    if (req.url.startsWith('/api/clan')) {
+    if (req.url.startsWith('/api/clan-api')) {
         const wrappedRes = createResponseWrapper(res);
         await clanHandler(req, wrappedRes);
         return;
