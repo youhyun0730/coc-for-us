@@ -76,12 +76,24 @@ function createWarSection(clan) {
     <section class="section war-section">
       <div class="section-title">클랜전</div>
       <div class="war-stats-grid">
-        <div class="stat-card"><div class="stat-label">승리</div><div class="stat-value wins nowrap">${wins}</div></div>
-        <div class="stat-card"><div class="stat-label">무승부</div><div class="stat-value nowrap">${ties}</div></div>
-        <div class="stat-card"><div class="stat-label">패배</div><div class="stat-value losses nowrap">${losses}</div></div>
-        <div class="stat-card"><div class="stat-label">승률</div><div class="stat-value nowrap">${rate}%</div></div>
+        <div class="stat-card">
+          <div class="stat-label">승리</div>
+          <div class="stat-value wins nowrap">${wins}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">무승부</div>
+          <div class="stat-value ties nowrap">${ties}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">패배</div>
+          <div class="stat-value losses nowrap">${losses}</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">승률</div>
+          <div class="stat-value rate nowrap">${rate}%</div>
+        </div>
 
-        <!-- 연속 승리는 다음 줄(와이드 카드) -->
+        <!-- 연속 승리는 다음 줄 -->
         <div class="stat-card wide">
           <div class="stat-label">연속 승리</div>
           <div class="stat-value streak">🔥 ${streak}</div>

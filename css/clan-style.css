@@ -853,13 +853,17 @@ h1, h2, .clan-name, .player-name {
     flex:0 0 auto;
 }
 .members-pill {
-  padding: 6px 10px;
-  border-radius: 999px;
-  background: #f5f5f5;
+  padding: 6px 12px;
+  border-radius: 10px;
   font-weight: 700;
   white-space: nowrap;
 }
-
+.members-count {
+  font-size: 1.05rem;
+  color: #222;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
 .clan-card .stat-card{ 
   min-width:0; 
   padding:12px 14px; 
@@ -919,6 +923,32 @@ h1, h2, .clan-name, .player-name {
   padding: 10px 12px !important;
 }
 
+/* 모바일에서는 세로선 대신 가로선으로 전환 (2열 스택 가정) */
+@media (max-width: 520px) {
+  .war-stats-grid .stat-card:not(:last-child)::after { display: none; }
+  .war-stats-grid .stat-card {
+    padding: 8px 0;
+    border-top: 1px dashed var(--divider); /* 점선으로 은은한 구분 */
+  }
+  .war-stats-grid .stat-card:nth-child(1) { border-top: none; }
+}
+
+/* === Remove gray backgrounds inside clan sections === */
+.clan-header,
+.members-count,
+.members-pill,
+.league-body,
+.war-stats-grid,
+.capital-body,
+.capital-section,
+.capital-header,
+.stat-card,
+.info-card {
+  background: none !important;
+  background-color: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+}
 /* 극소 화면(≤360px)에서는 전체 폰트 더 줄이기 */
 @media (max-width: 360px){
   .clan-card .war-stats-grid .stat-label,
@@ -928,5 +958,118 @@ h1, h2, .clan-name, .player-name {
   .clan-card .war-stats-grid .stat-value,
   .war-section .war-stats-grid .stat-value {
     font-size: 0.9rem !important;
+  }
+}
+
+/* === Clan War stats: fixed colors + visible dividers on mobile === */
+
+.war-stats-grid {
+  --divider: rgba(0, 0, 0, 0.15); /* 약간 더 진하게 */
+  padding: 8px 0;
+  row-gap: 12px;
+  position: relative;
+}
+
+/* 기본 카드 */
+.war-stats-grid .stat-card {
+  background: transparent !important;
+  box-shadow: none !important;
+  border: none !important;
+  text-align: center;
+  padding: 8px 6px;
+  position: relative;
+}
+
+/* 세로 구분선: 마지막 카드 제외 */
+.war-stats-grid .stat-card:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  bottom: 6px;
+  right: -2px;
+  width: 1.5px;
+  background: linear-gradient(180deg, transparent, var(--divider), transparent);
+  display: block !important; /* ✅ 모바일에서도 강제 표시 */
+}
+
+/* ✅ 승률(4번째 카드) 오른쪽 선 제거 */
+.war-stats-grid .stat-card:nth-child(4)::after {
+  display: none !important;
+}
+
+/* ===== 색상 복원 ===== */
+.war-stats-grid .stat-value.wins {
+  color: #28a745 !important; /* 초록 */
+}
+.war-stats-grid .stat-value.ties {
+  color: #888 !important; /* 회색 */
+}
+.war-stats-grid .stat-value.losses {
+  color: #dc3545 !important; /* 빨강 */
+}
+.war-stats-grid .stat-value.rate {
+  color: #007bff !important; /* 파랑 */
+}
+.war-stats-grid .stat-value.streak {
+  color: #ff6b00 !important; /* 주황 */
+}
+
+/* 라벨/값 공통 스타일 */
+.war-stats-grid .stat-label {
+  font-size: 12px;
+  letter-spacing: 0.2px;
+  color: #666;
+}
+.war-stats-grid .stat-value {
+  font-weight: 800;
+  font-size: 1.1rem;
+}
+
+/* ✅ 연속 승리 강조 */
+.war-stats-grid .stat-card.wide {
+  border: 2px solid rgba(0, 0, 0, 0.15);
+  border-radius: 16px;
+  padding: 18px 22px;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 1.25rem;
+  font-weight: 900;
+  transform: scale(1.12);
+  color: #ff6b00 !important;
+}
+
+/* ===== 모바일 대응: 선 유지 + 크기 조정 ===== */
+@media (max-width: 680px) {
+  .war-stats-grid {
+    grid-template-columns: repeat(4, 1fr) !important; /* 한 줄 유지 */
+    gap: 6px !important;
+  }
+
+  .war-stats-grid .stat-card {
+    padding: 6px 4px !important;
+  }
+
+  /* ✅ 모바일에서도 선 유지 */
+  .war-stats-grid .stat-card::after {
+    display: block !important;
+    opacity: 0.6;
+    width: 1px;
+  }
+
+  /* ✅ 선 얇게 유지하면서 시각적으로 자연스럽게 */
+  .war-stats-grid .stat-card:not(:last-child)::after {
+    right: -1px;
+    background: rgba(0, 0, 0, 0.15);
+  }
+
+  /* 연속승리 크기 조정 */
+  .war-stats-grid .stat-card.wide {
+    grid-column: 1 / -1 !important;
+    padding: 16px 20px !important;
+    font-size: 1.3rem !important;
+    transform: scale(1.1);
   }
 }
