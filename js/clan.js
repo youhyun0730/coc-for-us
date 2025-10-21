@@ -111,7 +111,7 @@ function createCapitalSection(clan) {
 
   return `
     <section class="section capital-section">
-      <div class="section-title">캐피탈</div>
+      <div class="section-title">클랜 캐피탈</div>
 
       <div class="capital-header">
         ${hall ? `

@@ -456,20 +456,49 @@ nav {
     }
 }
 
+@media (min-width: 769px) {
+  .clan-name {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}
+
 @media (max-width: 480px) {
 }
 
 @media (max-width: 680px) {
   .war-stats-grid {
-    grid-template-columns: repeat(2, minmax(140px, 1fr));
+    display: grid;
+    grid-auto-flow: column;              /* 가로로 흐르게 */
+    grid-auto-columns: minmax(110px, 1fr); /* 각 카드 최소 폭 */
+    grid-template-columns: none;         /* 고정 4열 해제 */
+    overflow-x: auto;                    /* 가로 스크롤 */
+    -webkit-overflow-scrolling: touch;   /* 부드러운 스크롤 */
+    gap: 10px;
+    padding-bottom: 4px;                 /* 스크롤바 여유 */
+    scroll-snap-type: x proximity;       /* 스냅(선택) */
   }
+  .war-stats-grid .stat-card {
+    min-width: 110px;
+    scroll-snap-align: start;            /* 스냅(선택) */
+    padding: 10px 12px;
+  }
+  /* 숫자/라벨 크기도 살짝 컴팩트 */
+  .war-stats-grid .stat-label { font-size: 0.9rem; }
+  .war-stats-grid .stat-value { font-size: 1.1rem; }
 }
+
+/* “연속 승리”는 wide라 자동으로 아래 줄에 있으므로 그대로 두되,
+   모바일 스크롤 줄과 시각적으로 겹치지 않도록 여백을 살짝 추가 */
+.stat-card.wide { margin-top: 8px; }
 
 /* ===== 모바일 환경 긴 한글 제목 세로깨짐 방지 ===== */
 @media (max-width: 768px) {
   .clan-name-tag {
     flex-wrap: nowrap;    /* 줄바꿈 방지 */
     min-width: 0;         /* 텍스트 수축 허용 (ellipsis 동작 필수) */
+    align-items: flex-start;
   }
 
   .clan-name-info {
@@ -504,16 +533,17 @@ nav {
     text-orientation: mixed;
     line-height: 1.3;
   }
-  .clan-name,
+  .clan-name {
+    white-space: normal;          /* 줄바꿈 허용 */
+    overflow: visible;            /* 잘림 해제 */
+    text-overflow: clip;          /* … 해제 */
+    line-height: 1.25;
+    word-break: keep-all;         /* 한글 단어 분해 방지 */
+  }
   .clan-tag {
-    display: block;
-    max-width: 100%;
-    white-space: nowrap;        /* 한 줄로 유지 */
-    overflow: hidden;           /* 넘치면 숨김 */
-    text-overflow: ellipsis;    /* … 처리 */
-    word-break: keep-all;       /* 한글 단어 분해 금지 */
-    writing-mode: horizontal-tb;/* 세로쓰기 방지 */
-    text-orientation: mixed;
+    white-space: nowrap;          /* 태그는 한 줄 유지(선택) */
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 }
 
@@ -594,8 +624,8 @@ h1, h2, .clan-name, .player-name {
 /* ===== ② 클랜전 섹션 ===== */
 .war-stats-grid {
   display: grid;
-  grid-template-columns: repeat(4, minmax(140px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 12px;
   border-radius: 14px;
   padding: 16px 18px;
 }
