@@ -132,15 +132,15 @@ nav {
 
 .clan-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(450px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
     gap: 30px;
 }
 
 .clan-card {
     background: white;
-    border-radius: 20px;
-    padding: 34px 32px;
-    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.25);
+    border-radius: 16px;
+    padding: 22px 20px;
+    box-shadow: 0 15px 28px rgba(0, 0, 0, 0.18);
     transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -162,7 +162,7 @@ nav {
     align-items: center;
     flex-wrap: nowrap;
     gap: 10px;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     padding-bottom: 12px;
     border-bottom: none !important;
 }
@@ -188,8 +188,8 @@ nav {
 
 /* 클랜 배지 이미지 */
 .clan-badge {
-    width: 70px;
-    height: 70px;
+    width: 56px;
+    height: 56px;
     object-fit: contain;   /* 비율 유지 + 잘림 방지 */
     object-position: center;
     background: transparent;   /* 회색 배경 (투명 PNG 대비) */
@@ -199,7 +199,7 @@ nav {
 
 /* 클랜 이름 */
 .clan-name {
-    font-size: 1.9rem;
+    font-size: clamp(1.2rem, 1.6vw, 1.6rem);
     font-weight: 700;
     color: #333;
     margin-bottom: 4px;
@@ -245,8 +245,8 @@ nav {
 /* 정보 카드 레이아웃 */
 .info-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 18px;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 14px;
 }
 
 .info-card {
@@ -254,7 +254,7 @@ nav {
     align-items: center;
     background: #fafafa;
     border-radius: 8px;
-    padding: 10px 14px;
+    padding: 8px 12px;
     box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 
@@ -477,7 +477,9 @@ nav {
 
 @media (max-width: 480px) {
 }
-
+@media (min-width: 1140px) {
+  .clan-container { grid-template-columns: repeat(3, 1fr); }
+}
 @media (max-width: 360px){
   .war-stats-grid{ gap: 4px !important; }
   .war-stats-grid .stat-card{ padding: 5px 5px !important; }
@@ -636,7 +638,7 @@ h1, h2, .clan-name, .player-name {
 }
 
 .league-section {
-  margin-top: 12px;
+  margin-top: 6px;
 }
 
 /* 섹션 제목 + 양옆 라인: style.css 패턴 재활용 */
@@ -680,12 +682,12 @@ h1, h2, .clan-name, .player-name {
   gap: 12px;
   background: #fafafa;
   border-radius: 14px;
-  padding: 16px 18px;
+  padding: 12px 14px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 .cwl-icon {
-  width: 56px;
-  height: 56px;
+  width: 48px;
+  height: 48px;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -704,16 +706,16 @@ h1, h2, .clan-name, .player-name {
 .war-stats-grid {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 12px;
+  gap: 10px;
   border-radius: 14px;
-  padding: 16px 18px;
+  padding: 12px 14px;
 }
 .nowrap { white-space: nowrap; }
 .stat-card {
   background: #fafafa;
   border-radius: 12px;
   min-width: 0;
-  padding: 10px 12px;
+  padding: 8px 10px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   display: grid;
   gap: 4px;
@@ -740,7 +742,7 @@ h1, h2, .clan-name, .player-name {
   gap: 12px;
   background: #fafafa;
   border-radius: 14px;
-  padding: 16px 18px;
+  padding: 12px 14px;
   box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   margin-bottom: 12px;
 }
@@ -899,7 +901,7 @@ h1, h2, .clan-name, .player-name {
   color: #555;
 }
 
-/* 값(숫자)은 한 줄 유지 + 자동 폰트 조정으로 잘림 방지 */
+/* 값(숫자)은 한 줄 유지 + 자동 폰트 조정으로 잘림 f방지 */
 .clan-card .war-stats-grid .stat-value,
 .war-section .war-stats-grid .stat-value {
   white-space: nowrap !important;
