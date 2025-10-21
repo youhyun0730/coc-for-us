@@ -160,7 +160,9 @@ nav {
 .clan-header {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 6px;
     margin-bottom: 12px;
     padding-bottom: 12px;
     border-bottom: none !important;
@@ -172,7 +174,8 @@ nav {
     align-items: center;
     gap: 12px; /* 배지와 텍스트 사이 간격 */
     font-size: 0.9rem;
-    flex: 1;
+    flex: 1 1 auto;
+    min-width: 0;         /* 텍스트 수축 허용 (ellipsis 동작 필수) */
 }
 
 /* 이름 + 태그를 세로로 정렬 */
@@ -544,6 +547,33 @@ nav {
     white-space: nowrap;          /* 태그는 한 줄 유지(선택) */
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 0.9rem;
+  }
+  .members-pill {
+    font-size: 0.9rem;
+    background: #f3f3f3;
+    padding: 5px 8px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .war-stats-grid {
+    display: grid !important;
+    grid-template-columns: repeat(2, 1fr) !important;
+    grid-auto-rows: auto;
+    gap: 10px;
+    overflow: visible !important; /* 스크롤 제거 */
+  }
+
+  /* 연속승리는 항상 맨 아래 한 줄로 */
+  .stat-card.wide {
+    grid-column: 1 / -1; /* 전체 가로폭 차지 */
+    margin-top: 4px;
+  }
+
+  /* 카드 안 여백 조금 늘려서 겹침 방지 */
+  .stat-card {
+    padding: 12px 14px;
+    min-width: 0;
   }
 }
 
@@ -761,7 +791,13 @@ h1, h2, .clan-name, .player-name {
 /* 6) (선택) 카드 자체에서 보이는 시각적 넘침도 잘라내기 */
 .clan-card { overflow: hidden; }
 
-.clan-right { display:flex; align-items:center; gap:8px; margin-left:auto; }
+.clan-right { 
+    display:flex; 
+    align-items:center; 
+    gap: 6px; 
+    margin-left:auto;
+    flex-shrink: 0; 
+}
 .members-pill {
   padding: 6px 10px;
   border-radius: 999px;
