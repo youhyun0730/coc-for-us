@@ -102,9 +102,18 @@ nav {
 .header-top {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: 10px;
+    padding: 0 20px;
+}
+
+.header-center {
+    display: flex;
+    align-items: center;
     justify-content: center;
     gap: 12px;
-    margin-bottom: 10px;
+    flex: 1;
 }
 
 .logo {
@@ -112,6 +121,28 @@ nav {
     vertical-align: middle;
     object-fit: contain;
     background: transparent;
+}
+
+.donate-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #FFDD00, #FBB034);
+    color: #000;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(255, 221, 0, 0.3);
+    white-space: nowrap;
+}
+
+.donate-btn:hover {
+    background: linear-gradient(135deg, #FBB034, #FFDD00);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 221, 0, 0.5);
 }
 
 .loading {
@@ -520,6 +551,10 @@ nav {
     text-align: center;
     gap: 10px;
     flex-wrap: nowrap;
+    padding: 0 10px;
+  }
+  .header-center {
+    flex-direction: column;
   }
   .header-top .logo {
     width: 100%;
@@ -532,12 +567,16 @@ nav {
     font-size: 1.8rem;
     min-width: 0;
     line-height: 1.3;
-    white-space: normal;    
+    white-space: normal;
     overflow: visible;
     text-overflow: clip;
     word-break: keep-all;
     writing-mode: horizontal-tb;
     text-orientation: mixed;
+  }
+  .donate-btn {
+    font-size: 0.85rem;
+    padding: 6px 14px;
   }
 }
 
