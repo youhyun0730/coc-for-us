@@ -127,6 +127,72 @@ module.exports = async function handler(req, res) {
       const activeWars = [...normalWars, ...leagueWars];
       return res.status(200).json({ count: activeWars.length, activeWars });
     }
+    
+// ===== X) 상세 전쟁/멤버: /api/clan/wars/detail =====
+if (/^\/api\/clan\/wars\/detail(?:$|\/|\?)/.test(pathname)) {
+  const urlObj = new URL(req.url, 'http://localhost');
+  const clanTagRaw = urlObj.searchParams.get('clanTag') || '';
+  const clanTag = clanTagRaw
+    ? (clanTagRaw.startsWith('#') ? clanTagRaw : `#${clanTagRaw}`)
+    : null;
+  const source = (urlObj.searchParams.get('source') || 'normal').toLowerCase();
+  const warTag = urlObj.searchParams.get('warTag') || '';
+
+  try {
+    if (source === 'league') {
+      // 1) warTag가 있으면 바로 상세
+      if (warTag) {
+        try {
+          const w = await client.getClanWarLeagueWar(warTag);
+          return res.status(200).json({ source: 'league', war: w || null, warTag });
+        } catch (e) {
+          // 접근 불가/존재X → null로
+          return res.status(200).json({ source: 'league', war: null, warTag, error: e.message });
+        }
+      }
+      // 2) warTag가 없으면, 해당 클랜이 포함된 진행/준비중 매치를 탐색
+      if (!clanTag) {
+        return res.status(200).json({ source: 'league', war: null, error: 'clanTag is required when source=league and warTag not provided' });
+      }
+      try {
+        const group = await client.getClanWarLeagueGroup(clanTag);
+        const tags = (group?.rounds || [])
+          .flatMap(r => r.warTags || [])
+          .filter(t => t && t !== '#0');
+
+        for (const t of tags.slice(-6).reverse()) {
+          try {
+            const w = await client.getClanWarLeagueWar(t);
+            const state = (w?.state || '').toLowerCase();
+            const hasUs = [w?.clan?.tag, w?.opponent?.tag].includes(clanTag);
+            if (w && hasUs && (state === 'preparation' || state === 'inwar')) {
+              return res.status(200).json({ source: 'league', war: w, warTag: t });
+            }
+          } catch (_) {}
+        }
+        return res.status(200).json({ source: 'league', war: null, clanTag });
+      } catch (e) {
+        return res.status(200).json({ source: 'league', war: null, clanTag, error: e.message });
+      }
+    }
+
+    // ----- normal (정규 클랜전) -----
+    {
+      const tag = clanTag || getPrimaryClanTag();
+      try {
+        const w = await client.getClanWar(tag);
+        // notInWar/권한 문제도 모두 200 + null로 회수
+        return res.status(200).json({ source: 'normal', war: w || null, clanTag: tag });
+      } catch (e) {
+        return res.status(200).json({ source: 'normal', war: null, clanTag: tag, error: e.message });
+      }
+    }
+  } catch (e) {
+    console.error('wars/detail error:', e);
+    // 여기도 200 + null
+    return res.status(200).json({ source, war: null, error: e.message || 'Unknown error' });
+  }
+}
 
     // ===== 2) 대표 클랜(첫 태그) 기준: 현재전/로그/CWL 그룹/워즈 =====
     if (/^\/api\/clan\/war\/current(?:$|\/)/.test(pathname)) {

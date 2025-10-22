@@ -135,3 +135,83 @@ footer { text-align:center; margin-top: 30px; color:#555; font-size:0.9rem; }
 }
 
 h1, h2 { font-weight: 900; }
+
+/* 핵심 레이아웃/색상만 — 다른 기본 타이포/컨테이너 스타일은 그대로 사용해도 됩니다. */
+
+.war-toolbar {
+  display:flex; justify-content:center; margin: 10px 0 16px;
+}
+.filters { display:inline-flex; gap:8px; padding:6px; border-radius:999px; background:#f2f3f7; border:1px solid #e6e8ee; }
+.filter-btn {
+  padding:10px 16px; border-radius:999px; border:0; background:transparent;
+  font-weight:800; letter-spacing:.2px; cursor:pointer;
+}
+.filter-btn.active { background:white; box-shadow:0 1px 6px rgba(0,0,0,.08); }
+
+.group { margin: 22px 0; }
+.group > h2 { font-weight:900; font-size:1.2rem; margin: 4px 4px 12px; color:#0e1116; }
+.cards { display:grid; grid-template-columns: 1fr; gap:14px; }
+
+@media (max-width: 900px) {
+  .cards { grid-template-columns: 1fr; }
+}
+
+/* 카드 */
+.war-card {
+  background:#fff; border-radius:16px; padding:14px;
+  box-shadow:0 12px 40px rgba(0,0,0,.12); border:1px solid #eef0f4;
+  overflow: visible; /* 접이식 영역이 가로로 잘리지 않게 */
+}
+.war-card .card-head {
+  display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:10px;
+  font-size:.95rem; color:#3a3f4b;
+}
+.badge {
+  display:inline-flex; align-items:center; height:26px; padding:0 10px; border-radius:999px; font-weight:900;
+}
+.badge.league { background: transparent; color:#1F2937; border:1px solid #D1D5DB; padding:2px 8px; line-height:1; } /* 리그전 */
+.badge.normal { background: transparent; color:#374151; border:1px solid #D1D5DB; padding:2px 8px; line-height:1; } /* 클랜전 */
+
+.card-head .state { font-weight:800; color:#6b7280; } /* 한글 상태 유지 */
+.card-head .size  { opacity:.9; }
+.card-head .timer { margin-left:auto; font-weight:900; color:#111; }
+
+.card-body { display:grid; grid-template-columns: 1fr auto 1fr; gap:12px; align-items:center; }
+.vs {
+  font-weight:900; letter-spacing:1px;
+  padding:6px 10px; border-radius:10px; background:#f4f6fb; border:1px solid #e8ebf2;
+}
+.side .name { font-weight:900; font-size:1.05rem; color:#101828; display:flex; flex-wrap:wrap; gap:6px; }
+.side .name .tag { font-family:monospace; color:#6b7280; }
+.side .meta {
+  display:flex; flex-wrap:wrap; column-gap:12px; row-gap:4px; margin-top:6px;
+  color:#3a3f4b;
+}
+.side .meta .th { font-weight:800; }
+
+.progress { width:100%; height:8px; background:#f0f2f7; border-radius:999px; overflow:hidden; margin-top:8px; border:1px solid #e6e8ee; }
+.progress .bar { height:100%; background:linear-gradient(90deg, #86b7ff, #3b82f6); }
+
+.war-card.is-preparation   .badge { filter:saturate(0.9); }
+.war-card.is-inWar         .badge { filter:saturate(1); }
+.war-card.is-warEnded      { opacity:.75; }
+
+/* 빈 상태 */
+.empty { padding:14px; text-align:center; color:#6b7280; border:1px dashed #e2e8f0; border-radius:12px; }
+
+.roster { margin-top:10px; border-top:1px dashed #e5e7eb; padding-top:10px; }
+.roster-inner { width:100%; }
+.roster-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+@media (max-width: 900px){ .roster-grid{ grid-template-columns:1fr; } }
+.card-foot { margin-top: 10px; display:flex; justify-content:flex-end; }
+.card-foot .roster-btn { padding:10px 14px; border-radius:10px; border:1px solid #e6e8ee; background:#fff; font-weight:800; }
+.roster-side h4 { margin:6px 0 8px; font-weight:900; }
+.roster-table { width:100%; border-collapse:separate; border-spacing:0; overflow:hidden; border:1px solid #e5e7eb; border-radius:12px; }
+.roster-table thead th { text-align:left; font-size:.9rem; background:#f3f6fb; padding:8px; }
+.roster-table td { padding:8px; border-top:1px solid #eef1f5; }
+.roster-table td.pos { width:36px; text-align:center; font-weight:800; }
+.roster-table td.name { font-weight:700; }
+.roster-table td.used, .roster-table td.stars, .roster-table td.destr { text-align:center; white-space:nowrap; }
+.roster-table .empty { text-align:center; color:#6b7280; }
+
+.badge { margin-right:6px; display:inline-block; } .badge:last-child{ margin-right:0; }
