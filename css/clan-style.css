@@ -161,6 +161,12 @@ nav {
     text-align: center;
 }
 
+:root {
+  --section-space: 16px;   /* 섹션 위/안쪽 여백 */
+  --block-gap: 8px;        /* 내부 아이템 간격 */
+  --section-divider: 2px;  /* 섹션 구분선 두께 */
+}
+
 .clan-container {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -180,21 +186,12 @@ nav {
     box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
 }
 
-/* クラン基本情報 */
-.clan-basic-info {
-    border-bottom: none !important;
-    margin-bottom: 0 !important;
-    padding-bottom: 8px;
-}
-
 /* 클랜 헤더: 배지 + 이름 + 리그 아이콘 */
 .clan-header {
     display: flex;
     align-items: center;
     flex-wrap: nowrap;
     gap: 10px;
-    margin-bottom: 8px;
-    padding-bottom: 12px;
     border-bottom: none !important;
 }
 
@@ -257,10 +254,10 @@ nav {
 
 /* 캐피탈 홀 아이콘 */
 .clan-capital-icon {
-    width: 35px;
-    height: 35px;
+    width: 50px;
+    height: 50px;
     object-fit: contain;
-    margin-right: 8px;
+    margin-right: 4px;
 }
 
 /* 리그 이름 텍스트 */
@@ -511,60 +508,6 @@ nav {
 @media (min-width: 1140px) {
   .clan-container { grid-template-columns: repeat(3, 1fr); }
 }
-@media (max-width: 360px){
-  .war-stats-grid{ gap: 4px !important; }
-  .war-stats-grid .stat-card{ padding: 5px 5px !important; }
-  .war-stats-grid .stat-label{ font-size: 0.72rem !important; }
-  .war-stats-grid .stat-value{ font-size: 0.9rem !important; }
-}
-
-@media (max-width: 680px) {
-  .war-stats-grid{
-    display: grid !important;
-    grid-template-columns: repeat(4, 1fr) !important; /* 4칸 고정 */
-    grid-auto-flow: row !important;                  /* 컬럼 플로우 금지 */
-    grid-auto-columns: initial !important;
-    gap: 6px !important;                              /* 간격 더 축소 */
-    padding: 8px 10px !important;
-    overflow-x: visible !important;
-    scroll-snap-type: none !important;
-  }
-
-  /* 카드 자체를 최대한 컴팩트하게 */
-  .war-stats-grid .stat-card{
-    min-width: 0 !important;      /* ✅ 줄어들 수 있게 */
-    padding: 6px 6px !important;
-    text-align: center;
-  }
-
-  /* 폭을 잡아먹던 원인: 라벨의 nowrap 해제 */
-  .war-stats-grid .stat-label{
-    white-space: normal !important; /* ✅ 줄바꿈 허용 */
-    overflow: hidden;
-    text-overflow: ellipsis;
-    font-size: 0.76rem !important;
-    line-height: 1.1;
-  }
-
-  /* 숫자는 한 줄 유지하되 크기 더 축소 */
-  .war-stats-grid .stat-value{
-    white-space: nowrap !important;
-    font-size: clamp(0.9rem, 3.2vw, 1.0rem) !important;
-    line-height: 1.1;
-  }
-
-  /* 연속 승리는 2번째 줄 전체 폭 */
-  .war-stats-grid .stat-card.wide{
-    grid-column: 1 / -1 !important;
-    margin-top: 6px;
-    padding: 10px 12px !important;
-  }
-}
-
-/* “연속 승리”는 wide라 자동으로 아래 줄에 있으므로 그대로 두되,
-   모바일 스크롤 줄과 시각적으로 겹치지 않도록 여백을 살짝 추가 */
-.stat-card.wide { margin-top: 8px; }
-
 /* ===== 모바일 환경 긴 한글 제목 세로깨짐 방지 ===== */
 @media (max-width: 768px) {
   .clan-name-tag {
@@ -614,8 +557,6 @@ nav {
     padding: 6px 14px;
   }
   .clan-header { 
-    margin-bottom: 6px !important;
-    padding-bottom: 6px !important;
     align-items: flex-start;
 }
   .clan-name {
@@ -629,12 +570,6 @@ nav {
     white-space: nowrap;          /* 태그는 한 줄 유지(선택) */
     font-size: 0.9rem;
   }
-  .league-section{
-    margin-top: 6px !important;            /* 헤더와의 수직 간격 축소 */
-  }
-  .league-section .section-title{
-    margin-bottom: 6px !important;         /* 섹션 타이틀 하단 간격 축소 */
-  }
   .league-body{
     padding: 12px 14px !important;         /* 카드 내부 여백 살짝 축소 */
   }
@@ -646,48 +581,31 @@ nav {
     border-radius: 999px;
     white-space: nowrap;
   }
-  .war-stats-grid {
-    display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
-    grid-auto-rows: auto;
-    gap: 10px;
-    overflow: visible !important; /* 스크롤 제거 */
-  }
-
-  /* 연속승리는 항상 맨 아래 한 줄로 */
-  .stat-card.wide {
-    grid-column: 1 / -1; /* 전체 가로폭 차지 */
-    margin-top: 4px;
-  }
-
-  /* 카드 안 여백 조금 늘려서 겹침 방지 */
-  .stat-card {
-    padding: 12px 14px;
-    min-width: 0;
-  }
 }
+
+.stat-row {
+  display: flex;
+  gap: 8px;         /* 아이템 간 간격 */
+  align-items: center;  /* 세로 가운데 정렬 */
+}
+
+.stat-value {
+  white-space: nowrap;  /* 한 줄 유지 */
+}
+
 
 h1, h2, .clan-name, .player-name {
   font-weight: 900; /* Black */
-}
-
-/* ===== 공통 섹션 레이아웃 ===== */
-.section {
-  margin-top: 22px;
-}
-
-.league-section {
-  margin-top: 6px;
 }
 
 /* 섹션 제목 + 양옆 라인: style.css 패턴 재활용 */
 .league-section .section-title,
 .war-section .section-title,
 .capital-section .section-title {
+  margin-top: var(--section-space);
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 8px;
   white-space: nowrap;
   font-weight: 600;
   color: #333;
@@ -719,10 +637,8 @@ h1, h2, .clan-name, .player-name {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: #fafafa;
   border-radius: 14px;
   padding: 12px 14px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
 }
 .cwl-icon {
   width: 48px;
@@ -736,34 +652,32 @@ h1, h2, .clan-name, .player-name {
   font-size: 0.95rem;
 }
 .league-meta .meta-value {
-  color: #111;
-  font-weight: 800;
+  font-weight: 600;
+  color: #555;
   font-size: 1.05rem;
 }
 
 /* ===== ② 클랜전 섹션 ===== */
 .war-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
-  border-radius: 14px;
-  padding: 12px 14px;
+  display: flex;
+  justify-content: space-between;
+  gap: 0px;
+  align-items: center;
 }
 .nowrap { white-space: nowrap; }
 .stat-card {
-  background: #fafafa;
   border-radius: 12px;
   min-width: 0;
   padding: 8px 10px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
   display: grid;
   gap: 4px;
+  position: relative;
 }
-.stat-card.wide { grid-column: 1 / -1; }
 .stat-label {
   color: #666;
   font-weight: 600;
   font-size: 0.9rem;
+  margin-bottom: 2px;
 }
 .stat-value {
   color: #111;
@@ -771,6 +685,7 @@ h1, h2, .clan-name, .player-name {
   font-size: 1.2rem;
 }
 .stat-value.wins   { color: #28a745; }
+.stat-value.ties  { color: #888;    }
 .stat-value.losses { color: #dc3545; }
 .stat-value.streak { color: #ff6b00; }
 
@@ -779,11 +694,7 @@ h1, h2, .clan-name, .player-name {
   display: flex;
   align-items: center;
   gap: 12px;
-  background: #fafafa;
-  border-radius: 14px;
   padding: 12px 14px;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
-  margin-bottom: 12px;
 }
 .capital-meta .meta-label {
   color: #666;
@@ -842,20 +753,6 @@ h1, h2, .clan-name, .player-name {
   max-width: 100%;
 }
 
-/* 2) “승/무/패/승률” 그리드: 최소폭 제거하여 유연 축소 */
-.war-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr)); /* 140px → 0 으로 변경 */
-  gap: 10px;
-}
-
-/* 작은 화면은 2열 (유지) */
-@media (max-width: 680px) {
-  .war-stats-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 /* 3) 각 카드가 줄어들 수 있게(Grid/Flex 수축 허용) */
 .stat-card {
   min-width: 0;                /* 중요: 자식이 폭 줄일 수 있게 */
@@ -864,24 +761,6 @@ h1, h2, .clan-name, .player-name {
   gap: 4px;
   padding: 10px 12px;          /* 살짝 타이트 */
 }
-
-/* 4) 길어진 텍스트/숫자 줄바꿈 & 말줄임으로 넘침 차단 */
-.stat-label,
-.stat-value {
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;         /* 한 줄 유지하되 넘치면 … */
-}
-
-/* 5) 혹시 .nowrap 클래스로 강제 줄바꿈 금지가 걸려 있으면, 전쟁 그리드 안에서는 무력화 */
-.war-stats-grid .nowrap {
-  white-space: normal;
-}
-
-/* 6) (선택) 카드 자체에서 보이는 시각적 넘침도 잘라내기 */
-.clan-card { overflow: hidden; }
-
 .clan-right { 
     display:flex; 
     align-items:center; 
@@ -902,213 +781,5 @@ h1, h2, .clan-name, .player-name {
   color: #222;
   font-weight: 700;
   letter-spacing: 0.3px;
-}
-.clan-card .stat-card{ 
-  min-width:0; 
-  padding:12px 14px; 
-}
-.clan-card .stat-card.wide{
-  grid-column:1 / -1; /* 아래 줄 전체 폭 */
-  margin-top:4px;
-}
-
-/* 작은 화면에서 글자·여백 살짝 컴팩트하게 */
-@media (max-width: 480px){
-  .clan-card .stat-card{ padding:10px 12px; }
-  .clan-card .stat-label{ font-size:0.85rem; }
-  .clan-card .stat-value{ font-size:1rem; }
-}
-
-/* === 모바일에서도 4칸 한 줄 유지 + 승률 잘림 방지 === */
-.clan-card .war-stats-grid,
-.war-section .war-stats-grid {
-  display: grid !important;
-  grid-template-columns: repeat(4, minmax(0, 1fr)) !important; /* 4칸 유지 */
-  gap: 8px !important;
-  overflow: visible !important;
-}
-
-.clan-card .war-stats-grid .stat-card,
-.war-section .war-stats-grid .stat-card {
-  min-width: 0 !important;
-  padding: 8px 6px !important;       /* 여백 살짝 축소 */
-  text-align: center;
-}
-
-/* 라벨은 최대한 작고 한 줄 */
-.clan-card .war-stats-grid .stat-label,
-.war-section .war-stats-grid .stat-label {
-  white-space: nowrap !important;
-  font-size: clamp(0.68rem, 2.6vw, 0.8rem) !important; /* 작게 */
-  line-height: 1.1;
-  color: #555;
-}
-
-/* 값(숫자)은 한 줄 유지 + 자동 폰트 조정으로 잘림 f방지 */
-.clan-card .war-stats-grid .stat-value,
-.war-section .war-stats-grid .stat-value {
-  white-space: nowrap !important;
-  font-size: clamp(0.9rem, 3.3vw, 1.05rem) !important; /* ✅ 자동 축소 */
-  overflow: visible !important;
-  text-overflow: clip !important;
-  line-height: 1.15;
-}
-
-/* 연속 승리는 항상 두 번째 줄 전체폭 */
-.clan-card .war-stats-grid .stat-card.wide,
-.war-section .war-stats-grid .stat-card.wide {
-  grid-column: 1 / -1 !important;
-  margin-top: 6px;
-  padding: 10px 12px !important;
-}
-
-/* 모바일에서는 세로선 대신 가로선으로 전환 (2열 스택 가정) */
-@media (max-width: 520px) {
-  .war-stats-grid .stat-card:not(:last-child)::after { display: none; }
-  .war-stats-grid .stat-card {
-    padding: 8px 0;
-    border-top: 1px dashed var(--divider); /* 점선으로 은은한 구분 */
-  }
-  .war-stats-grid .stat-card:nth-child(1) { border-top: none; }
-}
-
-/* === Remove gray backgrounds inside clan sections === */
-.clan-header,
-.members-count,
-.members-pill,
-.league-body,
-.war-stats-grid,
-.capital-body,
-.capital-section,
-.capital-header,
-.stat-card,
-.info-card {
-  background: none !important;
-  background-color: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-}
-/* 극소 화면(≤360px)에서는 전체 폰트 더 줄이기 */
-@media (max-width: 360px){
-  .clan-card .war-stats-grid .stat-label,
-  .war-section .war-stats-grid .stat-label {
-    font-size: 0.65rem !important;
-  }
-  .clan-card .war-stats-grid .stat-value,
-  .war-section .war-stats-grid .stat-value {
-    font-size: 0.9rem !important;
-  }
-}
-
-/* === Clan War stats: fixed colors + visible dividers on mobile === */
-
-.war-stats-grid {
-  --divider: rgba(0, 0, 0, 0.15); /* 약간 더 진하게 */
-  padding: 8px 0;
-  row-gap: 12px;
-  position: relative;
-}
-
-/* 기본 카드 */
-.war-stats-grid .stat-card {
-  background: transparent !important;
-  box-shadow: none !important;
-  border: none !important;
-  text-align: center;
-  padding: 8px 6px;
-  position: relative;
-}
-
-/* 세로 구분선: 마지막 카드 제외 */
-.war-stats-grid .stat-card:not(:last-child)::after {
-  content: "";
-  position: absolute;
-  top: 6px;
-  bottom: 6px;
-  right: -2px;
-  width: 1.5px;
-  background: linear-gradient(180deg, transparent, var(--divider), transparent);
-  display: block !important; /* ✅ 모바일에서도 강제 표시 */
-}
-
-/* ✅ 승률(4번째 카드) 오른쪽 선 제거 */
-.war-stats-grid .stat-card:nth-child(4)::after {
-  display: none !important;
-}
-
-/* ===== 색상 복원 ===== */
-.war-stats-grid .stat-value.wins {
-  color: #28a745 !important; /* 초록 */
-}
-.war-stats-grid .stat-value.ties {
-  color: #888 !important; /* 회색 */
-}
-.war-stats-grid .stat-value.losses {
-  color: #dc3545 !important; /* 빨강 */
-}
-.war-stats-grid .stat-value.rate {
-  color: #007bff !important; /* 파랑 */
-}
-.war-stats-grid .stat-value.streak {
-  color: #ff6b00 !important; /* 주황 */
-}
-
-/* 라벨/값 공통 스타일 */
-.war-stats-grid .stat-label {
-  font-size: 12px;
-  letter-spacing: 0.2px;
-  color: #666;
-}
-.war-stats-grid .stat-value {
-  font-weight: 800;
-  font-size: 1.1rem;
-}
-
-/* ✅ 연속 승리 강조 */
-.war-stats-grid .stat-card.wide {
-  border: 2px solid rgba(0, 0, 0, 0.15);
-  border-radius: 16px;
-  padding: 18px 22px;
-  background: transparent;
-  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  font-size: 1.25rem;
-  font-weight: 900;
-  transform: scale(1.12);
-  color: #ff6b00 !important;
-}
-
-/* ===== 모바일 대응: 선 유지 + 크기 조정 ===== */
-@media (max-width: 680px) {
-  .war-stats-grid {
-    grid-template-columns: repeat(4, 1fr) !important; /* 한 줄 유지 */
-    gap: 6px !important;
-  }
-
-  .war-stats-grid .stat-card {
-    padding: 6px 4px !important;
-  }
-
-  /* ✅ 모바일에서도 선 유지 */
-  .war-stats-grid .stat-card::after {
-    display: block !important;
-    opacity: 0.6;
-    width: 1px;
-  }
-
-  /* ✅ 선 얇게 유지하면서 시각적으로 자연스럽게 */
-  .war-stats-grid .stat-card:not(:last-child)::after {
-    right: -1px;
-    background: rgba(0, 0, 0, 0.15);
-  }
-
-  /* 연속승리 크기 조정 */
-  .war-stats-grid .stat-card.wide {
-    grid-column: 1 / -1 !important;
-    padding: 16px 20px !important;
-    font-size: 1.3rem !important;
-    transform: scale(1.1);
-  }
 }

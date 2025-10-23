@@ -35,7 +35,7 @@ function createBasicInfoSection(clan) {
         <div class="clan-right">
           <div class="members-pill" title="클랜원" aria-label="클랜원 수">
             <span class="members-count">
-              👥 ${getMemberCount(clan)} / ${getMemberLimit(clan)}
+              👤 ${getMemberCount(clan)}
             </span>
           </div>
         </div>
@@ -77,25 +77,19 @@ function createWarSection(clan) {
       <div class="section-title">클랜전</div>
       <div class="war-stats-grid">
         <div class="stat-card">
-          <div class="stat-label">승리</div>
-          <div class="stat-value wins nowrap">${wins}</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">무승부</div>
-          <div class="stat-value ties nowrap">${ties}</div>
-        </div>
-        <div class="stat-card">
-          <div class="stat-label">패배</div>
-          <div class="stat-value losses nowrap">${losses}</div>
-        </div>
+          <div class="stat-label">전적</div>
+          <div class="stat-row">
+            <div class="stat-value wins nowrap">${wins}</div>
+            <div class="stat-value ties nowrap">${ties}</div>
+            <div class="stat-value losses nowrap">${losses}</div>
+          </div>
+          </div>
         <div class="stat-card">
           <div class="stat-label">승률</div>
           <div class="stat-value rate nowrap">${rate}%</div>
         </div>
-
-        <!-- 연속 승리는 다음 줄 -->
-        <div class="stat-card wide">
-          <div class="stat-label">연속 승리</div>
+        <div class="stat-card">
+          <div class="stat-label">연승</div>
           <div class="stat-value streak">🔥 ${streak}</div>
         </div>
       </div>
