@@ -130,7 +130,8 @@ module.exports = async function handler(req, res) {
     
 // ===== X) 상세 전쟁/멤버: /api/clan/wars/detail =====
 if (/^\/api\/clan\/wars\/detail(?:$|\/|\?)/.test(pathname)) {
-  const urlObj = new URL(req.url, 'http://localhost');
+  const base = `${req.headers['x-forwarded-proto'] || 'https'}://${req.headers.host || 'localhost'}`;
+  const urlObj = new URL(req.url, base);
   const clanTagRaw = urlObj.searchParams.get('clanTag') || '';
   const clanTag = clanTagRaw
     ? (clanTagRaw.startsWith('#') ? clanTagRaw : `#${clanTagRaw}`)
