@@ -574,13 +574,6 @@ nav {
     padding: 12px 14px !important;         /* 카드 내부 여백 살짝 축소 */
   }
   .clan-right{ white-space: nowrap; flex:0 0 auto; } /* 멤버표시 고정 */
-  .members-pill {
-    font-size: 0.9rem;
-    background: #f3f3f3;
-    padding: 5px 8px;
-    border-radius: 999px;
-    white-space: nowrap;
-  }
 }
 
 .stat-row {
