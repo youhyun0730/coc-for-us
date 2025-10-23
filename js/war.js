@@ -317,7 +317,7 @@ function startTicker(root) {
     errBox.style.display  = 'none';
 
     try {
-      const data = await safeFetch('/api/clan/wars/active');
+      const data = await fetchActiveWarsWithFallback();
       loading.style.display = 'none';
 
       renderFilters(root);
@@ -333,6 +333,60 @@ function startTicker(root) {
 
   document.addEventListener('DOMContentLoaded', main);
 })();
+
+// ===== 폴백 수집기 =====
+async function fetchActiveWarsWithFallback() {
+  // 1) 우선 /api/clan/wars/active 시도
+  try {
+    return await (async () => {
+      const res = await fetch('/api/clan/wars/active');
+      if (!res.ok) throw new Error(String(res.status));
+      return await res.json();
+    })();
+  } catch (e) {
+    // 404면 폴백 경로로 수집
+    if (!String(e.message).startsWith('404')) throw e;
+  }
+
+  // 2) 폴백: /api/clan 목록 → 각 클랜에 대해 detail 호출(노말/리그)
+  const clansRes = await fetch('/api/clan');
+  if (!clansRes.ok) throw new Error(`/api/clan ${clansRes.status}`);
+  const clansJson = await clansRes.json();
+  const clans = Array.isArray(clansJson?.clans) ? clansJson.clans : [];
+
+  // helper: detail 호출
+  const getDetail = async (tag, source) => {
+    const q = new URLSearchParams({ clanTag: tag, source });
+    const r = await fetch(`/api/clan/wars/detail?${q.toString()}`);
+    if (!r.ok) return null;
+    const j = await r.json().catch(() => null);
+    // 백엔드가 { war: {...} } 또는 바로 {...}로 줄 수 있으니 정규화
+    const war = j?.war || j;
+    if (!war || !war.state) return null;
+    return { source, war };
+  };
+
+  // 병렬 수집
+  const tasks = [];
+  clans.forEach(c => {
+    const tag = c?.tag;
+    if (!tag) return;
+    tasks.push(getDetail(tag, 'normal'));
+    tasks.push(getDetail(tag, 'league'));
+  });
+  const results = (await Promise.allSettled(tasks))
+    .map(x => (x.status === 'fulfilled' ? x.value : null))
+    .filter(Boolean);
+
+  // 활성(준비/진행)만 추리기
+  const activeWars = results.filter(it => {
+    const s = String(it?.war?.state || '').toLowerCase();
+    return s === 'preparation' || s === 'inwar';
+  });
+
+  // 렌더러가 기대하는 형태로 반환
+  return { activeWars };
+}
 
 document.addEventListener('click', async (e) => {
   const btn = e.target.closest('.roster-btn');
