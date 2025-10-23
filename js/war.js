@@ -22,50 +22,50 @@
 
   // 상태 판정
   function getState(w) {
-    // API 필드 네이밍 케이스 흡수
     const state = (w?.state || w?.war?.state || '').toLowerCase();
     return state || 'unknown';
   }
+
   function formatKoreanDuration(ms){
-  if (!isFinite(ms) || ms <= 0) return '';
-  const totalSec = Math.floor(ms/1000);
-  const totalMin = Math.floor(totalSec/60);
-  const hours = Math.floor(totalMin/60);
-  const mins = totalMin % 60;
-  if (hours > 0) return `${hours}시간${mins>0?` ${mins}분`:''}`;
-  return `${mins}분`;
-}
+    if (!isFinite(ms) || ms <= 0) return '';
+    const totalSec = Math.floor(ms/1000);
+    const totalMin = Math.floor(totalSec/60);
+    const hours = Math.floor(totalMin/60);
+    const mins = totalMin % 60;
+    if (hours > 0) return `${hours}시간${mins>0?` ${mins}분`:''}`;
+    return `${mins}분`;
+  }
 
-
-function computeSideStats(side, attacksPerMember, size){
-  const members = Array.isArray(side?.members) ? side.members : [];
-  const totalPossible = (Number(size)||0) * (Number(attacksPerMember)||0);
-  let atkCount = 0;
-  let destrSum = 0;
-  members.forEach(m=>{
-    const atks = Array.isArray(m?.attacks) ? m.attacks : [];
-    atks.forEach(a=>{
-      if (a && typeof a.destructionPercentage !== 'undefined') {
-        atkCount += 1;
-        destrSum += Number(a.destructionPercentage)||0;
-      }
+  function computeSideStats(side, attacksPerMember, size){
+    const members = Array.isArray(side?.members) ? side.members : [];
+    const totalPossible = (Number(size)||0) * (Number(attacksPerMember)||0);
+    let atkCount = 0;
+    let destrSum = 0;
+    members.forEach(m=>{
+      const atks = Array.isArray(m?.attacks) ? m.attacks : [];
+      atks.forEach(a=>{
+        if (a && typeof a.destructionPercentage !== 'undefined') {
+          atkCount += 1;
+          destrSum += Number(a.destructionPercentage)||0;
+        }
+      });
     });
-  });
-  const avgDestr = atkCount ? Math.round((destrSum/atkCount)*10)/10 : 0;
-  return { used: atkCount, total: totalPossible, avg: avgDestr };
-}
+    const avgDestr = atkCount ? Math.round((destrSum/atkCount)*10)/10 : 0;
+    return { used: atkCount, total: totalPossible, avg: avgDestr };
+  }
 
-function timeLeftKorean(iso){
-  if (!iso) return '';
-  const ms = new Date(iso).getTime() - getNow();
-  if (ms <= 0) return '0분';
-  const s = Math.floor(ms / 1000);
-  const h = Math.floor(s / 3600);
-  const m = Math.floor((s % 3600) / 60);
-  if (h > 0) return `${h}시간${m>0?` ${m}분`:''}`;
-  return `${m}분`;
-}
-function timeLeft(iso) {
+  function timeLeftKorean(iso){
+    if (!iso) return '';
+    const ms = new Date(iso).getTime() - getNow();
+    if (ms <= 0) return '0분';
+    const s = Math.floor(ms / 1000);
+    const h = Math.floor(s / 3600);
+    const m = Math.floor((s % 3600) / 60);
+    if (h > 0) return `${h}시간${m>0?` ${m}분`:''}`;
+    return `${m}분`;
+  }
+
+  function timeLeft(iso) {
     if (!iso) return '';
     const ms = new Date(iso).getTime() - getNow();
     if (ms <= 0) return '0m 0s';
@@ -75,6 +75,7 @@ function timeLeft(iso) {
     const ss = s % 60;
     return `${h}h ${m}m ${ss}s`;
   }
+
   const thIcon = (lvl) => lvl ? `TH · ⭐ ${lvl}` : '';
   const koState = (s) => {
     const x = String(s||'').toLowerCase();
@@ -119,12 +120,12 @@ function timeLeft(iso) {
     `;
   }
 
-function warCard(item) {
+  function warCard(item) {
     const isLeague = (item?.source || '').toLowerCase().includes('league');
     const war = item.war || item;
 
-    const state = (war.state || '').toLowerCase(); // preparation / inWar / warEnded
-    const size  = war?.teamSize ?? war?.teamSize ?? 15;
+    const state = (war.state || '').toLowerCase();
+    const size  = war?.teamSize ?? 15;
     const apm   = war?.attacksPerMember ?? 2;
 
     const clan  = war?.clan || {};
@@ -143,11 +144,8 @@ function warCard(item) {
     const leftStars  = fmt(clan?.stars);
     const rightStars = fmt(opp?.stars);
 
-    const leftDest  = Math.round((clan?.destructionPercentage ?? 0) * 100) / 100;
-    const rightDest = Math.round((opp?.destructionPercentage ?? 0) * 100) / 100;
-
     const timer = state === 'preparation' ? timeLeftKorean(start) : state === 'inwar' ? timeLeftKorean(endAt) : '';
-    // 카드
+
     const el = document.createElement('article');
     el.className = `war-card is-${state} ${isLeague ? 'type-league' : 'type-normal'}`;
     el.__startIso = start || null;
@@ -157,10 +155,9 @@ function warCard(item) {
       <header class="card-head">
         <span class="badge ${isLeague ? 'league' : 'normal'}">${isLeague ? '리그전' : '클랜전'}</span>
         <span class="state">${koState(state)}</span>
-        <span class="size">15인전</span>
+        <span class="size">${size}인전</span>
         ${timer ? `<span class="timer">⏱ ${timer}</span>` : ''}
       </header>
-</div>
 
       <div class="card-body">
         <div class="side left">
@@ -188,56 +185,67 @@ function warCard(item) {
         </div>
       </div>
       <div class="card-foot">
-          <button class="roster-btn"
-            data-clantag="${clan?.tag || ''}"
-            data-source="${isLeague ? 'league' : 'normal'}"
-            data-wartag="${war?.warTag || ''}">
-            명단/공격 보기
-          </button>
-        </div>
-<div class=\"roster\" hidden></div>      
+        <button class="roster-btn"
+          data-clantag="${clan?.tag || ''}"
+          data-source="${isLeague ? 'league' : 'normal'}"
+          data-wartag="${war?.warTag || ''}">
+          명단/공격 보기
+        </button>
+      </div>
+      <div class="roster" hidden></div>      
     `;
     el.__war = war;
-    // fetch detail to enrich stats/timer
     enrichCard(el, war, isLeague);
     return el;
   }
 
+  async function enrichCard(card, war, isLeague) {
+    try {
+      const clanTag = war?.clan?.tag || '';
+      const warTag  = war?.warTag  || '';
+      const source  = isLeague ? 'league' : 'normal';
+      if (!clanTag) return;
   
-async function enrichCard(card, war, isLeague){
-  try{
-    const clanTag = war?.clan?.tag || '';
-    const warTag  = war?.warTag  || '';
-    const source  = isLeague ? 'league' : 'normal';
-    if (!clanTag) return;
-    const res = await fetch(`/api/clan/wars/detail?clanTag=${encodeURIComponent(clanTag)}&source=${encodeURIComponent(source)}&warTag=${encodeURIComponent(warTag)}`);
-    const data = await res.json();
-    // recompute stats
-    const apm  = Number(data?.attacksPerMember ?? war?.attacksPerMember ?? 2);
-    const size = Number(data?.teamSize ?? war?.teamSize ?? 15);
-    const statsL = computeSideStats(data?.clan, apm, size);
-    const statsR = computeSideStats(data?.opponent, apm, size);
-    const usedL = card.querySelector('.used-left');
-    const usedR = card.querySelector('.used-right');
-    const avgL  = card.querySelector('.avg-left');
-    const avgR  = card.querySelector('.avg-right');
-    if (usedL) usedL.textContent = `⚔️ ${statsL.used} / ${statsL.total}`;
-    if (usedR) usedR.textContent = `⚔️ ${statsR.used} / ${statsR.total}`;
-    if (avgL)  avgL.textContent  = `💥 ${statsL.avg}%`;
-    if (avgR)  avgR.textContent  = `💥 ${statsR.avg}%`;
-    // timer (use broader set of fields)
-    const state = (data?.state || '').toLowerCase();
-    const endAt   = data?.endTime || data?.endTimeUTC || data?.endTimeIso;
-    const startAt = data?.startTime || data?.preparationStartTime || data?.startTimeUTC;
-    const t = state==='preparation' ? timeLeftKorean(startAt) : state==='inwar' ? timeLeftKorean(endAt) : '';
-    const ts = card.querySelector('.timer');
-    if (ts) ts.textContent = t ? `⏱ ${t}` : '';
-  }catch(e){
-    // silently ignore
-  }
-}
-function renderData(root, data, currentFilter = 'all') {
-    // 그룹 컨테이너
+      // ✅ 환경 감지 (로컬 / Vercel)
+      const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+      const url = isLocal
+        ? `/api/clan/wars/detail?clanTag=${encodeURIComponent(clanTag)}&source=${encodeURIComponent(source)}&warTag=${encodeURIComponent(warTag)}`
+        : `/api/clan?route=wars_detail&clanTag=${encodeURIComponent(clanTag)}&source=${encodeURIComponent(source)}&warTag=${encodeURIComponent(warTag)}`;
+  
+      const res = await fetch(url);
+      const data = await res.json();
+  
+      const apm  = Number(data?.attacksPerMember ?? war?.attacksPerMember ?? 2);
+      const size = Number(data?.teamSize ?? war?.teamSize ?? 15);
+      const statsL = computeSideStats(data?.clan, apm, size);
+      const statsR = computeSideStats(data?.opponent, apm, size);
+  
+      const usedL = card.querySelector('.used-left');
+      const usedR = card.querySelector('.used-right');
+      const avgL  = card.querySelector('.avg-left');
+      const avgR  = card.querySelector('.avg-right');
+      if (usedL) usedL.textContent = `⚔️ ${statsL.used} / ${statsL.total}`;
+      if (usedR) usedR.textContent = `⚔️ ${statsR.used} / ${statsR.total}`;
+      if (avgL)  avgL.textContent  = `💥 ${statsL.avg}%`;
+      if (avgR)  avgR.textContent  = `💥 ${statsR.avg}%`;
+  
+      const state = (data?.state || '').toLowerCase();
+      const endAt   = data?.endTime || data?.endTimeUTC || data?.endTimeIso;
+      const startAt = data?.startTime || data?.preparationStartTime || data?.startTimeUTC;
+      const t = state === 'preparation'
+        ? timeLeftKorean(startAt)
+        : state === 'inwar'
+        ? timeLeftKorean(endAt)
+        : '';
+  
+      const ts = card.querySelector('.timer');
+      if (ts) ts.textContent = t ? `⏱ ${t}` : '';
+    } catch (e) {
+      console.error('enrichCard error', e);
+    }
+  }  
+
+  function renderData(root, data, currentFilter = 'all') {
     const byId = (id) => $(id.startsWith('#') ? id : `#${id}`, root);
     const contPrep = byId('preparation');
     const contIn   = byId('inWar');
@@ -255,8 +263,6 @@ function renderData(root, data, currentFilter = 'all') {
 
     if (!list.length) {
       contPrep.innerHTML = `<div class="empty">표시할 전쟁이 없습니다.</div>`;
-      contIn.innerHTML   = '';
-      contEnd.innerHTML  = '';
       return;
     }
 
@@ -266,7 +272,6 @@ function renderData(root, data, currentFilter = 'all') {
       if (state === 'preparation') contPrep.appendChild(card);
       else if (state === 'inwar' || state === 'inWar') contIn.appendChild(card);
       else if (state === 'warended' || state === 'warEnded') {
-        // 보통 이 페이지는 active만 오지만, 혹시 오면 표시
         document.querySelector('[data-group="warEnded"]').style.display = '';
         contEnd.appendChild(card);
       } else {
@@ -274,7 +279,6 @@ function renderData(root, data, currentFilter = 'all') {
       }
     });
 
-    // 섹션이 비면 접기
     $$('.group', root).forEach(g => {
       const has = g.querySelector('.cards').children.length > 0;
       g.style.display = has ? '' : 'none';
@@ -292,21 +296,19 @@ function renderData(root, data, currentFilter = 'all') {
     });
   }
 
-  // 타이머 갱신(1초)
-  
-function startTicker(root) {
-  setInterval(() => {
-    $$('.war-card .timer', root).forEach((el) => {
-      const card = el.closest('.war-card');
-      const state = card?.__state || '';
-      const endIso = card?.__endIso || '';
-      const startIso = card?.__startIso || '';
-      const t = state === 'preparation' ? timeLeftKorean(startIso) :
-                state === 'inwar'       ? timeLeftKorean(endIso)   : '';
-      el.textContent = t ? `⏱ ${t}` : '';
-    });
-  }, 1000);
-}
+  function startTicker(root) {
+    setInterval(() => {
+      $$('.war-card .timer', root).forEach((el) => {
+        const card = el.closest('.war-card');
+        const state = card?.__state || '';
+        const endIso = card?.__endIso || '';
+        const startIso = card?.__startIso || '';
+        const t = state === 'preparation' ? timeLeftKorean(startIso) :
+                  state === 'inwar'       ? timeLeftKorean(endIso)   : '';
+        el.textContent = t ? `⏱ ${t}` : '';
+      });
+    }, 1000);
+  }
 
   async function main() {
     const loading = $('#loading');
@@ -319,7 +321,6 @@ function startTicker(root) {
     try {
       const data = await fetchActiveWarsWithFallback();
       loading.style.display = 'none';
-
       renderFilters(root);
       renderData(root, data, 'all');
       bindFilter(root, data);
@@ -336,55 +337,46 @@ function startTicker(root) {
 
 // ===== 폴백 수집기 =====
 async function fetchActiveWarsWithFallback() {
-  // 1) 우선 /api/clan/wars/active 시도
+  const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+  const activeUrl = isLocal ? '/api/clan/wars/active' : '/api/clan?route=wars_active';
+  const clanUrl   = isLocal ? '/api/clan' : '/api/clan?route=clan_list';
+  const detailUrl = (tag, source) => isLocal
+    ? `/api/clan/wars/detail?clanTag=${tag}&source=${source}`
+    : `/api/clan?route=wars_detail&clanTag=${tag}&source=${source}`;
+
+  // 1️⃣ 우선 active 시도
   try {
-    return await (async () => {
-      const res = await fetch('/api/clan/wars/active');
-      if (!res.ok) throw new Error(String(res.status));
-      return await res.json();
-    })();
+    const res = await fetch(activeUrl);
+    if (!res.ok) throw new Error(String(res.status));
+    return await res.json();
   } catch (e) {
-    // 404면 폴백 경로로 수집
     if (!String(e.message).startsWith('404')) throw e;
   }
 
-  // 2) 폴백: /api/clan 목록 → 각 클랜에 대해 detail 호출(노말/리그)
-  const clansRes = await fetch('/api/clan');
-  if (!clansRes.ok) throw new Error(`/api/clan ${clansRes.status}`);
+  // 2️⃣ 폴백
+  const clansRes = await fetch(clanUrl);
+  if (!clansRes.ok) throw new Error(`${clanUrl} ${clansRes.status}`);
   const clansJson = await clansRes.json();
   const clans = Array.isArray(clansJson?.clans) ? clansJson.clans : [];
 
-  // helper: detail 호출
-  const getDetail = async (tag, source) => {
-    const q = new URLSearchParams({ clanTag: tag, source });
-    const r = await fetch(`/api/clan/wars/detail?${q.toString()}`);
-    if (!r.ok) return null;
-    const j = await r.json().catch(() => null);
-    // 백엔드가 { war: {...} } 또는 바로 {...}로 줄 수 있으니 정규화
-    const war = j?.war || j;
-    if (!war || !war.state) return null;
-    return { source, war };
-  };
-
-  // 병렬 수집
   const tasks = [];
   clans.forEach(c => {
     const tag = c?.tag;
     if (!tag) return;
-    tasks.push(getDetail(tag, 'normal'));
-    tasks.push(getDetail(tag, 'league'));
+    tasks.push(fetch(detailUrl(tag, 'normal')).then(r => r.json()));
+    tasks.push(fetch(detailUrl(tag, 'league')).then(r => r.json()));
   });
+
   const results = (await Promise.allSettled(tasks))
     .map(x => (x.status === 'fulfilled' ? x.value : null))
-    .filter(Boolean);
+    .filter(Boolean)
+    .map(j => ({ source: j.source, war: j.war || j }));
 
-  // 활성(준비/진행)만 추리기
   const activeWars = results.filter(it => {
     const s = String(it?.war?.state || '').toLowerCase();
     return s === 'preparation' || s === 'inwar';
   });
 
-  // 렌더러가 기대하는 형태로 반환
   return { activeWars };
 }
 
@@ -395,20 +387,15 @@ document.addEventListener('click', async (e) => {
   const card = btn.closest('.war-card');
   if (!card) return;
 
-  // 패널/내부 엘리먼트 확보 (없으면 즉석 생성)
   let panel = card.querySelector('.roster');
   if (!panel) {
     panel = document.createElement('div');
     panel.className = 'roster';
     panel.hidden = true;
     panel.innerHTML = `<div class="roster-inner">불러오는 중…</div>`;
-    // 헤더 다음 위치에 삽입
     const head = card.querySelector('.card-head');
-    if (head && head.nextSibling) {
-      card.insertBefore(panel, head.nextSibling);
-    } else {
-      card.appendChild(panel);
-    }
+    if (head && head.nextSibling) card.insertBefore(panel, head.nextSibling);
+    else card.appendChild(panel);
   }
   let inner = panel.querySelector('.roster-inner');
   if (!inner) {
@@ -417,14 +404,10 @@ document.addEventListener('click', async (e) => {
     panel.appendChild(inner);
   }
 
-  // 토글
   panel.hidden = !panel.hidden;
   if (panel.hidden) return;
-
-  // 이미 로드했다면 재호출 X
   if (panel.dataset.loaded) return;
 
-  // 1) 캐시 우선
   const cachedWar = card.__war;
   if (cachedWar && cachedWar.clan && cachedWar.opponent) {
     inner.innerHTML = renderRosterTables(cachedWar);
@@ -432,15 +415,15 @@ document.addEventListener('click', async (e) => {
     return;
   }
 
-  // 2) 캐시 없으면 API 호출 (보조 경로)
   inner.textContent = '불러오는 중…';
   try {
     const q = new URLSearchParams({
+      route: 'wars_detail',
       clanTag: btn.dataset.clantag || '',
       source:  btn.dataset.source  || 'normal',
       warTag:  btn.dataset.wartag  || ''
     });
-    const resp = await fetch(`/api/clan/wars/detail?${q}`);
+    const resp = await fetch(`/api/clan?${q}`);
     const data = await resp.json().catch(() => ({}));
     const war = data?.war || null;
 
@@ -448,7 +431,7 @@ document.addEventListener('click', async (e) => {
       inner.innerHTML = `<div class="empty">표시할 전쟁 데이터가 없습니다.</div>`;
     } else {
       inner.innerHTML = renderRosterTables(war);
-      card.__war = war; // 성공 시 캐시
+      card.__war = war;
     }
     panel.dataset.loaded = '1';
   } catch (err) {
@@ -458,18 +441,11 @@ document.addEventListener('click', async (e) => {
 });
 
 function renderRosterTables(war) {
-  const oppMap = (side)=>{
-    const list = Array.isArray(side?.members)? side.members:[];
-    const map = {};
-    list.forEach(mm=>{ if(mm?.tag) map[mm.tag]=mm; });
-    return map;
-  };
-  // 널/형식 가드
   if (!war || typeof war !== 'object') {
     return `<div class="empty">전쟁 정보가 비어 있습니다.</div>`;
   }
+
   const attacksPerMember = Number(war.attacksPerMember) || 2;
-  // 전체 공격 풀 (좌/우 모두)
   const allAttacks = []
     .concat(
       ...(Array.isArray(war?.clan?.members) ? war.clan.members.map(m=>m.attacks||[]) : []),
@@ -477,6 +453,7 @@ function renderRosterTables(war) {
     )
     .flat()
     .filter(Boolean);
+
   const buildSide = (team) => {
     if (!team || !Array.isArray(team.members)) {
       return `
@@ -493,14 +470,12 @@ function renderRosterTables(war) {
         const atkList = Array.isArray(m?.attacks) ? m.attacks : [];
         const usedAttacks = atkList.length;
         const sumStars = atkList.reduce((s,a)=> s + (Number(a?.stars)||0), 0);
-        const maxDestr = atkList.reduce((mx,a)=> Math.max(mx, Number(a?.destructionPercentage)||0), 0);
-
-        // 방어 집계(상대의 공격 중 내가 수비한 것)
-        const myTag = m?.tag;
-        const defList = myTag ? allAttacks.filter(a => a?.defenderTag === myTag) : [];
-        const defUsed = defList.length;
-        const defStars = defList.reduce((s,a)=> s + (Number(a?.stars)||0), 0);
-        const defMax = defList.reduce((mx,a)=> Math.max(mx, Number(a?.destructionPercentage)||0), 0);
+        const defList = m?.tag ? allAttacks.filter(a => a?.defenderTag === m.tag) : [];
+        const defBest = defList.length
+          ? defList.sort((a,b) =>
+              (b.stars - a.stars) || (b.destructionPercentage - a.destructionPercentage)
+            )[0]
+          : null;
 
         return `
           <tr>
@@ -508,7 +483,7 @@ function renderRosterTables(war) {
             <td class="name">${m?.name ?? '-'}</td>
             <td class="used">${usedAttacks}/${attacksPerMember}</td>
             <td class="stars">${sumStars} ★</td>
-                        <td class="def-best">${(function(){ if(defList.length===0) return "-"; const best = defList.slice().sort((a,b)=> (Number(b.stars||0)-Number(a.stars||0)) || (Number(b.destructionPercentage||0)-Number(a.destructionPercentage||0)) )[0]; return `${Number(best.stars||0)} ★ ${Number(best.destructionPercentage||0)}%`; })()}</td>
+            <td class="def-best">${defBest ? `${defBest.stars} ★ ${defBest.destructionPercentage}%` : '-'}</td>
           </tr>`;
       }).join('');
 
@@ -528,8 +503,5 @@ function renderRosterTables(war) {
       </div>`;
   };
 
-  const left  = buildSide(war.clan);
-  const right = buildSide(war.opponent);
-
-  return `<div class="roster-grid">${left}${right}</div>`;
+  return `<div class="roster-grid">${buildSide(war.clan)}${buildSide(war.opponent)}</div>`;
 }
