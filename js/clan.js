@@ -36,11 +36,55 @@ function createBasicInfoSection(clan) {
           <div class="members-pill" title="클랜원" aria-label="클랜원 수">
             <span class="members-count">
               👤 ${getMemberCount(clan)}
+              ${renderMemberTooltip(clan)}
             </span>
           </div>
         </div>
 
       </div>
+    </div>
+  `;
+}
+
+function renderMemberTooltip(clan) {
+  if (!clan.members || clan.members.length === 0) return '';
+
+  // 1️⃣ 역할별 그룹화
+  const grouped = {
+    leader: [],
+    coLeader: [],
+    elder: [],
+    member: []
+  };
+
+  clan.members.forEach(m => {
+    if (grouped[m.role]) grouped[m.role].push(m);
+  });
+
+  // 2️⃣ 표시 순서 정의
+  const order = [
+    { key: 'leader', label: '대표' },
+    { key: 'coLeader', label: '공동대표' },
+    { key: 'elder', label: '장로' },
+    { key: 'member', label: '멤버' }
+  ];
+
+  // 3️⃣ 역할이 존재하는 경우에만 표시
+  return `
+    <div class="tooltip">
+      ${order
+        .filter(o => grouped[o.key].length > 0)
+        .map(
+          o => `
+          <div class="tooltip-section">
+            <div class="tooltip-title">${o.label}</div>
+            ${grouped[o.key]
+              .map(m => `<div class="tooltip-item">${m.name}</div>`)
+              .join('')}
+          </div>
+        `
+        )
+        .join('')}
     </div>
   `;
 }

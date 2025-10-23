@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>클랜전 & 리그전 정보</title>
+  <link rel="stylesheet" href="css/statistics-style.css" />
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <div class="header-top">
+        <div class="header-center">
+          <img src="images/icon/logo_Japanese.png" alt="로고" class="logo" />
+          <h1>우리들의 일그러진 통계</h1>
+        </div>
+        <a href="https://www.buymeacoffee.com/youhyun073q" target="_blank" class="donate-btn">
+          ☕ 유자 혼내주기
+        </a>
+      </div>
+      <nav>
+        <a href="index.html" class="nav-link">계정 정보</a>
+        <a href="clan.html" class="nav-link">클랜 정보</a>
+        <a href="ranking.html" class="nav-link">랭킹</a>
+        <a href="statistics.html" class="nav-link active">통계</a>
+        <a href="war.html" class="nav-link">전쟁 정보</a>
+      </nav>
+    </header>
+
+    <div id="loading" class="loading">불러오는 중...</div>
+    <div id="error" class="error" style="display:none;"></div>
+
+    <main>
+        <section id="overall" class="tab-content active">
+            <div class="chart-group-row">
+                <div class="stat-card small">
+                    <h3>타운홀</h3>
+                    <canvas id="townhallChart"></canvas>
+                </div>
+                <div class="stat-card small">
+                    <h3>경쟁전 리그</h3>
+                    <canvas id="leagueChart"></canvas>
+                </div>
+            </div>
+
+            <div class="chart-group-row">
+                <div class="stat-card small">
+                    <h3>클랜 레벨</h3>
+                    <canvas id="clanLevelChart"></canvas>
+                </div>
+                <div class="stat-card small">
+                    <h3>리그전 티어</h3>
+                    <canvas id="warLeagueChart"></canvas>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    <footer>
+      <p>&copy; 2025 별이삼샵 재일 동포 향우회. All rights reserved.</p>
+    </footer>
+  </div>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="js/statistics.js"></script>
+</body>
+
+</html>

@@ -428,7 +428,7 @@ const clanInfo = player.clan
 function translateRole(role) {
     const roles = {
         'member': '멤버',
-        'admin': '장로',
+        'elder': '장로',
         'coLeader': '공동 대표',
         'leader': '대표'
     };
