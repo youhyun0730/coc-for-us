@@ -104,14 +104,42 @@ function renderChart(canvasId, label, dataObj) {
   let labels = Object.keys(dataObj);
   let values = Object.values(dataObj);
 
-  // ✅ 리그전 티어와 경쟁전 그래프만 순서 유지, 나머지는 역순
-  if (!["warLeagueChart", "leagueChart"].includes(canvasId)) {
-    labels = labels.reverse();
-    values = values.reverse();
-  }
+  // ✅ 리그전/경쟁전만 티어 순서 정렬, 나머지는 역순
+  if (canvasId === "leagueChart" || canvasId === "warLeagueChart") {
+    // 리그 티어 순서 정의
+    const tierOrder = {
+      "Champion League III": 1,
+      "Champion League II": 2,
+      "Champion League I": 3,
+      "Master League III": 4,
+      "Master League II": 5,
+      "Master League I": 6,
+      "Crystal League III": 7,
+      "Crystal League II": 8,
+      "Crystal League I": 9,
+      "Gold League III": 10,
+      "Gold League II": 11,
+      "Gold League I": 12,
+      "Silver League III": 13,
+      "Silver League II": 14,
+      "Silver League I": 15,
+      "Bronze League III": 16,
+      "Bronze League II": 17,
+      "Bronze League I": 18,
+      "Unranked": 19
+    };
 
-   // ✅ 경쟁전 리그일 때 'Unranked'를 마지막으로 이동
-  if (canvasId === "leagueChart" || label.includes("경쟁전")) {
+    // 데이터 정렬
+    const sortedData = labels.map(label => ({
+      label,
+      value: values[labels.indexOf(label)],
+      order: tierOrder[label] || Infinity
+    })).sort((a, b) => a.order - b.order);
+
+    labels = sortedData.map(item => item.label);
+    values = sortedData.map(item => item.value);
+
+    // Unranked를 맨 아래로
     const idx = labels.findIndex(l => l.toLowerCase().includes("unranked"));
     if (idx !== -1) {
       const unrankedLabel = labels.splice(idx, 1)[0];
@@ -119,6 +147,10 @@ function renderChart(canvasId, label, dataObj) {
       labels.push(unrankedLabel);
       values.push(unrankedValue);
     }
+  } else {
+    // 타운홀, 클랜 레벨은 그냥 역순
+    labels = labels.reverse();
+    values = values.reverse();
   }
 
   new Chart(ctx, {
@@ -131,16 +163,16 @@ function renderChart(canvasId, label, dataObj) {
         backgroundColor: "rgba(0, 0, 0, 0.85)",
         borderColor: "rgba(0, 0, 0, 1)",
         borderWidth: 1.2,
-        barThickness: 8,     // 얇고 세련된 막대
+        barThickness: 8,
         borderRadius: 4,
         hoverBackgroundColor: "rgba(40, 40, 40, 0.9)",
-        maxBarThickness: 12, // ✅ 너무 두꺼워지지 않게 제한
+        maxBarThickness: 12,
       }],
     },
     options: {
-      indexAxis: "y", // ← 막대가 왼쪽에서 오른쪽으로
+      indexAxis: "y",
       responsive: true,
-      maintainAspectRatio: false, // ✅ 항목 많을 때 그래프 잘리지 않게
+      maintainAspectRatio: false,
       plugins: {
         legend: { display: false },
         title: {
@@ -155,6 +187,7 @@ function renderChart(canvasId, label, dataObj) {
       scales: {
         x: {
           beginAtZero: true,
+          max: Math.max(5, ...values),
           ticks: { color: "#333", stepSize: 1 },
           grid: { drawBorder: false, color: "rgba(0,0,0,0.05)" },
         },
@@ -166,14 +199,3 @@ function renderChart(canvasId, label, dataObj) {
     },
   });
 }
-
-// 탭 전환
-document.querySelectorAll(".toggle-btn").forEach((btn) => {
-  btn.addEventListener("click", () => {
-    document.querySelectorAll(".toggle-btn").forEach((b) => b.classList.remove("active"));
-    document.querySelectorAll(".tab-content").forEach((sec) => sec.classList.remove("active"));
-
-    btn.classList.add("active");
-    document.getElementById(btn.dataset.target).classList.add("active");
-  });
-});

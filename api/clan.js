@@ -55,28 +55,18 @@ module.exports = async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
-  const rawUrl = req.url || '';
-  const pathname = rawUrl.split('?')[0]; // 쿼리 제거
+  try { // ✅ 여기서 try 시작!
+    const rawUrl = req.url || '';
+    const pathname = rawUrl.split('?')[0];
+    
+    // ✅ Vercel 쿼리 파라미터 처리 추가
+    const base = `${req.headers['x-forwarded-proto'] || 'https'}://${req.headers.host || 'localhost'}`;
+    const urlObj = new URL(req.url, base);
+    const route = urlObj.searchParams.get('route') || '';
 
-  // 환경체크 로그 (기존 스타일 유지)
-  const CLAN_TAGS_RAW = process.env.COC_CLAN_TAGS;
-  console.log('Environment check:', {
-    hasClanTags: !!CLAN_TAGS_RAW,
-    hasEmail: !!process.env.COC_EMAIL,
-    hasPassword: !!process.env.COC_PASSWORD
-  });
-  if (!CLAN_TAGS_RAW) {
-    return res.status(500).json({ error: 'Clan tags not configured' });
-  }
-  console.log('COC_CLAN_TAGS raw:', CLAN_TAGS_RAW);
-  const parsedTagsNoHash = CLAN_TAGS_RAW.split(',').map((t) => t.trim()).filter(Boolean);
-  console.log('Parsed clan tags:', parsedTagsNoHash);
-
-  try {
-    const client = await getClient();
-
-    // ===== 1) 먼저: 모든 태그에서 "진행 중 전쟁" 수집 (/api/clan/wars/active) =====
-    if (/^\/api\/clan\/wars\/active(?:$|\/)/.test(pathname)) {
+    // ✅ route 파라미터로 분기
+    if (route === 'wars_active' || /^\/api\/clan\/wars\/active(?:$|\/)/.test(pathname)) {
+      const client = await getClient(); // ✅ client 추가!
       const clanTags = parseClanTags();
 
       // (a) 일반 클랜전
@@ -128,75 +118,67 @@ module.exports = async function handler(req, res) {
       return res.status(200).json({ count: activeWars.length, activeWars });
     }
     
-// ===== X) 상세 전쟁/멤버: /api/clan/wars/detail =====
-if (/^\/api\/clan\/wars\/detail(?:$|\/|\?)/.test(pathname)) {
-  const base = `${req.headers['x-forwarded-proto'] || 'https'}://${req.headers.host || 'localhost'}`;
-  const urlObj = new URL(req.url, base);
-  const clanTagRaw = urlObj.searchParams.get('clanTag') || '';
-  const clanTag = clanTagRaw
-    ? (clanTagRaw.startsWith('#') ? clanTagRaw : `#${clanTagRaw}`)
-    : null;
-  const source = (urlObj.searchParams.get('source') || 'normal').toLowerCase();
-  const warTag = urlObj.searchParams.get('warTag') || '';
+    // ===== X) 상세 전쟁/멤버: /api/clan/wars/detail =====
+    if (route === 'wars_detail' || /^\/api\/clan\/wars\/detail(?:$|\/|\?)/.test(pathname)) {
+      const client = await getClient(); // ✅ client 추가!
+      const base = `${req.headers['x-forwarded-proto'] || 'https'}://${req.headers.host || 'localhost'}`;
+      const urlObj = new URL(req.url, base);
+      const clanTagRaw = urlObj.searchParams.get('clanTag') || '';
+      const clanTag = clanTagRaw
+        ? (clanTagRaw.startsWith('#') ? clanTagRaw : `#${clanTagRaw}`)
+        : null;
+      const source = (urlObj.searchParams.get('source') || 'normal').toLowerCase();
+      const warTag = urlObj.searchParams.get('warTag') || '';
 
-  try {
-    if (source === 'league') {
-      // 1) warTag가 있으면 바로 상세
-      if (warTag) {
-        try {
-          const w = await client.getClanWarLeagueWar(warTag);
-          return res.status(200).json({ source: 'league', war: w || null, warTag });
-        } catch (e) {
-          // 접근 불가/존재X → null로
-          return res.status(200).json({ source: 'league', war: null, warTag, error: e.message });
-        }
-      }
-      // 2) warTag가 없으면, 해당 클랜이 포함된 진행/준비중 매치를 탐색
-      if (!clanTag) {
-        return res.status(200).json({ source: 'league', war: null, error: 'clanTag is required when source=league and warTag not provided' });
-      }
-      try {
-        const group = await client.getClanWarLeagueGroup(clanTag);
-        const tags = (group?.rounds || [])
-          .flatMap(r => r.warTags || [])
-          .filter(t => t && t !== '#0');
-
-        for (const t of tags.slice(-6).reverse()) {
+      if (source === 'league') {
+        // 1) warTag가 있으면 바로 상세
+        if (warTag) {
           try {
-            const w = await client.getClanWarLeagueWar(t);
-            const state = (w?.state || '').toLowerCase();
-            const hasUs = [w?.clan?.tag, w?.opponent?.tag].includes(clanTag);
-            if (w && hasUs && (state === 'preparation' || state === 'inwar')) {
-              return res.status(200).json({ source: 'league', war: w, warTag: t });
-            }
-          } catch (_) {}
+            const w = await client.getClanWarLeagueWar(warTag);
+            return res.status(200).json({ source: 'league', war: w || null, warTag });
+          } catch (e) {
+            return res.status(200).json({ source: 'league', war: null, warTag, error: e.message });
+          }
         }
-        return res.status(200).json({ source: 'league', war: null, clanTag });
-      } catch (e) {
-        return res.status(200).json({ source: 'league', war: null, clanTag, error: e.message });
-      }
-    }
+        // 2) warTag가 없으면, 해당 클랜이 포함된 진행/준비중 매치를 탐색
+        if (!clanTag) {
+          return res.status(200).json({ source: 'league', war: null, error: 'clanTag is required when source=league and warTag not provided' });
+        }
+        try {
+          const group = await client.getClanWarLeagueGroup(clanTag);
+          const tags = (group?.rounds || [])
+            .flatMap(r => r.warTags || [])
+            .filter(t => t && t !== '#0');
 
-    // ----- normal (정규 클랜전) -----
-    {
+          for (const t of tags.slice(-6).reverse()) {
+            try {
+              const w = await client.getClanWarLeagueWar(t);
+              const state = (w?.state || '').toLowerCase();
+              const hasUs = [w?.clan?.tag, w?.opponent?.tag].includes(clanTag);
+              if (w && hasUs && (state === 'preparation' || state === 'inwar')) {
+                return res.status(200).json({ source: 'league', war: w, warTag: t });
+              }
+            } catch (_) {}
+          }
+          return res.status(200).json({ source: 'league', war: null, clanTag });
+        } catch (e) {
+          return res.status(200).json({ source: 'league', war: null, clanTag, error: e.message });
+        }
+      }
+
+      // ----- normal (정규 클랜전) -----
       const tag = clanTag || getPrimaryClanTag();
       try {
         const w = await client.getClanWar(tag);
-        // notInWar/권한 문제도 모두 200 + null로 회수
         return res.status(200).json({ source: 'normal', war: w || null, clanTag: tag });
       } catch (e) {
         return res.status(200).json({ source: 'normal', war: null, clanTag: tag, error: e.message });
       }
     }
-  } catch (e) {
-    console.error('wars/detail error:', e);
-    // 여기도 200 + null
-    return res.status(200).json({ source, war: null, error: e.message || 'Unknown error' });
-  }
-}
 
     // ===== 2) 대표 클랜(첫 태그) 기준: 현재전/로그/CWL 그룹/워즈 =====
     if (/^\/api\/clan\/war\/current(?:$|\/)/.test(pathname)) {
+      const client = await getClient(); // ✅ client 추가!
       const tag = getPrimaryClanTag();
       try {
         const war = await client.getClanWar(tag);
@@ -208,6 +190,7 @@ if (/^\/api\/clan\/wars\/detail(?:$|\/|\?)/.test(pathname)) {
     }
 
     if (/^\/api\/clan\/war\/log(?:$|\/)/.test(pathname)) {
+      const client = await getClient(); // ✅ client 추가!
       const tag = getPrimaryClanTag();
       try {
         const log = await client.getClanWarLog(tag);
@@ -220,6 +203,7 @@ if (/^\/api\/clan\/wars\/detail(?:$|\/|\?)/.test(pathname)) {
     }
 
     if (/^\/api\/clan\/league\/group(?:$|\/)/.test(pathname)) {
+      const client = await getClient(); // ✅ client 추가!
       const tag = getPrimaryClanTag();
       try {
         const group = await client.getClanWarLeagueGroup(tag);
@@ -231,6 +215,7 @@ if (/^\/api\/clan\/wars\/detail(?:$|\/|\?)/.test(pathname)) {
     }
 
     if (/^\/api\/clan\/league\/wars(?:$|\/)/.test(pathname)) {
+      const client = await getClient(); // ✅ client 추가!
       const tag = getPrimaryClanTag();
       try {
         const group = await client.getClanWarLeagueGroup(tag);
@@ -256,11 +241,9 @@ if (/^\/api\/clan\/wars\/detail(?:$|\/|\?)/.test(pathname)) {
     }
 
     // ===== 3) 마지막: 일반 /api/clan (여러 태그 병렬 조회 — 기존 동작 유지) =====
-    if (/^\/api\/clan(?:$|\/|\?)/.test(pathname)) {
-      const clanTagArray = (CLAN_TAGS_RAW || '')
-        .split(',')
-        .map((tag) => tag.trim())
-        .filter((tag) => tag.length > 0);
+    if (route === 'clan_list' || /^\/api\/clan(?:$|\/|\?)/.test(pathname)) {
+      const client = await getClient(); // ✅ client 추가!
+      const clanTagArray = parseClanTags(); // ✅ 수정!
 
       const clanPromises = clanTagArray.map(async (tag) => {
         try {
@@ -289,7 +272,8 @@ if (/^\/api\/clan\/wars\/detail(?:$|\/|\?)/.test(pathname)) {
 
     // 매칭 없음
     return res.status(404).json({ error: 'Unknown /api/clan route' });
-  } catch (error) {
+
+  } catch (error) { // ✅ catch는 여기서!
     console.error('Error in clan api handler:', error);
     console.error('Error stack:', error.stack);
     return res.status(500).json({

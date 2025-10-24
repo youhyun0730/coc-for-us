@@ -44,9 +44,13 @@
     members.forEach(m=>{
       const atks = Array.isArray(m?.attacks) ? m.attacks : [];
       atks.forEach(a=>{
-        if (a && typeof a.destructionPercentage !== 'undefined') {
+        // ✅ destruction 우선 체크!
+        const destr = a?.destruction ?? a?.destructionPercentage;
+        if (a && typeof destr !== 'undefined') {
           atkCount += 1;
-          destrSum += Number(a.destructionPercentage)||0;
+          let val = Number(destr) || 0;
+          // ✅ 이미 퍼센트니까 그냥 더하기!
+          destrSum += val;
         }
       });
     });
@@ -200,23 +204,34 @@
   }
 
   async function enrichCard(card, war, isLeague) {
+    const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
+    const clanTag = war?.clanTag || war?.clan?.tag;
+    const warTag  = war?.warTag || '';
+
+    if (!clanTag) {
+      card.querySelector('.roster')?.remove();
+      return;
+    }
+
+    const encodedTag = encodeURIComponent(clanTag);
+    const encodedWarTag = warTag ? `&warTag=${encodeURIComponent(warTag)}` : '';
+    const source = isLeague ? 'league' : 'normal';
+    
+    const detailUrl = isLocal
+      ? `/api/clan/wars/detail?clanTag=${encodedTag}&source=${source}${encodedWarTag}`
+      : `/api/clan?route=wars_detail&clanTag=${encodedTag}&source=${source}${encodedWarTag}`;
+
     try {
-      const clanTag = war?.clan?.tag || '';
-      const warTag  = war?.warTag  || '';
-      const source  = isLeague ? 'league' : 'normal';
-      if (!clanTag) return;
-  
-      // ✅ 환경 감지 (로컬 / Vercel)
-      const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
-      const url = isLocal
-        ? `/api/clan/wars/detail?clanTag=${encodeURIComponent(clanTag)}&source=${encodeURIComponent(source)}&warTag=${encodeURIComponent(warTag)}`
-        : `/api/clan?route=wars_detail&clanTag=${encodeURIComponent(clanTag)}&source=${encodeURIComponent(source)}&warTag=${encodeURIComponent(warTag)}`;
-  
-      const res = await fetch(url);
-      const data = await res.json();
+      const res = await fetch(detailUrl);
+      const json = await res.json();
+      
+      // ✅ data는 json.war 또는 json 자체!
+      const data = json?.war || json;
   
       const apm  = Number(data?.attacksPerMember ?? war?.attacksPerMember ?? 2);
       const size = Number(data?.teamSize ?? war?.teamSize ?? 15);
+      
+      // ✅ data.clan, data.opponent 넘기기!
       const statsL = computeSideStats(data?.clan, apm, size);
       const statsR = computeSideStats(data?.opponent, apm, size);
   
@@ -340,9 +355,16 @@ async function fetchActiveWarsWithFallback() {
   const isLocal = location.hostname === 'localhost' || location.hostname === '127.0.0.1';
   const activeUrl = isLocal ? '/api/clan/wars/active' : '/api/clan?route=wars_active';
   const clanUrl   = isLocal ? '/api/clan' : '/api/clan?route=clan_list';
-  const detailUrl = (tag, source) => isLocal
-    ? `/api/clan/wars/detail?clanTag=${tag}&source=${source}`
-    : `/api/clan?route=wars_detail&clanTag=${tag}&source=${source}`;
+  
+  // ✅ encodeURIComponent로 태그 인코딩!
+  const detailUrl = (tag, source, warTag = '') => {
+    const encodedTag = encodeURIComponent(tag);
+    const encodedWarTag = warTag ? `&warTag=${encodeURIComponent(warTag)}` : '';
+    const params = `clanTag=${encodedTag}&source=${source}${encodedWarTag}`;
+    return isLocal
+      ? `/api/clan/wars/detail?${params}`
+      : `/api/clan?route=wars_detail&${params}`;
+  };
 
   // 1️⃣ 우선 active 시도
   try {
@@ -363,8 +385,8 @@ async function fetchActiveWarsWithFallback() {
   clans.forEach(c => {
     const tag = c?.tag;
     if (!tag) return;
-    tasks.push(fetch(detailUrl(tag, 'normal')).then(r => r.json()));
-    tasks.push(fetch(detailUrl(tag, 'league')).then(r => r.json()));
+    tasks.push(fetch(detailUrl(tag, 'normal', '')).then(r => r.json()));
+    tasks.push(fetch(detailUrl(tag, 'league', '')).then(r => r.json()));
   });
 
   const results = (await Promise.allSettled(tasks))
@@ -470,12 +492,18 @@ function renderRosterTables(war) {
         const atkList = Array.isArray(m?.attacks) ? m.attacks : [];
         const usedAttacks = atkList.length;
         const sumStars = atkList.reduce((s,a)=> s + (Number(a?.stars)||0), 0);
+        
         const defList = m?.tag ? allAttacks.filter(a => a?.defenderTag === m.tag) : [];
+        
         const defBest = defList.length
-          ? defList.sort((a,b) =>
-              (b.stars - a.stars) || (b.destructionPercentage - a.destructionPercentage)
-            )[0]
+          ? defList.sort((a,b) => {
+              const aDestr = a?.destruction ?? a?.destructionPercentage ?? 0;
+              const bDestr = b?.destruction ?? b?.destructionPercentage ?? 0;
+              return (b.stars - a.stars) || (bDestr - aDestr);
+            })[0]
           : null;
+
+        const defDestr = defBest ? Math.round(defBest?.destruction ?? defBest?.destructionPercentage ?? 0) : 0;
 
         return `
           <tr>
@@ -483,7 +511,7 @@ function renderRosterTables(war) {
             <td class="name">${m?.name ?? '-'}</td>
             <td class="used">${usedAttacks}/${attacksPerMember}</td>
             <td class="stars">${sumStars} ★</td>
-            <td class="def-best">${defBest ? `${defBest.stars} ★ ${defBest.destructionPercentage}%` : '-'}</td>
+            <td class="def-best">${defBest ? `${defBest.stars} ★ ${defDestr}%` : '-'}</td>
           </tr>`;
       }).join('');
 
