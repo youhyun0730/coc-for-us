@@ -221,6 +221,126 @@ h1, h2 { font-weight: 900; }
 .war-card.is-inWar         .badge { filter:saturate(1); }
 .war-card.is-warEnded      { opacity:.75; }
 
+/* ===== Roster Table Visual Enhancement ===== */
+.roster-table.pretty {
+  width:100%;
+  border-collapse:separate;
+  border-spacing:0;
+  background:#f3f4f6;    
+  color:#111;                     
+  text-shadow:none;
+  border-radius:12px;
+  overflow:hidden;
+  box-shadow: 0 6px 18px rgba(0,0,0,.08);
+  border:1px solid #e5e7eb;
+  table-layout:fixed;
+}
+
+.roster-table.pretty thead th{
+  background:#e9edf3;             /* 살짝 더 진한 헤더 */
+  color:#111;
+  padding:10px 8px;
+  font-weight:900;
+  text-align:center;
+}
+
+.roster-table.pretty td{
+  padding:9px 10px;
+  border-top:1px solid #e7e9ee;
+}
+.roster-table.pretty td.name{
+  white-space: normal;
+  word-break: break-word;
+  overflow: visible;
+}
+.roster-table.pretty tbody tr:nth-child(odd){
+  background:#f8fafc;        
+}
+.roster-table.pretty th:nth-child(1),
+.roster-table.pretty td:nth-child(1) {
+  width: 6%;  
+}
+.roster-table.pretty th:nth-child(2),
+.roster-table.pretty td:nth-child(2) {
+  width: 34%;
+}
+.roster-table.pretty th:nth-child(3),
+.roster-table.pretty td:nth-child(3) {
+  width: 38%; 
+}
+.roster-table.pretty th:nth-child(4),
+.roster-table.pretty td:nth-child(4) {
+  width: 22%;  
+}
+
+.attack-result {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  font-size: 0.92rem;
+}
+
+.attack-result{ display:flex; align-items:center; gap:8px; white-space:nowrap; font-size:0.92rem; }
+.attack-result .atk-label{ font-weight:800; color:#333; text-shadow:none; -webkit-text-stroke:0; flex: 0 0 auto;}
+.attack-result .atk-target{ color:#6b7280; flex:1 1 auto; min-width:0; overflow:hidden; text-overflow:ellipsis;} 
+.attack-result.none{ color:#9aa0a6; }
+.atk-outcome{ margin-left:auto; font-weight:900; color:#111; }
+.atk-metrics   { margin-left:auto; display:inline-flex; gap:8px; align-items:center; flex:0 0 auto; align-items: center; white-space: nowrap;}
+.defense-cell .defense-grid{
+  display:grid;
+  grid-template-columns: auto 1fr; /* 왼쪽: 별, 오른쪽: 라벨/비율 */
+  grid-template-rows: auto auto;   /* 1행: 별 + 라벨 / 2행: 퍼센트 + 비율 */
+  column-gap: 12px;
+  row-gap: 2px;
+  align-items:center;
+}
+.defense-cell .defense-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  grid-template-rows:auto auto;
+  align-items:center;
+  column-gap:12px;
+  row-gap:2px;
+  white-space:nowrap;
+}
+.def-label{
+  justify-self:end;
+  font-weight:700;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.stars3{ display:inline-flex; gap:2px; vertical-align:middle; white-space:nowrap; }
+.star{ font-size:1rem; line-height:1; }
+.star.on{
+  color:#111;                      /* 카드 톤에서 선명한 검정 별 */
+  text-shadow:none;
+}
+.star.off{
+  color:#c5cbd3;                   /* 연회색(미획득) */
+}
+.def-stars   { justify-self: start; }
+.def-pct     { justify-self: start; font-weight: 900; }
+.def-success { justify-self: end; font-weight: 900; }
+@media (max-width: 680px){
+  .roster-table.pretty td{ padding:6px 8px; }
+  .attack-result{ font-size:0.85rem; gap:6px; }
+  .star{ font-size:0.95rem; }
+  .roster-table.pretty th:nth-child(2),
+  .roster-table.pretty td:nth-child(2){ width: 24%; }
+  .roster-table.pretty th:nth-child(3),
+  .roster-table.pretty td:nth-child(3){ width: 46%; }
+  .roster-table.pretty th:nth-child(4),
+  .roster-table.pretty td:nth-child(4){ width: 30%; }
+}
+@media (max-width: 720px) {
+  .roster-table.pretty th:nth-child(2),
+  .roster-table.pretty td:nth-child(2) { width: 30%; }
+  .roster-table.pretty th:nth-child(3),
+  .roster-table.pretty td:nth-child(3) { width: 40%; }
+  .roster-table.pretty th:nth-child(4),
+  .roster-table.pretty td:nth-child(4) { width: 24%; }
+}
 /* 빈 상태 */
 .empty { padding:14px; text-align:center; color:#6b7280; border:1px dashed #e2e8f0; border-radius:12px; }
 

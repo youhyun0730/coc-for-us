@@ -36,27 +36,42 @@
     return `${mins}분`;
   }
 
-  function computeSideStats(side, attacksPerMember, size){
-    const members = Array.isArray(side?.members) ? side.members : [];
-    const totalPossible = (Number(size)||0) * (Number(attacksPerMember)||0);
-    let atkCount = 0;
-    let destrSum = 0;
-    members.forEach(m=>{
-      const atks = Array.isArray(m?.attacks) ? m.attacks : [];
-      atks.forEach(a=>{
-        // ✅ destruction 우선 체크!
-        const destr = a?.destruction ?? a?.destructionPercentage;
-        if (a && typeof destr !== 'undefined') {
-          atkCount += 1;
-          let val = Number(destr) || 0;
-          // ✅ 이미 퍼센트니까 그냥 더하기!
-          destrSum += val;
+function computeSideStats(side, opponent, attacksPerMember, size){
+  const members = Array.isArray(side?.members) ? side.members : [];
+  const oppMembers = Array.isArray(opponent?.members) ? opponent.members : [];
+  const oppTagSet = new Set(oppMembers.map(m => m?.tag).filter(Boolean));
+
+  const totalPossible = (Number(size)||0) * (Number(attacksPerMember)||0);
+
+  // 사용 공격 수
+  let atkCount = 0;
+
+  // 상대 각 방어(=defenderTag)별 최고 파괴율 집계
+  const bestByDefender = new Map(); // defenderTag -> best %
+  members.forEach(m => {
+    const atks = Array.isArray(m?.attacks) ? m.attacks : [];
+    atks.forEach(a => {
+      // destruction 필드 호환
+      const destr = a?.destruction ?? a?.destructionPercentage;
+      const defTag = a?.defenderTag;
+      if (typeof destr !== 'undefined') {
+        atkCount += 1;
+        if (defTag && oppTagSet.has(defTag)) {
+          const val = Number(destr) || 0;
+          const prev = bestByDefender.get(defTag) ?? 0;
+          if (val > prev) bestByDefender.set(defTag, val);
         }
-      });
+      }
     });
-    const avgDestr = atkCount ? Math.round((destrSum/atkCount)*10)/10 : 0;
-    return { used: atkCount, total: totalPossible, avg: avgDestr };
-  }
+  });
+
+  // 총파괴율 = (상대 각 방어의 최고 파괴율 합) / 팀 규모
+  const teamSize = Number(size) || 0;
+  const sumBest = [...bestByDefender.values()].reduce((s,v) => s + v, 0);
+  const totalPct = teamSize ? Math.round((sumBest / teamSize) * 10) / 10 : 0;
+
+  return { used: atkCount, total: totalPossible, totalPct };
+}
 
   function timeLeftKorean(iso){
     if (!iso) return '';
@@ -137,13 +152,13 @@
     const endAt = war?.endTime || war?.endTimeUTC || war?.endTimeIso;
     const start = war?.startTime || war?.preparationStartTime || war?.startTimeUTC;
 
-    const statsL = computeSideStats(clan, apm, size);
-    const statsR = computeSideStats(opp, apm, size);
+    const statsL = computeSideStats(clan, opp, apm, size);
+    const statsR = computeSideStats(opp, clan, apm, size);
     const usedL = statsL.used;
     const usedR = statsR.used;
     const total = statsL.total;
-    const avgL = statsL.avg;
-    const avgR = statsR.avg;
+    const totalPctL = statsL.totalPct;
+    const totalPctR = statsR.totalPct;
 
     const leftStars  = fmt(clan?.stars);
     const rightStars = fmt(opp?.stars);
@@ -170,7 +185,7 @@
             <span class="th">${thIcon(clan?.townHallLevel)}</span>
             <span>⭐ ${leftStars}</span>
             <span class="used-left">⚔️ ${fmt(usedL)} / ${fmt(total)}</span>
-            <span class="avg-left">💥 ${avgL}%</span>
+            <span class="avg-left">💥 ${totalPctL}%</span>
           </div>
           ${progress(usedL, total)}
         </div>
@@ -183,7 +198,7 @@
             <span class="th">${thIcon(opp?.townHallLevel)}</span>
             <span>⭐ ${rightStars}</span>
             <span class="used-right">⚔️ ${fmt(usedR)} / ${fmt(total)}</span>
-            <span class="avg-right">💥 ${avgR}%</span>
+            <span class="avg-right">💥 ${totalPctR}%</span>
           </div>
           ${progress(usedR, total)}
         </div>
@@ -232,8 +247,8 @@
       const size = Number(data?.teamSize ?? war?.teamSize ?? 15);
       
       // ✅ data.clan, data.opponent 넘기기!
-      const statsL = computeSideStats(data?.clan, apm, size);
-      const statsR = computeSideStats(data?.opponent, apm, size);
+      const statsL = computeSideStats(data?.clan, data?.opponent, apm, size);
+      const statsR = computeSideStats(data?.opponent, data?.clan, apm, size);
   
       const usedL = card.querySelector('.used-left');
       const usedR = card.querySelector('.used-right');
@@ -241,8 +256,8 @@
       const avgR  = card.querySelector('.avg-right');
       if (usedL) usedL.textContent = `⚔️ ${statsL.used} / ${statsL.total}`;
       if (usedR) usedR.textContent = `⚔️ ${statsR.used} / ${statsR.total}`;
-      if (avgL)  avgL.textContent  = `💥 ${statsL.avg}%`;
-      if (avgR)  avgR.textContent  = `💥 ${statsR.avg}%`;
+      if (avgL)  avgL.textContent  = `💥 ${statsL.totalPct}%`;
+      if (avgR)  avgR.textContent  = `💥 ${statsR.totalPct}%`;
   
       const state = (data?.state || '').toLowerCase();
       const endAt   = data?.endTime || data?.endTimeUTC || data?.endTimeIso;
@@ -463,19 +478,44 @@ document.addEventListener('click', async (e) => {
 });
 
 function renderRosterTables(war) {
+  // --- Guard ---
   if (!war || typeof war !== 'object') {
     return `<div class="empty">전쟁 정보가 비어 있습니다.</div>`;
   }
 
+  // --- Local helpers ---
+  const esc = (s) =>
+    String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+
+  const getDestr = (a) => {
+    const v = (a?.destruction ?? a?.destructionPercentage);
+    const n = Number(v);
+    return Number.isFinite(n) ? n : null;
+  };
+
+  const fmtPct = (n) => (n == null ? '-' : `${Math.round(n)}%`);
+
+  const renderStars = (count) => {
+    const s = Number(count) || 0;
+    let html = '';
+    for (let i = 1; i <= 3; i++) {
+      html += `<span class="star ${i <= s ? 'on' : 'off'}">★</span>`;
+    }
+    return `<span class="stars3">${html}</span>`;
+  };
+
   const attacksPerMember = Number(war.attacksPerMember) || 2;
+
+  // 좌/우 전체 공격(방어 집계용)
   const allAttacks = []
     .concat(
-      ...(Array.isArray(war?.clan?.members) ? war.clan.members.map(m=>m.attacks||[]) : []),
-      ...(Array.isArray(war?.opponent?.members) ? war.opponent.members.map(m=>m.attacks||[]) : [])
+      ...(Array.isArray(war?.clan?.members) ? war.clan.members.map(m => m.attacks || []) : []),
+      ...(Array.isArray(war?.opponent?.members) ? war.opponent.members.map(m => m.attacks || []) : [])
     )
     .flat()
     .filter(Boolean);
 
+  // --- One side builder ---
   const buildSide = (team) => {
     if (!team || !Array.isArray(team.members)) {
       return `
@@ -485,51 +525,107 @@ function renderRosterTables(war) {
         </div>`;
     }
 
+    const isLeft = war?.clan?.tag === team?.tag;
+    const enemy  = isLeft ? (war?.opponent?.members || []) : (war?.clan?.members || []);
+
     const rows = team.members
       .slice()
       .sort((a, b) => (a?.mapPosition || 999) - (b?.mapPosition || 999))
       .map(m => {
         const atkList = Array.isArray(m?.attacks) ? m.attacks : [];
-        const usedAttacks = atkList.length;
-        const sumStars = atkList.reduce((s,a)=> s + (Number(a?.stars)||0), 0);
-        
-        const defList = m?.tag ? allAttacks.filter(a => a?.defenderTag === m.tag) : [];
-        
-        const defBest = defList.length
-          ? defList.sort((a,b) => {
-              const aDestr = a?.destruction ?? a?.destructionPercentage ?? 0;
-              const bDestr = b?.destruction ?? b?.destructionPercentage ?? 0;
-              return (b.stars - a.stars) || (bDestr - aDestr);
-            })[0]
-          : null;
 
-        const defDestr = defBest ? Math.round(defBest?.destruction ?? defBest?.destructionPercentage ?? 0) : 0;
+        // 공격 1/2
+        const atkCells = [];
+        for (let i = 0; i < attacksPerMember; i++) {
+          const atk = atkList[i];
+          if (atk) {
+            const tgt   = enemy.find(x => x?.tag === atk?.defenderTag);
+            const tpos  = tgt?.mapPosition ?? '?';
+            const tname = tgt?.name ? esc(tgt.name) : '';
+            const targetLabel = tpos !== '?' ? (tname ? `${tpos}. ${tname}` : `${tpos}`) : (tname || '-');
+
+            const destr = getDestr(atk);
+            const stars = Number(atk?.stars) || 0;
+
+            // 퍼센트 먼저, 그 다음 별
+            atkCells.push(`
+              <div class="attack-result">
+                <span class="atk-label">공격 ${i + 1}</span>
+                <span class="atk-target">${targetLabel}</span>
+                <span class="atk-metrics">
+                  <span class="atk-outcome">${fmtPct(destr)}</span>
+                  <span class="atk-stars">${renderStars(stars)}</span>
+                </span>
+              </div>
+            `);
+          } else {
+            atkCells.push(`
+              <div class="attack-result none">
+                <span class="atk-label">공격 ${i + 1}</span>
+                <span class="atk-outcome">-</span>
+              </div>
+            `);
+          }
+        }
+
+        // 방어: 성공(0★) 카운트 / 총 방어
+        const myTag = m?.tag;
+        const defList = myTag ? allAttacks.filter(a => a?.defenderTag === myTag) : [];
+        const defTotal   = defList.length;
+        const defSuccess = defList.reduce((n, a) => n + (Number(a?.stars) < 3 ? 1 : 0), 0);
+
+        // 최고 피격 결과(★ 우선, 동률시 파괴율 큰 것)
+        const best = defList.slice().sort(
+          (a,b)=>(Number(b?.stars||0)-Number(a?.stars||0)) ||
+                  ((getDestr(b)||0)-(getDestr(a)||0))
+        )[0];
+
+        const bestStars = best?.stars || 0;
+        const bestPct   = getDestr(best);
 
         return `
           <tr>
             <td class="pos">${m?.mapPosition ?? '-'}</td>
-            <td class="name">${m?.name ?? '-'}</td>
-            <td class="used">${usedAttacks}/${attacksPerMember}</td>
-            <td class="stars">${sumStars} ★</td>
-            <td class="def-best">${defBest ? `${defBest.stars} ★ ${defDestr}%` : '-'}</td>
+            <td class="name">${esc(m?.name ?? '-')}</td>
+            <td class="attacks-cell">${atkCells.join('')}</td>
+            <td class="defense-cell">
+              <div class="defense-grid">
+                <div class="def-stars">${renderStars(bestStars)}</div>
+                <div class="def-label">방어:</div>
+                <div class="def-pct">${fmtPct(bestPct)}</div>
+                <div class="def-success">${defSuccess}/${defTotal}</div>
+              </div>
+            </td>
           </tr>`;
       }).join('');
 
     return `
       <div class="roster-side">
-        <h4>${team?.name || 'Clan'}</h4>
-        <table class="roster-table">
+        <h4>${esc(team?.name) || 'Clan'}</h4>
+        <table class="roster-table pretty">
           <thead>
-            <tr>
-              <th>#</th><th>이름</th><th>공격</th><th>획득 별</th><th>피격 결과</th>
-            </tr>
+            <tr><th>#</th><th>이름</th><th>공격</th><th>방어</th></tr>
           </thead>
-          <tbody>
-            ${rows || `<tr><td colspan="5" class="empty">멤버 데이터 없음</td></tr>`}
-          </tbody>
+          <tbody>${rows || `<tr><td colspan="4" class="empty">멤버 데이터 없음</td></tr>`}</tbody>
         </table>
       </div>`;
   };
 
   return `<div class="roster-grid">${buildSide(war.clan)}${buildSide(war.opponent)}</div>`;
+}
+
+function getDestr(a){
+  // API가 destruction 또는 destructionPercentage로 줄 수 있으므로 둘 다 대응
+  const v = (a?.destruction ?? a?.destructionPercentage);
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null; // NaN 방지
+}
+function fmtPct(n){ return n == null ? '-' : `${Math.round(n)}%`; }
+function renderStars(count){
+  const s = Number(count) || 0;
+  let html = '';
+  for (let i=1; i<=3; i++){
+    html += `<span class="star ${i<=s?'on':'off'}">★</span>`;
+  }
+  return `<span class="stars3">${html}</span>`;
 }
