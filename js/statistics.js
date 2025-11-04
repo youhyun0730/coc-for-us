@@ -108,24 +108,24 @@ function renderChart(canvasId, label, dataObj) {
   if (canvasId === "leagueChart" || canvasId === "warLeagueChart") {
     // 리그 티어 순서 정의
     const tierOrder = {
-      "Champion League III": 1,
+      "Champion League I": 1,
       "Champion League II": 2,
-      "Champion League I": 3,
-      "Master League III": 4,
+      "Champion League III": 3,
+      "Master League I": 4,
       "Master League II": 5,
-      "Master League I": 6,
-      "Crystal League III": 7,
+      "Master League III": 6,
+      "Crystal League I": 7,
       "Crystal League II": 8,
-      "Crystal League I": 9,
-      "Gold League III": 10,
+      "Crystal League III": 9,
+      "Gold League I": 10,
       "Gold League II": 11,
-      "Gold League I": 12,
-      "Silver League III": 13,
+      "Gold League III": 12,
+      "Silver League I": 13,
       "Silver League II": 14,
-      "Silver League I": 15,
-      "Bronze League III": 16,
+      "Silver League III": 15,
+      "Bronze League I": 16,
       "Bronze League II": 17,
-      "Bronze League I": 18,
+      "Bronze League III": 18,
       "Unranked": 19
     };
 
