@@ -81,6 +81,10 @@ window.addEventListener('load', () => {
       sorted.sort((a, b) => (b.warStars || 0) - (a.warStars || 0));
     } else if (criteria === 'obstacleRemoval') {
       sorted.sort((a, b) => getAchievementValue(b, 'Nice and Tidy') - getAchievementValue(a, 'Nice and Tidy'));
+    } else if (criteria === 'builderBase') {
+      sorted.sort((a, b) => (b.builderBaseTrophies || 0) - (a.builderBaseTrophies || 0));
+    } else if (criteria === 'clanCapital') {
+      sorted.sort((a, b) => (b.clanCapitalContributions || 0) - (a.clanCapitalContributions || 0));
     }
 
     rankingList.innerHTML = '';
@@ -104,6 +108,8 @@ window.addEventListener('load', () => {
       else if (criteria === 'siegeDonations') scoreValue = getAchievementValue(player, 'Siege Sharer');
       else if (criteria === 'warStars') scoreValue = player.warStars || 0;
       else if (criteria === 'obstacleRemoval') scoreValue = getAchievementValue(player, 'Nice and Tidy');
+      else if (criteria === 'builderBase') scoreValue = player.builderBaseTrophies || 0;
+      else if (criteria === 'clanCapital') scoreValue = player.clanCapitalContributions || 0;
 
       // 🔹 동점 체크
       if (scoreValue !== prevScore) {
@@ -141,6 +147,10 @@ window.addEventListener('load', () => {
         scoreText = `전쟁 별 ${(player.warStars || 0).toLocaleString()} ★`;
       } else if (criteria === 'obstacleRemoval') {
         scoreText = `장애물 제거 ${getAchievementValue(player, 'Nice and Tidy').toLocaleString()}`;
+      } else if (criteria === 'builderBase') {
+        scoreText = `장인 기지 트로피 ${(player.builderBaseTrophies || 0).toLocaleString()} 🏆`;
+      } else if (criteria === 'clanCapital') {
+        scoreText = `클랜 캐피탈 기여 ${(player.clanCapitalContributions || 0).toLocaleString()}`;
       }
 
       rankCard.innerHTML = `
@@ -167,28 +177,20 @@ window.addEventListener('load', () => {
       return `images/town-hall/Building_HV_Town_Hall_level_${player.townHallLevel}.png`;
     } else if (criteria === 'competitive') {
       return player.leagueTier?.icon?.url || '';
+    } else if (criteria === 'clanCapital') {
+      // ✅ 클랜 캐피탈 명성 이미지
+      return 'images/icon/Reputation.png';
     } else if (criteria === 'expLevel') {
-      return 'images/icon/xp.png';
+      // ✅ 경험치는 XP 이미지
+      return 'images/icon/Xp.png';
+    } else if (criteria === 'builderBase') {
+      // ✅ 장인 기지는 장인 타운홀 이미지
+      return `images/builder-hall/Building_BB_Builder_Hall_level_${player.builderHallLevel || 0}.png`;
     } else if (criteria === 'donations' || criteria === 'spellDonations' || criteria === 'siegeDonations' || criteria === 'warStars' || criteria === 'obstacleRemoval') {
-      // ✅ 새 항목들은 타운홀 이미지
+      // 새 항목들은 타운홀 이미지
       return `images/town-hall/Building_HV_Town_Hall_level_${player.townHallLevel}.png`;
     }
     return '';
-  }
-
-  /** 🔸 아이콘 HTML (경험치용 오버레이 포함) */
-  function getIconHTML(src, criteria, player) {
-    if (!src) return '';
-    if (criteria === 'expLevel') {
-      return `
-        <div class="xp-icon-wrapper">
-          <img class="rank-icon xp-icon" src="${src}" alt="XP">
-          <span class="xp-level">${player.expLevel}</span>
-        </div>
-      `;
-    } else {
-      return `<img class="rank-icon" src="${src}" alt="icon" onerror="this.style.display='none';">`;
-    }
   }
 
   /** ✅ achievements에서 name으로 value 가져오기 */
@@ -219,6 +221,85 @@ function calculateTotalPetLevels(player) {
 
   return pets.reduce((sum, pet) => sum + (pet.level || 0), 0);
 }
+
+/** Reputation Level 계산 (표 그대로 적용) */
+function calculateReputationLevel(contributions) {
+  if (!contributions || contributions < 0) return 0;
+
+  // 각 레벨의 필요 reputation (표 기반)
+  const levelCosts = [];
+
+  // 1~20 → 각 레벨 5,000 필요
+  for (let i = 1; i <= 20; i++) levelCosts.push(5000);
+
+  // 21~40 → 각 레벨 10,000 필요
+  for (let i = 21; i <= 40; i++) levelCosts.push(10000);
+
+  // 41~55 → 각 레벨 20,000 필요
+  for (let i = 41; i <= 55; i++) levelCosts.push(20000);
+
+  // 56~65 → 각 레벨 30,000 필요
+  for (let i = 56; i <= 65; i++) levelCosts.push(30000);
+
+  // 66~70 → 각 레벨 40,000 필요
+  for (let i = 66; i <= 70; i++) levelCosts.push(40000);
+
+  // 71~78 → 각 레벨 50,000 필요
+  for (let i = 71; i <= 78; i++) levelCosts.push(50000);
+
+  // 79~83 → 각 레벨 60,000 필요
+  for (let i = 79; i <= 83; i++) levelCosts.push(60000);
+
+  // 84~88 → 각 레벨 70,000 필요
+  for (let i = 84; i <= 88; i++) levelCosts.push(70000);
+
+  // 89~93 → 각 레벨 80,000 필요
+  for (let i = 89; i <= 93; i++) levelCosts.push(80000);
+
+  // 94~98 → 각 레벨 90,000 필요
+  for (let i = 94; i <= 98; i++) levelCosts.push(90000);
+
+  // ★ 99부터는 100,000씩 무한 상승
+  // contributions가 충분히 크면 여기서 자동으로 계산됨
+
+  let level = 1;
+  let remaining = contributions;
+
+  for (let i = 0; i < levelCosts.length; i++) {
+    if (remaining >= levelCosts[i]) {
+      remaining -= levelCosts[i];
+      level++;
+    } else {
+      return level;
+    }
+  }
+
+  // 레벨 99 이상은 100,000씩 필요
+  return level + Math.floor(remaining / 100000);
+}
+
+  /** 🔸 아이콘 HTML (경험치/클랜캐피탈용 오버레이 포함) */
+  function getIconHTML(src, criteria, player) {
+    if (!src) return '';
+    if (criteria === 'expLevel') {
+      return `
+        <div class="xp-icon-wrapper">
+          <img class="rank-icon xp-icon" src="${src}" alt="XP">
+          <span class="xp-level">${player.expLevel}</span>
+        </div>
+      `;
+    } else if (criteria === 'clanCapital') {
+      const reputationLevel = calculateReputationLevel(player.clanCapitalContributions || 0);
+      return `
+        <div class="xp-icon-wrapper capital-reputation">
+          <img class="rank-icon xp-icon" src="${src}" alt="Capital">
+          <span class="xp-level capital-level">${reputationLevel}</span>
+        </div>
+      `;
+    } else {
+      return `<img class="rank-icon" src="${src}" alt="icon" onerror="this.style.display='none';">`;
+    }
+  }
 
   // 초기 실행
   initRanking();

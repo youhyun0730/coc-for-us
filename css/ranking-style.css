@@ -917,3 +917,26 @@ h1, h2, .clan-name, .player-name {
     font-size: 16px;
   }
 }
+
+/* ✅ 캐피탈 reputation 레벨 숫자 위로 올리기 */
+.capital-level {
+  top: 40% !important; /* 기본 50%보다 위로 */
+  text-shadow: 
+    -1px -1px 0 #000,
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000,
+     0 2px 4px rgba(0, 0, 0, 0.8);
+    font-weight: bold;
+}
+
+/* xp-level 테두리 및 그림자 추가 */
+.xp-level {
+  -webkit-text-stroke: 0.5px black; /* 테두리 */
+  text-shadow: 
+    -1px -1px 0 #000,
+     1px -1px 0 #000,
+    -1px  1px 0 #000,
+     1px  1px 0 #000,
+     0 2px 4px rgba(0, 0, 0, 0.8); /* 그림자 */
+}
