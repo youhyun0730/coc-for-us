@@ -71,6 +71,16 @@ window.addEventListener('load', () => {
         if (idA !== idB) return idB - idA;
         return (b.trophies || 0) - (a.trophies || 0);
       });
+    } else if (criteria === 'donations') {
+      sorted.sort((a, b) => getAchievementValue(b, 'Friend in Need') - getAchievementValue(a, 'Friend in Need'));
+    } else if (criteria === 'spellDonations') {
+      sorted.sort((a, b) => getAchievementValue(b, 'Sharing is caring') - getAchievementValue(a, 'Sharing is caring'));
+    } else if (criteria === 'siegeDonations') {
+      sorted.sort((a, b) => getAchievementValue(b, 'Siege Sharer') - getAchievementValue(a, 'Siege Sharer'));
+    } else if (criteria === 'warStars') {
+      sorted.sort((a, b) => (b.warStars || 0) - (a.warStars || 0));
+    } else if (criteria === 'obstacleRemoval') {
+      sorted.sort((a, b) => getAchievementValue(b, 'Nice and Tidy') - getAchievementValue(a, 'Nice and Tidy'));
     }
 
     rankingList.innerHTML = '';
@@ -89,6 +99,11 @@ window.addEventListener('load', () => {
       else if (criteria === 'expLevel') scoreValue = player.expLevel;
       else if (criteria === 'competitive')
         scoreValue = `${player.leagueTier?.id || 0}-${player.trophies || 0}`;
+      else if (criteria === 'donations') scoreValue = getAchievementValue(player, 'Friend in Need');
+      else if (criteria === 'spellDonations') scoreValue = getAchievementValue(player, 'Sharing is caring');
+      else if (criteria === 'siegeDonations') scoreValue = getAchievementValue(player, 'Siege Sharer');
+      else if (criteria === 'warStars') scoreValue = player.warStars || 0;
+      else if (criteria === 'obstacleRemoval') scoreValue = getAchievementValue(player, 'Nice and Tidy');
 
       // 🔹 동점 체크
       if (scoreValue !== prevScore) {
@@ -116,6 +131,16 @@ window.addEventListener('load', () => {
         scoreText = `경험치 Lv.${player.expLevel}`;
       } else if (criteria === 'competitive') {
         scoreText = `${player.leagueTier?.name || 'Unranked'} · ${player.trophies?.toLocaleString() || 0} <img src="images/icon/Trophy.png" alt="trophy" class="trophy-icon">`;
+      } else if (criteria === 'donations') {
+        scoreText = `누적 지원 ${getAchievementValue(player, 'Friend in Need').toLocaleString()}`;
+      } else if (criteria === 'spellDonations') {
+        scoreText = `누적 지원 마법 ${getAchievementValue(player, 'Sharing is caring').toLocaleString()}`;
+      } else if (criteria === 'siegeDonations') {
+        scoreText = `누적 지원 시즈 ${getAchievementValue(player, 'Siege Sharer').toLocaleString()}`;
+      } else if (criteria === 'warStars') {
+        scoreText = `전쟁 별 ${(player.warStars || 0).toLocaleString()} ★`;
+      } else if (criteria === 'obstacleRemoval') {
+        scoreText = `장애물 제거 ${getAchievementValue(player, 'Nice and Tidy').toLocaleString()}`;
       }
 
       rankCard.innerHTML = `
@@ -144,6 +169,9 @@ window.addEventListener('load', () => {
       return player.leagueTier?.icon?.url || '';
     } else if (criteria === 'expLevel') {
       return 'images/icon/xp.png';
+    } else if (criteria === 'donations' || criteria === 'spellDonations' || criteria === 'siegeDonations' || criteria === 'warStars' || criteria === 'obstacleRemoval') {
+      // ✅ 새 항목들은 타운홀 이미지
+      return `images/town-hall/Building_HV_Town_Hall_level_${player.townHallLevel}.png`;
     }
     return '';
   }
@@ -161,6 +189,13 @@ window.addEventListener('load', () => {
     } else {
       return `<img class="rank-icon" src="${src}" alt="icon" onerror="this.style.display='none';">`;
     }
+  }
+
+  /** ✅ achievements에서 name으로 value 가져오기 */
+  function getAchievementValue(player, achievementName) {
+    if (!player.achievements || !Array.isArray(player.achievements)) return 0;
+    const achievement = player.achievements.find(a => a.name === achievementName);
+    return achievement?.value || 0;
   }
 
   /** ✅ 영웅 레벨 합 계산 */
