@@ -147,6 +147,14 @@ function renderChart(canvasId, label, dataObj) {
       labels.push(unrankedLabel);
       values.push(unrankedValue);
     }
+    // legend를 맨 위로
+    const legendIdx = labels.findIndex(l => l.toLowerCase().includes("legend"));
+    if (legendIdx !== -1) {
+      const legendLabel = labels.splice(legendIdx, 1)[0];
+      const legendValue = values.splice(legendIdx, 1)[0];
+      labels.unshift(legendLabel);
+      values.unshift(legendValue);
+    }
   } else {
     // 타운홀, 클랜 레벨은 그냥 역순
     labels = labels.reverse();

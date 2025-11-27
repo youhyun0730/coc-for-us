@@ -182,7 +182,7 @@ window.addEventListener('load', () => {
       return 'images/icon/Reputation.png';
     } else if (criteria === 'expLevel') {
       // ✅ 경험치는 XP 이미지
-      return 'images/icon/Xp.png';
+      return 'images/icon/xp.png';
     } else if (criteria === 'builderBase') {
       // ✅ 장인 기지는 장인 타운홀 이미지
       return `images/builder-hall/Building_BB_Builder_Hall_level_${player.builderHallLevel || 0}.png`;
