@@ -209,6 +209,7 @@ function getEquipmentImageSrc(equipmentName, heroName) {
         'Hog Rider Puppet': 'Hog_Rider_Puppet',
         'Rocket Spear': 'Rocket_Spear',
         'Electro Boots': 'Electro_Boots',
+        'Frost Flake': 'Frost_Flake',
 
         'Henchmen Puppet': 'Henchmen_Puppet',
         'Dark Orb': 'Dark_Orb',

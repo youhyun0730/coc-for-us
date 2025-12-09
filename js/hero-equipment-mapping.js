@@ -34,7 +34,8 @@ const heroEquipmentMapping = {
         'Hog Rider Puppet',
         'Haste Vial',
         'Rocket Spear',
-        'Electro Boots'
+        'Electro Boots',
+        'Frost Flake'
     ],
     'Minion Prince': [
         'Henchmen Puppet',
@@ -90,6 +91,7 @@ const equipmentNameMapping = {
     '호그 라이더 인형': 'Hog Rider Puppet',
     '로켓 창': 'Rocket Spear',
     '일렉트로 부츠': 'Electro Boots',
+    '서리 조각' : 'Frost Flake',
 
     // Minion Prince
     '보디가드 인형': 'Henchmen Puppet',
